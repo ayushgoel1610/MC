@@ -1,4 +1,4 @@
-package com.example.ayush.myapplication;
+package com.iiitd.mcproject;
 
 import android.app.Activity;
 import android.os.Bundle;
