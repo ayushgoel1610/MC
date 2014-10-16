@@ -12,7 +12,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login1"
+        android:text="Login"
         android:id="@+id/login"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
