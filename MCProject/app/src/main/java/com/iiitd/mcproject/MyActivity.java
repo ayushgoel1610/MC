@@ -21,7 +21,7 @@ public class MyActivity extends Activity {
             public void onClick(View view) {
                 //Intent i = new Intent(getBaseContext() , Topic.class);
                 Intent i = new Intent(getBaseContext() , FreeBase.class);
-                startActivity(i);
+                //startActivity(i);
             }
         });
     }

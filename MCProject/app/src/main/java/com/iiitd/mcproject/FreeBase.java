@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -58,24 +57,18 @@ public class FreeBase extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.topic);
 
-        Button search = (Button)findViewById(R.id.topic_search_button);
         bar = (ProgressBar)findViewById(R.id.topic_search_progressBar);
         bar.setVisibility(View.INVISIBLE);
         summary = (TextView) findViewById(R.id.topic_search_text);
         summary.setVisibility(View.INVISIBLE);
-        search_text = (EditText)findViewById(R.id.topic_search_editText);
         image = (ImageView)findViewById(R.id.topic_image);
         image.setVisibility(View.INVISIBLE);
 
         Log.d(tag , "Inside FreeBase Class");
 
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 ConnectivityManager cmgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
                 if(networkInfo!=null && networkInfo.isConnected()){
-                    if(search_text.getText().toString() != null && !search_text.getText().toString().isEmpty()) {
                         bar.setVisibility(View.VISIBLE);
                         summary.setVisibility(View.INVISIBLE);
                         summary.setText("");
@@ -84,7 +77,7 @@ public class FreeBase extends Activity{
                         bmp = null;
                         Log.d(tag, "Connected to internet");
                         try {
-                            String res = new KnowledgeGraphTask().execute(search_text.getText().toString()).get();
+                          String res = new KnowledgeGraphTask().execute(getIntent().getStringExtra("topic")).get();
                           //String res = new KnowledgeGraphTask().execute("inception").get();
                             if(bmp == null){
                                 Toast.makeText(getBaseContext() , "No Image Found" , Toast.LENGTH_SHORT).show();
@@ -98,15 +91,10 @@ public class FreeBase extends Activity{
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         }
-                    }else{
-                        Toast.makeText(getBaseContext() , "please fill in the search value " , Toast.LENGTH_SHORT).show();
-                    }
                 }else{
                     Toast.makeText(getBaseContext(), "No internet connection", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
-    }
 
     private class KnowledgeGraphTask extends AsyncTask<String , Void , String>{
 
