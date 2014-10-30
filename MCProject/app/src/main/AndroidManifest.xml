@@ -16,10 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+     
         <activity
-            android:name=".MainTabsActivity"
-            android:label="@string/title_activity_main_tabs" >
+            android:name=".MasterActivity"
+            android:label="@string/title_activity_master" >
         </activity>
     </application>
 

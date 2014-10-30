@@ -25,7 +25,7 @@ public class MyActivity extends Activity {
     }
 
     public void toMainTabs(View view){
-        Intent intent= new Intent(this,MainTabsActivity.class);
+        Intent intent= new Intent(this,MasterActivity.class);
         startActivity(intent);
     }
 

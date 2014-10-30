@@ -1,13 +1,19 @@
 package com.iiitd.mcproject;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 
 
 /**
@@ -28,6 +34,33 @@ public class TrendingFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    ListView trendingTopics;
+    private ArrayList<String> topicList=new ArrayList<String>();
+    private ArrayList<Integer> imageList=new ArrayList<Integer>();
+
+    TopicList adapter;
+    String[] topicNames = {
+            "Game of Thrones",
+            "The Walking Dead",
+            "Android",
+            "Avengers",
+            "India",
+            "Google",
+            "ISIS"
+    } ;
+
+    Integer[] imageId = {
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher
+    };
+    View inflateView;
+    Context context;
 
     private OnFragmentInteractionListener mListener;
 
@@ -61,11 +94,64 @@ public class TrendingFragment extends Fragment {
         }
     }
 
+    private void addToList(){
+        topicList.addAll(topicList);
+        imageList.addAll(imageList);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void initList(){
+        adapter = new TopicList(getActivity(), topicList, imageList);
+        trendingTopics=(ListView)inflateView.findViewById(R.id.trending_list);
+        trendingTopics.setAdapter(adapter);
+        trendingTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Toast.makeText(getActivity(), "You Clicked at " + topicList.get(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+        trendingTopics.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i2, int i3) {
+                if (trendingTopics.getLastVisiblePosition() == trendingTopics.getAdapter().getCount() - 1
+                        && trendingTopics.getChildAt(trendingTopics.getChildCount() - 1).getBottom() <= trendingTopics.getHeight()) {
+                    //scroll end reached
+                    //Toast.makeText(getActivity(), "Reached end of list ", Toast.LENGTH_SHORT).show();
+                    //add more items to list
+                    addToList();
+                }
+            }
+        });
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trending, container, false);
+        inflateView= inflater.inflate(R.layout.fragment_trending, container, false);
+
+        for(String topic:topicNames)
+            topicList.add(topic);
+
+        for(int id:imageId)
+                imageList.add(id);
+
+        //Populate list
+        initList();
+
+        return inflateView;
+    }
+
+    @Override
+    public void onViewCreated (View view, Bundle savedInstanceState){
+        super.onViewCreated(view,savedInstanceState);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
