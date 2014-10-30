@@ -1,4 +1,5 @@
 class TopicsController < ApplicationController
+	skip_before_action :require_token,only:[:topicList,:new,:create]
 	protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
 	def show
 		@topic=Topic.find(params[:id])
@@ -12,6 +13,7 @@ class TopicsController < ApplicationController
 	end
 	def create
 		@topic=Topic.new(topic_params)
+		@topic.health=0
 		respond_to do |format|
       		if @topic.save
       			puts "hello"
@@ -34,6 +36,14 @@ class TopicsController < ApplicationController
 				@topic.save
 			end
 		end
+	end
+	def topicList
+		@topics=Topic.order(health: :desc).limit(10).offset(params[:offset])
+		@topicList={
+			list: @topics,
+			size: @topics.size
+		}.to_json
+		render :json => @topicList
 	end
 	private
 		def topic_params

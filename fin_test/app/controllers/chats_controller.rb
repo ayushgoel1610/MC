@@ -12,14 +12,22 @@ class ChatsController < ApplicationController
 		@chat=Chat.find(params[:id])
 		@user1=@chat.userid_1
 		@user2=@chat.userid_2
+		@topic=Topic.find(@chat.topic_id)
 		if(params[:userid]==@chat.userid_1)
 			@chat.reputation_2=params[:reputation]
-			UsersController.new.update_recents(@userid_2,@userid_1,params[:reputation],@chat.topic_id)
-		else if (params[:userid]==@chat.userid_2)
+			@user2.reputation += params[:reputation]
+			UsersController.new.update_recents(@chat.userid_2,@chat.userid_1,params[:reputation],@chat.topic_id)
+			UsersController.new.update_userTopics(@chat.userid_2,@chat.topic_id,params[:reputation])
+		elsif (params[:userid]==@chat.userid_2)
 			@chat.reputation_1=params[:reputation]
-			UsersController.new.update_recents(@userid_2,@userid_1,params[:reputation],@chat.topic_id)
+			@user1.reputation+=params[:reputation]
+			UsersController.new.update_recents(@chat.userid_2,@chat.userid_1,params[:reputation],@chat.topic_id)
+			UsersController.new.update_userTopics(@chat.userid_1,@chat.topic_id,params[:reputation])
 		end
+		topic_total=@topic.health*@topic.user_count
 		TopicsController.new.incr_user_count(@chat.topic_id)
+		@topic.health=(topic_total+params[:reputation])/@topic.user_count
+		@topic.save
 
 
 

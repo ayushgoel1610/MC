@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :topics
   post 'chats', to: 'chats#create'
   post 'endchat',to: 'chats#end_chat'
+  post 'topics/list',to: 'topics#topicList'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
