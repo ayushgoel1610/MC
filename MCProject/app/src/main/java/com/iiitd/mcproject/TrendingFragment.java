@@ -33,7 +33,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -45,7 +44,11 @@ import java.util.concurrent.ExecutionException;
  * create an instance of this fragment.
  *
  */
+
 public class TrendingFragment extends Fragment {
+
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,6 +61,7 @@ public class TrendingFragment extends Fragment {
     ListView trendingTopics;
     private ArrayList<String> topicList=new ArrayList<String>();
     private ArrayList<byte[]> imageList=new ArrayList<byte[]>();
+    private ArrayList<String> imageUrlList=new ArrayList<String>();
 
     TopicList adapter;
     String[] topicNames = {
@@ -149,7 +153,6 @@ public class TrendingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         inflateView= inflater.inflate(R.layout.fragment_trending, container, false);
-        //getList();
         return inflateView;
     }
 
@@ -219,14 +222,8 @@ public class TrendingFragment extends Fragment {
         if(networkInfo!=null && networkInfo.isConnected()) {
             for (String topic : topicNames) {
                 topicList.add(topic);
-                try {
-                    imageList.add(new KnowledgeGraphTask().execute(topic.toLowerCase()));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
+                    new KnowledgeGraphTask().execute(topic.toLowerCase());
+             }
         }else{
             Toast.makeText(getActivity() , "No Internet Connection" , Toast.LENGTH_SHORT).show();
         }
@@ -241,22 +238,23 @@ public class TrendingFragment extends Fragment {
         @Override
         protected Void doInBackground(String... param) {
             Log.d(tag, "inside the KnowledgeGraphTask");
-            Log.d(tag , "The topic is : " + param[0]);
+            Log.d(tag, "The topic is : " + param[0]);
             String topic = new String(param[0]);
-            topic = topic.replace(" " , "_");
+            topic = topic.replace(" ", "_");
 
             String topic_id = getTopicId(topic);
-            Log.d(tag , "The topic id is : " + topic_id );
+            Log.d(tag, "The topic id is : " + topic_id);
 
-            if(topic_id == null){
+            if (topic_id == null) {
                 return null;
-            }else{
+            } else {
                 String image_id = getTopicImageId(topic_id);
-                if(image_id == null){
+                if (image_id == null) {
                     return null;
-                }else{
+                } else {
                     getTopicImage(image_id);
                 }
+                return null;
             }
         }
 
@@ -375,6 +373,7 @@ public class TrendingFragment extends Fragment {
             HttpTransport httpTransport = new NetHttpTransport();
             HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
             String req_url = "https://www.googleapis.com/freebase/v1/image" + image_id;
+            imageUrlList.add(req_url);
             Log.d(tag , "The image_id url is : " + req_url);
             GenericUrl url = new GenericUrl(req_url);
             HttpRequest request = null;
@@ -404,6 +403,7 @@ public class TrendingFragment extends Fragment {
                 }
                 baos.close();
                 byte[] b = baos.toByteArray();
+                imageList.add(b);
                 //Bitmap bmp = BitmapFactory.decodeByteArray(b, 0, b.length);
                 Log.d(tag , "Image retrieved");
                 return b;
