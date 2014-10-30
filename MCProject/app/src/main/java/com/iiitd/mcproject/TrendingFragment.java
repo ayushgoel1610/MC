@@ -190,6 +190,7 @@ public class TrendingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        getList();
         getListImage();
     }
 
@@ -222,12 +223,14 @@ public class TrendingFragment extends Fragment {
         if(networkInfo!=null && networkInfo.isConnected()) {
             for (String topic : topicNames) {
                 topicList.add(topic);
-                    new KnowledgeGraphTask().execute(topic.toLowerCase());
+                new KnowledgeGraphTask().execute(topic.toLowerCase());
              }
         }else{
             Toast.makeText(getActivity() , "No Internet Connection" , Toast.LENGTH_SHORT).show();
         }
         //Populate list
+        Log.d("" , Integer.toString(imageList.size()));
+        Log.d("" , Integer.toString(topicList.size()));
         initList();
     }
 
