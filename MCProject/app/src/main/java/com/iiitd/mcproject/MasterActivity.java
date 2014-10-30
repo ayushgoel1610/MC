@@ -129,6 +129,7 @@ public class MasterActivity extends Activity
 
         switch(position) {
             case 0:
+                if(!((MainTabsFragment)getFragmentManager().findFragmentByTag( MainTabsFragment.TAG)).isVisible())
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content_frame, MainTabsFragment.newInstance(), MainTabsFragment.TAG).commit();

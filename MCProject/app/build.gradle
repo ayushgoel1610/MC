@@ -26,4 +26,6 @@ dependencies {
     compile 'com.google.api-client:google-api-client:1.18.0-rc'
 
     compile 'com.android.support:support-v13:20.0.0'
+
+    compile 'com.squareup.picasso:picasso:2.3.4'
 }
