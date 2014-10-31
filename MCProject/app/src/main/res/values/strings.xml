@@ -8,6 +8,8 @@
     <string name="title_section1">Categories</string>
     <string name="title_section2">Trending</string>
     <string name="title_section3">Recent</string>
+    <string name="drawer_open">Drawer Opened</string>
+    <string name="drawer_close">Drawer Closed</string>
     <string name="title_activity_main_tabs">MainTabsActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
