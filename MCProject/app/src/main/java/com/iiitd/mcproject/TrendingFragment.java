@@ -29,9 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 
@@ -254,7 +252,7 @@ public class TrendingFragment extends Fragment {
                 if(topic_id == null){
                     return "ERROR";
                 }else{
-                    String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id);
+                    String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid";
                     if(image_id == null){
                         return "ERROR";
                     }else if(topicList.indexOf(topic)>=0){
@@ -371,50 +369,6 @@ public class TrendingFragment extends Fragment {
                 }catch (IOException e){
                     e.printStackTrace();
                     return e.toString();
-                }
-            }
-
-            private byte[] getTopicImage(String image_id){
-                Log.d(tag , "Inside getImageId");
-                HttpTransport httpTransport = new NetHttpTransport();
-                HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
-                String req_url = "https://www.googleapis.com/freebase/v1/image" + image_id +"?maxwidth=400&maxheight=400&mode=fillcropmid";
-                Log.d(tag , "The image_id url is : " + req_url);
-                GenericUrl url = new GenericUrl(req_url);
-                HttpRequest request = null;
-                try {
-                    request = requestFactory.buildGetRequest(url);
-                } catch (IOException e) {
-                    e.printStackTrace();
-
-                    return null;
-                }
-                HttpResponse httpResponse = null;
-                try {
-                    httpResponse = request.execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.d(tag , "Something went wrong");
-                    return null;
-                }
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                int bufferSize = 1024;
-                int len = 0;
-                byte[] buffer = new byte[bufferSize];
-                try {
-                    InputStream instream = httpResponse.getContent();
-                    while ((len = instream.read(buffer)) != -1) {
-                        baos.write(buffer, 0, len);
-                    }
-                    baos.close();
-                    byte[] b = baos.toByteArray();
-                    //Bitmap bmp = BitmapFactory.decodeByteArray(b, 0, b.length);
-                    Log.d(tag , "Image retrieved");
-                    return b;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.d(tag , "Something went wrong");
-                    return null;
                 }
             }
 

@@ -3,8 +3,6 @@ package com.iiitd.mcproject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -23,15 +21,13 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -41,9 +37,6 @@ import java.util.concurrent.ExecutionException;
 
 public class FreeBase extends Activity{
 
-
-    Bitmap bmp ;
-
     ImageView image;
     ProgressBar bar ;
     TextView summary;
@@ -51,6 +44,10 @@ public class FreeBase extends Activity{
 
     String api_key = new String("AIzaSyBYeRWNMW3EHasjpawd1cSJ0cUOdInM6ds");
     String tag = new String("FreeBase class");
+
+    String image_id;
+    String description;
+    String text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,45 +71,28 @@ public class FreeBase extends Activity{
                         summary.setText("");
                         image.setVisibility(View.INVISIBLE);
                         image.setImageDrawable(null);
-                        bmp = null;
+                        image_id = null;
                         Log.d(tag, "Connected to internet");
-                        try {
-                          String res = new KnowledgeGraphTask().execute(getIntent().getStringExtra("topic")).get();
-                          //String res = new KnowledgeGraphTask().execute("inception").get();
-                            if(bmp == null){
-                                Toast.makeText(getBaseContext() , "No Image Found" , Toast.LENGTH_SHORT).show();
-                            }else {
-                                image.setImageBitmap(bmp);
-                            }
-                            Log.d(tag, "Back to FreeBase : " + res);
-                            summary.setText(res);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        }
+                        new KnowledgeGraphTask().execute(getIntent().getStringExtra("topic"));
                 }else{
                     Toast.makeText(getBaseContext(), "No internet connection", Toast.LENGTH_SHORT).show();
                 }
             }
 
-    private class KnowledgeGraphTask extends AsyncTask<String , Void , String>{
+    private class KnowledgeGraphTask extends AsyncTask<String , Void , Void>{
 
         @Override
-        protected String doInBackground(String... param) {
+        protected Void doInBackground(String... param) {
             Log.d(tag , "inside the KnowledgeGraphTask");
             Log.d(tag , "The topic is : " + param[0]);
             String topic = new String(param[0]);
             topic = topic.replace(" " , "_");
-
             String topic_id = getTopicId(topic);
             Log.d(tag , "The topic id is : " + topic_id );
-
-            if(topic_id == null){
-                return null;
-            }else{
-                return getTopicData(topic_id);
+            if(topic_id != null){
+                getTopicData(topic_id);
             }
+            return null;
         }
 
         private String getTopicId(String topic) {
@@ -162,7 +142,7 @@ public class FreeBase extends Activity{
             }
         }
 
-        private String getTopicData(String topic_id){
+        private void getTopicData(String topic_id){
             Log.d(tag , "Inside getTopicData");
             HttpTransport httpTransport = new NetHttpTransport();
             HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
@@ -176,7 +156,7 @@ public class FreeBase extends Activity{
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d(tag , "Something went wrong");
-                return null;
+                return ;
             }
             HttpResponse httpResponse = null;
             try {
@@ -184,7 +164,7 @@ public class FreeBase extends Activity{
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d(tag , "Something went wrong");
-                return null;
+                return;
             }
             JSONObject json = null;
             try {
@@ -197,8 +177,8 @@ public class FreeBase extends Activity{
                 JSONArray json_description_values = new JSONArray(json_description.getString("values"));
                 Log.d(tag ,  "the json_description_values : " + json_description_values.toString());
                 JSONObject json_value = (JSONObject)json_description_values.get(0);
-                String description = json_value.getString("value");
-                String text = json_value.getString("text");
+                description = json_value.getString("value");
+                text = json_value.getString("text");
                 Log.d(tag , description);
 
                 try {
@@ -207,77 +187,33 @@ public class FreeBase extends Activity{
                     JSONArray json_image_values = new JSONArray(json_image.getString("values"));
                     Log.d(tag, "the json_image_values : " + json_image_values.toString());
                     JSONObject image = (JSONObject) json_image_values.get(0);
-                    String image_id = image.getString("id");
+                    image_id = image.getString("id");
                     Log.d(tag, "The image id is : " + image_id);
-
-                    if (image_id != null) {
-                        getTopicImage(image_id);
-                    }
                 }  catch (JSONException e) {
                     e.printStackTrace();
                     Log.d(tag , "Something went wrong");
                 }
-                return text;
+                return;
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.d(tag , "Something went wrong");
-                return null;
+                return;
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d(tag , "Something went wrong");
-                return null;
+                return;
             }
         }
 
-        private void getTopicImage(String image_id){
-            Log.d(tag , "Inside getImageId");
-            HttpTransport httpTransport = new NetHttpTransport();
-            HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
-            String req_url = "https://www.googleapis.com/freebase/v1/image" + image_id;
-            Log.d(tag , "The image_id url is : " + req_url);
-            GenericUrl url = new GenericUrl(req_url);
-            HttpRequest request = null;
-            try {
-                request = requestFactory.buildGetRequest(url);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.d(tag , "Something went wrong");
-                return;
-            }
-            HttpResponse httpResponse = null;
-            try {
-                httpResponse = request.execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.d(tag , "Something went wrong");
-                return;
-            }
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            int bufferSize = 1024;
-            int len = 0;
-            byte[] buffer = new byte[bufferSize];
-            try {
-                InputStream instream = httpResponse.getContent();
-                while ((len = instream.read(buffer)) != -1) {
-                    baos.write(buffer, 0, len);
-                }
-                baos.close();
-                byte[] b = baos.toByteArray();
-                bmp = BitmapFactory.decodeByteArray(b, 0, b.length);
-                Log.d(tag , "Image retrieved");
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.d(tag , "Something went wrong");
-            }
-    }
-
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.d(tag , "The result is : " + s);
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
             bar.setVisibility(View.INVISIBLE);
+            summary.setText(text);
             summary.setVisibility(View.VISIBLE);
             image.setVisibility(View.VISIBLE);
+            String imageUrl = "https://www.googleapis.com/freebase/v1/image" + image_id + "?maxwidth=500&maxheight=500&mode=fillcropmid";
+            Picasso.with(getBaseContext()).load(imageUrl).error(R.drawable.ic_launcher).into(image);
         }
     }
 }
