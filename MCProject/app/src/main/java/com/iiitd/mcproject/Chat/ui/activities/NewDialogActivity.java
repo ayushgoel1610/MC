@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
 import com.iiitd.mcproject.Chat.ui.fragments.UsersFragment;
+import com.iiitd.mcproject.MasterActivity;
 import com.iiitd.mcproject.R;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class NewDialogActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(NewDialogActivity.this, SplashActivity.class);
+        Intent i = new Intent(NewDialogActivity.this, MasterActivity.class);
         startActivity(i);
         finish();
 

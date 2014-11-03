@@ -6,9 +6,11 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.facebook.Request;
@@ -36,6 +39,7 @@ import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 public class loginActivity extends FragmentActivity {
 
     private LoginButton loginBtn;
+    private ProgressBar progressBar;
 //    private Button postImageBtn;
 //    private Button updateStatusBtn;
 
@@ -64,6 +68,8 @@ public class loginActivity extends FragmentActivity {
         setContentView(R.layout.activity_login);
 
         userNameView = (TextView) findViewById(R.id.user_name);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
         loginBtn = (LoginButton) findViewById(R.id.authButton);
         loginBtn.setReadPermissions(Arrays.asList("email"));
         loginBtn.setUserInfoChangedCallback(new UserInfoChangedCallback() {
@@ -71,23 +77,38 @@ public class loginActivity extends FragmentActivity {
             public void onUserInfoFetched(GraphUser user) {
                 if (user != null)
                 {
+                    userNameView.setText("Loading Topics");
+                    progressBar.setVisibility(View.VISIBLE);
+                    loginBtn.setVisibility(View.GONE);
+
                     userLogin = user.asMap().get("email").toString();
                     userEmail = user.asMap().get("email").toString();
                     userFBid = user.getId();
                     userFullName = user.getName();
 
-                    userNameView.setText("Hello, " + user.getName());
+//                    userNameView.setText("Hello, " + user.getName());
                     userToken = Session.getActiveSession().getAccessToken();
-                    Log.d("debug",""+user.getInnerJSONObject());
-                    Log.d("debug", "userToken: " + userToken);
+//                    Log.d("debug",""+user.getInnerJSONObject());
+//                    Log.d("debug", "userToken: " + userToken);
 
-                    passwordAlert();
 
+                    SharedPreferences sp = getSharedPreferences(Common.PREF,MODE_PRIVATE);
+                    String checkPass = sp.getString("userPassword","null");
+//                    Log.d("checkpass",checkPass);
+                    if(checkPass.equals("null"))
+                    {
+                        passwordAlert();
+                    }
+                    else
+                    {
+                        quickbloxLogin ql1 = new quickbloxLogin(loginActivity.this);
+                        ql1.userChat_auth();
+                    }
                 }
-                else
-                {
-                    userNameView.setText("You are not logged");
-                }
+//                else
+//                {
+//
+//                }
             }
         });
 
@@ -114,6 +135,13 @@ public class loginActivity extends FragmentActivity {
 
     private void userSignQB()
     {
+       SharedPreferences sharedPref = getSharedPreferences(Common.PREF,MODE_PRIVATE);
+       SharedPreferences.Editor editor = sharedPref.edit();
+       editor.putString("userLogin",userLogin);
+       editor.putString("userPassword",userPassword);
+       editor.putString("userEmail",userEmail);
+       editor.putString("userFBId",userFBid);
+       editor.commit();
        quickbloxRequest newReq = new quickbloxRequest(userLogin, userPassword, userEmail, userFBid, userFullName, loginActivity.this);
        newReq.execute();
     }
