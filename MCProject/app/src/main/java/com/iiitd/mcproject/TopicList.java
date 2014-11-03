@@ -39,6 +39,8 @@ public class TopicList extends ArrayAdapter<String> {
         if(position<imageId.size())
             imageUrl = imageId.get(position);
 
+//        Log.v("topic list",topics.get(position)+" "+imageUrl);
+
         if(imageUrl==null) {
             imageView.setImageResource(R.drawable.ic_launcher);
         }else {

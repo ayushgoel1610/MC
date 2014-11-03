@@ -25,11 +25,16 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -47,6 +52,10 @@ import java.util.ArrayList;
 public class TrendingFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+    private static final String SERVER_URL = "http://192.168.49.240:3000/";
+    private static final String TRENDING_TOPICS_API="topics/list/";
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -54,20 +63,15 @@ public class TrendingFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private long offset=0;
+
     ListView trendingTopics;
     private ArrayList<String> topicList=new ArrayList<String>();
     private ArrayList<String> imageList=new ArrayList<String>();
 
+    String tag = new String("getTopicTask");
+
     TopicList adapter;
-    String[] topicNames = {
-            "Game of Thrones",
-            "The Walking Dead",
-            "Android",
-            "Avengers",
-            "India",
-            "Google",
-            "ISIS"
-    } ;
 
     View inflateView;
     Context context;
@@ -135,9 +139,9 @@ public class TrendingFragment extends Fragment {
                 if (trendingTopics.getLastVisiblePosition() == trendingTopics.getAdapter().getCount() - 1
                         && trendingTopics.getChildAt(trendingTopics.getChildCount() - 1).getBottom() <= trendingTopics.getHeight()) {
                     //scroll end reached
-                    //Toast.makeText(getActivity(), "Reached end of list ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Reached end of list ", Toast.LENGTH_SHORT).show();
                     //add more items to list
-                    addToList();
+                    //addToList();
                 }
             }
         });
@@ -187,7 +191,7 @@ public class TrendingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getList();
-        getListImage();
+        //getListImage();
     }
 
     /**
@@ -206,19 +210,16 @@ public class TrendingFragment extends Fragment {
     }
 
     private void getList(){
-        for (String topic : topicNames) {
-            topicList.add(topic);
-            imageList.add(null);
-        }
-        initList();
+        TopicTask();
+        //initList();
     }
 
     private void getListImage(){
         ConnectivityManager cmgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
         if(networkInfo!=null && networkInfo.isConnected()) {
-            for (String topic : topicNames) {
-                topicList.add(topic);
+            for (String topic : topicList) {
+                //topicList.add(topic);
                 try {
                     KnowledgeGraphTask(topic);
                 } catch (Exception e) {
@@ -229,6 +230,109 @@ public class TrendingFragment extends Fragment {
             Toast.makeText(getActivity() , "No Internet Connection" , Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void TopicTask(){
+        new AsyncTask<Void, String, String>(){
+
+            @Override
+            protected String doInBackground(Void... param) {
+                String result=getTopics(offset);
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                Log.i(tag, msg);
+                if(msg.contains("retrieved")) {
+                    offset += 10;
+                    if(offset==10)
+                        initList();
+                    else
+                        adapter.notifyDataSetChanged();
+
+                    getListImage();
+                }
+                //Populate list
+                //adapter.notifyDataSetChanged();
+            }
+        }.execute(null, null, null);
+    }
+
+    private String getTopics(long offset){
+        InputStream inputStream = null;
+        try {
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(SERVER_URL+TRENDING_TOPICS_API);
+
+            String json = "";
+
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("offset", offset);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            json = jsonObject.toString();
+            Log.e(tag,json);
+
+            StringEntity se = new StringEntity(json);
+            //	        se.setContentType("application/json;charset=UTF-8");
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE,"application/json"));
+
+            httpPost.setEntity(se);
+
+            org.apache.http.HttpResponse httpResponse = httpclient.execute(httpPost);
+
+            inputStream = httpResponse.getEntity().getContent();
+            StatusLine sl=httpResponse.getStatusLine();
+
+            Log.v(tag, Integer.toString(sl.getStatusCode())+" "+sl.getReasonPhrase());
+
+            StringBuffer sb=new StringBuffer();
+
+            try {
+                int ch;
+                while ((ch = inputStream.read()) != -1) {
+                    sb.append((char) ch);
+                }
+            Log.v("ELSERVICES", "first input stream: "+sb.toString());
+
+                JSONObject response=new JSONObject(sb.toString());
+                JSONArray topicsArray=response.getJSONArray("list");
+
+                addNewTopics(topicsArray);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw e;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
+
+        }
+        catch (Exception e){
+            return "ERROR : Due to "+e.getMessage();
+        }
+        return "topics retrieved successfully";
+    }
+
+    private void addNewTopics(JSONArray topicsArray){
+        JSONObject JSONTopic;
+        for(int i=0;i<topicsArray.length();i++){
+            try {
+                JSONTopic=topicsArray.getJSONObject(i);
+                String topic=JSONTopic.getString("name");
+                topicList.add(topic);
+                imageList.add(null);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void KnowledgeGraphTask(final String topicName)
@@ -247,14 +351,19 @@ public class TrendingFragment extends Fragment {
                 String topic_id = getTopicId(topic);
                 Log.d(tag , "The topic id is : " + topic_id );
 
+                topic = topic.replace("_" , " ");
+
                 if(topic_id == null){
                     return "ERROR";
                 }else{
                     String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id);
-                    if(image_id == null){
+                    Log.v(tag,"adding image for "+topic+" to: "+topicList.indexOf(topic));
+                    if(image_id.equals("https://www.googleapis.com/freebase/v1/imagenull")){
+                        Log.v(tag,"Not adding image: "+image_id);
                         return "ERROR";
                     }else if(topicList.indexOf(topic)>=0){
                         imageList.add(topicList.indexOf(topic),image_id);
+                        Log.v(tag,"Adding image: "+image_id);
                         return image_id;
                     }
                 }
@@ -322,7 +431,7 @@ public class TrendingFragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.d(tag , "Something went wrong");
-                    return e.toString();
+                    return null;
                 }
                 HttpResponse httpResponse = null;
                 try {
@@ -330,7 +439,7 @@ public class TrendingFragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.d(tag , "Something went wrong");
-                    return e.toString();
+                    return null;
                 }
                 JSONObject json = null;
                 try {
@@ -358,59 +467,15 @@ public class TrendingFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
 
-                        return e.toString();
+                        return null;
                     }
                 }catch(JSONException e){
                     e.printStackTrace();
-                     
+
                     return e.toString();
                 }catch (IOException e){
                     e.printStackTrace();
-                     
-                    return e.toString();
-                }
-            }
 
-            private byte[] getTopicImage(String image_id){
-                Log.d(tag , "Inside getImageId");
-                HttpTransport httpTransport = new NetHttpTransport();
-                HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
-                String req_url = "https://www.googleapis.com/freebase/v1/image" + image_id;
-                Log.d(tag , "The image_id url is : " + req_url);
-                GenericUrl url = new GenericUrl(req_url);
-                HttpRequest request = null;
-                try {
-                    request = requestFactory.buildGetRequest(url);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                     
-                    return null;
-                }
-                HttpResponse httpResponse = null;
-                try {
-                    httpResponse = request.execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.d(tag , "Something went wrong");
-                    return null;
-                }
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                int bufferSize = 1024;
-                int len = 0;
-                byte[] buffer = new byte[bufferSize];
-                try {
-                    InputStream instream = httpResponse.getContent();
-                    while ((len = instream.read(buffer)) != -1) {
-                        baos.write(buffer, 0, len);
-                    }
-                    baos.close();
-                    byte[] b = baos.toByteArray();
-                    //Bitmap bmp = BitmapFactory.decodeByteArray(b, 0, b.length);
-                    Log.d(tag , "Image retrieved");
-                    return b;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.d(tag , "Something went wrong");
                     return null;
                 }
             }
