@@ -32,7 +32,6 @@ import java.util.TimerTask;
 
 public class TopicChat extends Activity{
 
-
     Timer mytimer ;
     int topic_id;
     private static final String CHAT_REQUEST="chats/request";

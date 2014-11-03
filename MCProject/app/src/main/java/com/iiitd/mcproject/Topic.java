@@ -84,6 +84,7 @@ public class Topic extends Activity{
 
     public void runChatClient(View view){
         Intent intent = new Intent(this, SplashActivity.class);
+        intent.putExtra("id" , getIntent().getIntExtra("id" , -1));
         startActivity(intent);
     }
 
