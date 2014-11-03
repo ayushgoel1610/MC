@@ -357,13 +357,13 @@ public class TrendingFragment extends Fragment {
                     return "ERROR";
                 }else{
                     String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id);
-                    Log.v(tag,"adding image for "+topic+" to: "+topicList.indexOf(topic));
+//                    Log.v(tag,"adding image for "+topic+" to: "+topicList.indexOf(topic));
                     if(image_id.equals("https://www.googleapis.com/freebase/v1/imagenull")){
-                        Log.v(tag,"Not adding image: "+image_id);
+//                        Log.v(tag,"Not adding image: "+image_id);
                         return "ERROR";
                     }else if(topicList.indexOf(topic)>=0){
                         imageList.add(topicList.indexOf(topic),image_id);
-                        Log.v(tag,"Adding image: "+image_id);
+//                        Log.v(tag,"Adding image: "+image_id);
                         return image_id;
                     }
                 }
