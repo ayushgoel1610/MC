@@ -3,6 +3,7 @@ package com.iiitd.mcproject.Chat.ui.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.quickblox.chat.model.QBChatHistoryMessage;
-import com.quickblox.chat.model.QBMessage;
 import com.iiitd.mcproject.ApplicationSingleton;
 import com.iiitd.mcproject.R;
+import com.quickblox.chat.model.QBChatHistoryMessage;
+import com.quickblox.chat.model.QBMessage;
 
 import java.util.Date;
 import java.util.List;
@@ -58,6 +59,7 @@ public class ChatAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         QBMessage chatMessage = getItem(position);
+        Log.v("The message is", " " + chatMessage);
         LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
@@ -67,8 +69,12 @@ public class ChatAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        setAlignment(holder, chatMessage.getSenderId() == ((ApplicationSingleton)context.getApplication()).getCurrentUser().getId());
+        Log.v("Incoming and Outgoing", " " + chatMessage.getSenderId());
+        Log.v("Incoming and Outgoing", " " + ((ApplicationSingleton) context.getApplication()).getCurrentUser().getId());
+        if (chatMessage.getSenderId() == null)
+            setAlignment(holder, true);
+        else
+            setAlignment(holder, chatMessage.getSenderId() == ((ApplicationSingleton) context.getApplication()).getCurrentUser().getId());
         holder.txtMessage.setText(chatMessage.getBody());
         if (chatMessage.getSenderId() != null) {
             holder.txtInfo.setText(chatMessage.getSenderId() + ": " + getTimeText(chatMessage));
@@ -89,6 +95,7 @@ public class ChatAdapter extends BaseAdapter {
 
     private void setAlignment(ViewHolder holder, boolean isIncoming) {
         if (isIncoming) {
+            Log.v("Incoming", "Incoming message");
             holder.contentWithBG.setBackgroundResource(R.drawable.incoming_message_bg);
 
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.contentWithBG.getLayoutParams();
@@ -107,6 +114,7 @@ public class ChatAdapter extends BaseAdapter {
             layoutParams.gravity = Gravity.RIGHT;
             holder.txtInfo.setLayoutParams(layoutParams);
         } else {
+            Log.v("Outgoing", "Outgoing message");
             holder.contentWithBG.setBackgroundResource(R.drawable.outgoing_message_bg);
 
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.contentWithBG.getLayoutParams();

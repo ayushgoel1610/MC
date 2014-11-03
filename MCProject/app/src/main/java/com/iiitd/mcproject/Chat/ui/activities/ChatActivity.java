@@ -82,6 +82,7 @@ public class ChatActivity extends Activity {
         sendButton = (Button) findViewById(R.id.chatSendButton);
 
         TextView meLabel = (TextView) findViewById(R.id.meLabel);
+        meLabel.setText("You");
         TextView companionLabel = (TextView) findViewById(R.id.companionLabel);
         RelativeLayout container = (RelativeLayout) findViewById(R.id.container);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -103,7 +104,10 @@ public class ChatActivity extends Activity {
 
                 // Load CHat history
                 //
-                loadChatHistory();
+                //loadChatHistory();
+                adapter = new ChatAdapter(ChatActivity.this, new ArrayList<QBMessage>());
+                messagesContainer.setAdapter(adapter);
+                progressBar.setVisibility(View.GONE);
                 break;
         }
 
