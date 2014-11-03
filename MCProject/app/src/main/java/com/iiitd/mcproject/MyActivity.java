@@ -1,17 +1,44 @@
 package com.iiitd.mcproject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+import java.util.concurrent.ExecutionException;
 
 
 public class MyActivity extends Activity {
+
+    Button loginBtn;
+    Button chatBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+        loginBtn = (Button) findViewById(R.id.login);
+        chatBtn = (Button) findViewById(R.id.chat);
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("debug","reached login");
+                        Intent loginIntent = new Intent(MyActivity.this, loginActivity.class);
+                        startActivity(loginIntent);
+                    }
+                });
+
+                chatBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+            }
+        });
     }
 
 
