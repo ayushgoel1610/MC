@@ -1,4 +1,4 @@
-package com.iiitd.mcproject;
+package com.iiitd.mcproject.TabFragments;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.iiitd.mcproject.R;
 
 
 /**

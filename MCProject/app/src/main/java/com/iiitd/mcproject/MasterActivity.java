@@ -13,6 +13,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.iiitd.mcproject.TabFragments.CategoryFragment;
+import com.iiitd.mcproject.TabFragments.RecentFragment;
+import com.iiitd.mcproject.TabFragments.TrendingFragment;
+
 
 public class MasterActivity extends Activity
         implements CategoryFragment.OnFragmentInteractionListener,

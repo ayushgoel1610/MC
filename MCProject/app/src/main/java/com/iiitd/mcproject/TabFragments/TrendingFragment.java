@@ -1,4 +1,4 @@
-package com.iiitd.mcproject;
+package com.iiitd.mcproject.TabFragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -24,6 +24,10 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.iiitd.mcproject.Common;
+import com.iiitd.mcproject.R;
+import com.iiitd.mcproject.Topic;
+import com.iiitd.mcproject.TopicList;
 
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpPost;
@@ -361,7 +365,7 @@ public class TrendingFragment extends Fragment {
                     return "ERROR";
                 }else{
 
-                    String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"+ "&key="+Common.Freebase_api_key;
+                    String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"+ "&key="+ Common.Freebase_api_key;
                     if(image_id.equals("https://www.googleapis.com/freebase/v1/imagenull")){
 
                         return "ERROR";

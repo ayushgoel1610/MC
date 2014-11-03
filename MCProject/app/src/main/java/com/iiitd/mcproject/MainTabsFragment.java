@@ -10,6 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.iiitd.mcproject.TabFragments.CategoryFragment;
+import com.iiitd.mcproject.TabFragments.RecentFragment;
+import com.iiitd.mcproject.TabFragments.TrendingFragment;
+
 import java.util.Locale;
 
 
