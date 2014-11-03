@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'sessions/new'
+  get 'sessions/create',to: 'sessions#create'
 
   resources :users
   resources :topics
@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   post 'topics/list',to: 'topics#topicList'
   post 'chats/request',to: 'chats#pair_request'
   post 'chats/pair',to: 'chats#ret_pair'
+  post 'login',to: 'users#login'
+  post 'logout',to: 'users#logout'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

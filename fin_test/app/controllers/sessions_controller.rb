@@ -2,17 +2,19 @@ class SessionsController < ApplicationController
   skip_before_action :require_token,only:[:new,:create]
   def new
   end
-  def create
-  	@user = User.authenticate(params[:email],params[:password])
-  	respond_to do |format|
+  def create(email,password)
+  	@user = User.authenticate(email,password)
   		if @user
-  			@user.token=ApiKey.create!
+        key=ApiKey.create.access_token
+        puts "hello"
+        puts @user.id
+  			@user.token=key
+        puts @user.inspect
   			@user.save
-  			format.json{render json: @user,status: "logged in"}
+  			return @user
   		else
-  			format.json{status: "Invalid Credentials"}
-  		end
-  	end
+  			nil
+  	  end
   end
   def destroy
   	
