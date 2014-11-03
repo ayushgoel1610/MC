@@ -57,7 +57,6 @@ public class TrendingFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
-    private static final String SERVER_URL = "http://192.168.49.240:3000/";
     private static final String TRENDING_TOPICS_API="topics/list/";
 
     private static final String ARG_PARAM1 = "param1";
@@ -271,7 +270,7 @@ public class TrendingFragment extends Fragment {
         InputStream inputStream = null;
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(SERVER_URL+TRENDING_TOPICS_API);
+            HttpPost httpPost = new HttpPost(Common.SERVER_URL+TRENDING_TOPICS_API);
 
             String json = "";
 
