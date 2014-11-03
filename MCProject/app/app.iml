@@ -79,6 +79,16 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="quickblox-android-sdk-core-2.0" level="project" />
+    <orderEntry type="library" exported="" name="quickblox-android-sdk-location-2.0" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-19.0.0" level="project" />
+    <orderEntry type="library" exported="" name="quickblox-android-sdk-customobjects-2.0" level="project" />
+    <orderEntry type="library" exported="" name="quickblox-android-sdk-chat-2.0" level="project" />
+    <orderEntry type="library" exported="" name="quickblox-android-sdk-videochat-2.0" level="project" />
+    <orderEntry type="library" exported="" name="quickblox-android-sdk-content-2.0" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-19.0.0" level="project" />
+    <orderEntry type="library" exported="" name="quickblox-android-sdk-ratings-2.0" level="project" />
+    <orderEntry type="library" exported="" name="quickblox-android-sdk-messages-2.0" level="project" />
   </component>
 </module>
 

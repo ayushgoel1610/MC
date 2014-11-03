@@ -2,7 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.iiitd.mcproject" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--<uses-sdk
+        android:minSdkVersion="10"
+        android:targetSdkVersion="19" />-->
+
     <application
+        android:name=".ApplicationSingleton"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -15,7 +22,21 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+            </activity>
+        <activity
+                android:name=".Chat.ui.activities.NewDialogActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".Chat.ui.activities.SplashActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".Chat.ui.activities.ChatActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="adjustResize" />
+
     </application>
 
 </manifest>

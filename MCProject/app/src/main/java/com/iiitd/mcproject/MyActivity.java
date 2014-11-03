@@ -1,9 +1,14 @@
 package com.iiitd.mcproject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+
+import com.iiitd.mcproject.Chat.ui.activities.SplashActivity;
 
 
 public class MyActivity extends Activity {
@@ -33,4 +38,12 @@ public class MyActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void runChatClient(View view){
+        Intent intent = new Intent(this, SplashActivity.class);
+        startActivity(intent);
+
+    }
+
+
 }
