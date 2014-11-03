@@ -1,3 +1,4 @@
+
 package com.iiitd.mcproject;
 
 import android.app.Activity;
@@ -6,8 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-
 
 public class MyActivity extends Activity {
 
@@ -15,15 +14,6 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-        Button topic = (Button) findViewById(R.id.topic);
-        topic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Intent i = new Intent(getBaseContext() , Topic.class);
-                Intent i = new Intent(getBaseContext() , FreeBase.class);
-                //startActivity(i);
-            }
-        });
     }
 
     @Override
@@ -47,3 +37,6 @@ public class MyActivity extends Activity {
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 }
+
+
+

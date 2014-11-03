@@ -123,7 +123,7 @@ public class TrendingFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Toast.makeText(getActivity(), "You Clicked at " + topicList.get(position), Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(getActivity() , FreeBase.class);
+                Intent i = new Intent(getActivity() , Topic.class);
                 i.putExtra("topic" , topicList.get(position));
                 startActivity(i);
             }
@@ -168,6 +168,10 @@ public class TrendingFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+
+    //?maxwidth=225&maxheight=225&mode=fillcropmid
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -218,8 +222,8 @@ public class TrendingFragment extends Fragment {
         ConnectivityManager cmgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
         if(networkInfo!=null && networkInfo.isConnected()) {
+
             for (String topic : topicList) {
-                //topicList.add(topic);
                 try {
                     KnowledgeGraphTask(topic);
                 } catch (Exception e) {
@@ -356,10 +360,10 @@ public class TrendingFragment extends Fragment {
                 if(topic_id == null){
                     return "ERROR";
                 }else{
-                    String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id);
-//                    Log.v(tag,"adding image for "+topic+" to: "+topicList.indexOf(topic));
+
+                    String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"+ "&key="+Common.Freebase_api_key;
                     if(image_id.equals("https://www.googleapis.com/freebase/v1/imagenull")){
-//                        Log.v(tag,"Not adding image: "+image_id);
+
                         return "ERROR";
                     }else if(topicList.indexOf(topic)>=0){
                         imageList.add(topicList.indexOf(topic),image_id);
@@ -374,7 +378,7 @@ public class TrendingFragment extends Fragment {
                 Log.d(tag , "Inside getTopicId");
                 HttpTransport httpTransport = new NetHttpTransport();
                 HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
-                String req_url = "https://www.googleapis.com/freebase/v1/search/?query=" + topic;
+                String req_url = "https://www.googleapis.com/freebase/v1/search/?query=" + topic+ "&key="+Common.Freebase_api_key;
                 Log.d(tag , "The search topic url is : " + req_url);
                 GenericUrl url = new GenericUrl(req_url);
                 HttpRequest request = null;
@@ -422,7 +426,7 @@ public class TrendingFragment extends Fragment {
                 HttpTransport httpTransport = new NetHttpTransport();
                 HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
                 //String req_url = "https://www.googleapis.com/freebase/v1/topic" + topic_id;
-                String req_url = "https://www.googleapis.com/freebase/v1/topic" + topic_id + "?filter=/common/topic/description&filter=/common/topic/image" ;
+                String req_url = "https://www.googleapis.com/freebase/v1/topic" + topic_id + "?filter=/common/topic/description&filter=/common/topic/image"+ "&key="+Common.Freebase_api_key ;
                 Log.d(tag , "The topic_id url is : " + req_url);
                 GenericUrl url = new GenericUrl(req_url);
                 HttpRequest request = null;
@@ -475,7 +479,6 @@ public class TrendingFragment extends Fragment {
                     return e.toString();
                 }catch (IOException e){
                     e.printStackTrace();
-
                     return null;
                 }
             }
@@ -488,6 +491,4 @@ public class TrendingFragment extends Fragment {
             }
         }.execute(null, null, null);
     }
-
-
 }
