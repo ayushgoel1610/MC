@@ -220,7 +220,6 @@ public class TrendingFragment extends Fragment {
         NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
         if(networkInfo!=null && networkInfo.isConnected()) {
             for (String topic : topicNames) {
-                topicList.add(topic);
                 try {
                     KnowledgeGraphTask(topic);
                 } catch (Exception e) {

@@ -1,3 +1,4 @@
+
 package com.iiitd.mcproject;
 
 import android.app.Activity;
@@ -7,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
+import com.iiitd.mcproject.Chat.ui.activities.SplashActivity;
 
 public class MyActivity extends Activity {
 
@@ -38,6 +39,12 @@ public class MyActivity extends Activity {
         startActivity(intent);
     }
 
+    public void runChatClient(View view){
+        Intent intent = new Intent(this, SplashActivity.class);
+        startActivity(intent);
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -47,3 +54,6 @@ public class MyActivity extends Activity {
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 }
+
+
+
