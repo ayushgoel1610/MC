@@ -1,3 +1,4 @@
+
 package com.iiitd.mcproject;
 
 import android.app.Activity;
@@ -8,6 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.view.MenuItem;
+
+import com.iiitd.mcproject.MasterActivity;
+import com.iiitd.mcproject.R;
 
 import java.util.concurrent.ExecutionException;
 
@@ -41,6 +46,10 @@ public class MyActivity extends Activity {
         });
     }
 
+    public void toMainTabs(View view){
+        Intent intent= new Intent(this,MasterActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,34 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.iiitd.mcproject" >
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"    package="com.iiitd.mcproject" >
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".ApplicationSingleton"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
             android:name=".MyActivity"
             android:label="@string/app_name" >
-            <!--<meta-data android:name="com.facebook.sdk.applicationId" android:value="@string/facebook_app_id"/>-->
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".Topic"
+            android:label="MCProject">
+        </activity>
+
+        <activity
+            android:name=".MasterActivity"
+            android:label="@string/title_activity_master" >
+        </activity>
+
+        <activity
+            android:name=".Chat.ui.activities.NewDialogActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".Chat.ui.activities.SplashActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".Chat.ui.activities.ChatActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".loginActivity"
             android:label="@string/title_activity_login" >
         </activity>
+
         <activity
             android:name="com.facebook.LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
+
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+
     </application>
 
 </manifest>
