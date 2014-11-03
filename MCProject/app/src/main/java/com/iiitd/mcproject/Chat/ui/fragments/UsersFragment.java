@@ -10,24 +10,27 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-//import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.iiitd.mcproject.Chat.ui.activities.ChatActivity;
+import com.iiitd.mcproject.Chat.ui.adapters.UsersAdapter;
+import com.iiitd.mcproject.R;
 import com.quickblox.chat.QBChatService;
 import com.quickblox.chat.model.QBDialog;
 import com.quickblox.chat.model.QBDialogType;
 import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.QBEntityCallbackImpl;
 import com.quickblox.core.request.QBPagedRequestBuilder;
-import com.iiitd.mcproject.R;
-import com.iiitd.mcproject.Chat.ui.activities.ChatActivity;
-import com.iiitd.mcproject.Chat.ui.adapters.UsersAdapter;
 import com.quickblox.users.QBUsers;
 import com.quickblox.users.model.QBUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 public class UsersFragment extends Fragment implements QBEntityCallback<ArrayList<QBUser>> {
 
+
+    private static final String CHAT_API="chats";
     private static final int PAGE_SIZE = 10;
     //private PullToRefreshListView usersList;
     private Button createChatButton;
@@ -185,11 +188,5 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         }
         return ids;
     }
-
-
-    
-
-
-
 
 }

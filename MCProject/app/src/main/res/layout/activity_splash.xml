@@ -22,7 +22,6 @@
         android:layout_alignParentLeft="false"
         android:layout_alignParentTop="false"
         android:layout_below="@+id/splash_app_title"
-        android:layout_above="@+id/splash_qb_link"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:focusableInTouchMode="false"
@@ -37,16 +36,6 @@
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp" />
-
-    <ImageView
-        android:id="@id/splash_qb_link"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/qb_splash_link" />
 
     <TextView
         android:id="@+id/splash_app_title"
