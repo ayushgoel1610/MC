@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -42,7 +43,6 @@ public class FreeBase extends Activity{
     TextView summary;
     EditText search_text;
 
-    String api_key = new String("AIzaSyBYeRWNMW3EHasjpawd1cSJ0cUOdInM6ds");
     String tag = new String("FreeBase class");
 
     String image_id;
@@ -99,7 +99,7 @@ public class FreeBase extends Activity{
             Log.d(tag , "Inside getTopicId");
             HttpTransport httpTransport = new NetHttpTransport();
             HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
-            String req_url = "https://www.googleapis.com/freebase/v1/search/?query=" + topic;
+            String req_url = "https://www.googleapis.com/freebase/v1/search/?query=" + topic + "&key="+Common.Freebase_api_key;
             Log.d(tag , "The search topic url is : " + req_url);
             GenericUrl url = new GenericUrl(req_url);
             HttpRequest request = null;
@@ -147,7 +147,7 @@ public class FreeBase extends Activity{
             HttpTransport httpTransport = new NetHttpTransport();
             HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
             //String req_url = "https://www.googleapis.com/freebase/v1/topic" + topic_id;
-            String req_url = "https://www.googleapis.com/freebase/v1/topic" + topic_id + "?filter=/common/topic/description&filter=/common/topic/image" ;
+            String req_url = "https://www.googleapis.com/freebase/v1/topic" + topic_id + "?filter=/common/topic/description&filter=/common/topic/image" + "&key="+Common.Freebase_api_key ;
             Log.d(tag , "The topic_id url is : " + req_url);
             GenericUrl url = new GenericUrl(req_url);
             HttpRequest request = null;
@@ -209,10 +209,11 @@ public class FreeBase extends Activity{
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             bar.setVisibility(View.INVISIBLE);
-            summary.setText(text);
+            summary.setText(description);
+            summary.setMovementMethod(new ScrollingMovementMethod());
             summary.setVisibility(View.VISIBLE);
             image.setVisibility(View.VISIBLE);
-            String imageUrl = "https://www.googleapis.com/freebase/v1/image" + image_id + "?maxwidth=500&maxheight=500&mode=fillcropmid";
+            String imageUrl = "https://www.googleapis.com/freebase/v1/image" + image_id + "?maxwidth=500&maxheight=500&mode=fillcropmid" + "&key="+Common.Freebase_api_key;
             Picasso.with(getBaseContext()).load(imageUrl).error(R.drawable.ic_launcher).into(image);
         }
     }

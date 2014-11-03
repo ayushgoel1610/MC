@@ -252,7 +252,7 @@ public class TrendingFragment extends Fragment {
                 if(topic_id == null){
                     return "ERROR";
                 }else{
-                    String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid";
+                    String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"+ "&key="+Common.Freebase_api_key;
                     if(image_id == null){
                         return "ERROR";
                     }else if(topicList.indexOf(topic)>=0){
@@ -267,7 +267,7 @@ public class TrendingFragment extends Fragment {
                 Log.d(tag , "Inside getTopicId");
                 HttpTransport httpTransport = new NetHttpTransport();
                 HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
-                String req_url = "https://www.googleapis.com/freebase/v1/search/?query=" + topic;
+                String req_url = "https://www.googleapis.com/freebase/v1/search/?query=" + topic+ "&key="+Common.Freebase_api_key;
                 Log.d(tag , "The search topic url is : " + req_url);
                 GenericUrl url = new GenericUrl(req_url);
                 HttpRequest request = null;
@@ -315,7 +315,7 @@ public class TrendingFragment extends Fragment {
                 HttpTransport httpTransport = new NetHttpTransport();
                 HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
                 //String req_url = "https://www.googleapis.com/freebase/v1/topic" + topic_id;
-                String req_url = "https://www.googleapis.com/freebase/v1/topic" + topic_id + "?filter=/common/topic/description&filter=/common/topic/image" ;
+                String req_url = "https://www.googleapis.com/freebase/v1/topic" + topic_id + "?filter=/common/topic/description&filter=/common/topic/image"+ "&key="+Common.Freebase_api_key ;
                 Log.d(tag , "The topic_id url is : " + req_url);
                 GenericUrl url = new GenericUrl(req_url);
                 HttpRequest request = null;
@@ -380,6 +380,4 @@ public class TrendingFragment extends Fragment {
             }
         }.execute(null, null, null);
     }
-
-
 }
