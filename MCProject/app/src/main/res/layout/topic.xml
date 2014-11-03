@@ -29,4 +29,15 @@
         android:layout_above="@+id/topic_search_progressBar"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:layout_marginTop="25dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Chat"
+        android:id="@+id/button"
+        android:layout_below="@+id/topic_search_text"
+        android:layout_centerHorizontal="true"
+        android:onClick="runChatClient"
+        />
+
 </RelativeLayout>

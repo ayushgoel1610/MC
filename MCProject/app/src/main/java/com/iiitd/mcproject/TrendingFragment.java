@@ -117,7 +117,7 @@ public class TrendingFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Toast.makeText(getActivity(), "You Clicked at " + topicList.get(position), Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(getActivity() , FreeBase.class);
+                Intent i = new Intent(getActivity() , Topic.class);
                 i.putExtra("topic" , topicList.get(position));
                 startActivity(i);
             }
