@@ -70,7 +70,7 @@ public class TrendingFragment extends Fragment {
 
     ListView trendingTopics;
     private ArrayList<String> topicList=new ArrayList<String>();
-    private ArrayList<String> topicIDList=new ArrayList<String>();
+    private ArrayList<Integer> topicIDList=new ArrayList<Integer>();
     private ArrayList<String> imageList=new ArrayList<String>();
 
     String tag = new String("getTopicTask");
@@ -130,6 +130,8 @@ public class TrendingFragment extends Fragment {
                 Intent i = new Intent(getActivity() , Topic.class);
                 i.putExtra("topic" , topicList.get(position));
                 i.putExtra("id", topicIDList.get(position));
+                int p = topicIDList.get(position) ;
+                Log.d(tag , "The topic id is : " + Integer.toString(topicIDList.get(position)));
                 startActivity(i);
             }
         });
@@ -336,7 +338,7 @@ public class TrendingFragment extends Fragment {
             try {
                 JSONTopic=topicsArray.getJSONObject(i);
                 String topic=JSONTopic.getString("name");
-                topicIDList.add(JSONTopic.getString("id"));
+                topicIDList.add(Integer.parseInt(JSONTopic.getString("id")));
                 topicList.add(topic);
                 imageList.add(null);
             } catch (JSONException e) {

@@ -23,7 +23,7 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.iiitd.mcproject.Chat.ui.activities.SplashActivity;
+import com.iiitd.mcproject.Chat.ui.activities.NewDialogActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -45,7 +45,7 @@ public class Topic extends Activity{
     TextView summary;
     EditText search_text;
 
-    String tag = new String("FreeBase class");
+    String tag = new String("Topic");
 
     String image_id;
     String description;
@@ -63,8 +63,9 @@ public class Topic extends Activity{
         image = (ImageView)findViewById(R.id.topic_image);
         image.setVisibility(View.INVISIBLE);
 
-        Log.d(tag , "Inside FreeBase Class");
+        //Toast.makeText(this , "the topic id is : " + Integer.toString(getIntent().getIntExtra("id" , -1)) , Toast.LENGTH_SHORT).show();
 
+        Log.d(tag , "Inside FreeBase Class");
                 ConnectivityManager cmgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
                 if(networkInfo!=null && networkInfo.isConnected()){
@@ -83,7 +84,7 @@ public class Topic extends Activity{
 
 
     public void runChatClient(View view){
-        Intent intent = new Intent(this, SplashActivity.class);
+        Intent intent = new Intent(this, NewDialogActivity.class);
         intent.putExtra("id" , getIntent().getIntExtra("id" , -1));
         startActivity(intent);
     }

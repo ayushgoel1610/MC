@@ -31,5 +31,8 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:19.1.+'
 
-}
+    compile project(':facebook')
 
+    compile 'commons-codec:commons-codec:1.9';
+
+}
