@@ -29,12 +29,19 @@ class ChatsController < ApplicationController
 		if @targetpair.user_id2.nil?
 			for element in @topic.chatqueues
 				if(element.user_id1!=params[:user_id])
+					@chat=Chat.new(userid_1: params[:user_id],userid_2: element.user_id1,topic_id: params[:topic_id])
+					@chat.save
+					@user=User.find(element.user_id1)
 					response={
-						user_id: element.user_id1
+						status: "user found",
+						user_id: @user.chat_id,
+						chat: @chat
 					}.to_json
 					element.user_id2=params[:user_id]
+					element.chat=@chat.id
 					element.save
 					@targetpair.delete
+					puts response
 					render :json => response
 					return
 				end
@@ -50,8 +57,12 @@ class ChatsController < ApplicationController
 			end
 			render :json => response
 		else
+			@chat=Chat.find(@targetpair.chat)
+			@user=User.find(@targetpair.user_id2)
 			response={
-				user_id: @targetpair.user_id2
+				status: "user found",
+				user_id: @user.chat_id,
+				chat: @chat
 			}.to_json
 			@targetpair.delete
 			render :json => response
