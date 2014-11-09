@@ -40,6 +40,8 @@ import java.io.IOException;
 
 public class Topic extends Activity{
 
+    //TEST COMMIT
+
     ImageView image;
     ProgressBar bar ;
     TextView summary;
