@@ -16,7 +16,10 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Formatter;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -37,20 +40,21 @@ public class quickbloxRequest extends AsyncTask<Void, Void, String> {
 
     private String userLogin;
     private String userEmail;
-    private String userFBid;
+    //private String userFBid;
     private String userFullName;
     private String userPassword;
 
     private ProgressDialog pDialog;
     private Context context;
 
-    public quickbloxRequest(String a, String b, String c, String d, String e, Context cnt)
+    private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+
+    public quickbloxRequest(String a, String b, String c, String d, Context cnt)
     {
         this.userLogin = a;
         this.userPassword = b;
         this.userEmail = c;
-        this.userFBid = d;
-        this.userFullName = e;
+        this.userFullName = d;
         this.context = cnt;
     }
 
@@ -65,11 +69,14 @@ public class quickbloxRequest extends AsyncTask<Void, Void, String> {
         SecureRandom random = new SecureRandom();
         random.generateSeed(10);
         int rand = Math.abs(random.nextInt());
+        rand = Math.abs(rand);
         Log.d("random:"," " +String.valueOf(rand));
         return String.valueOf(rand);
     }
 
-    public static String hmacSha1(String value, String key) {
+    public static String hmacSha1(String value, String key)
+    {
+        /*
         try {
             // Get an hmac_sha1 key from the raw key bytes
             byte[] keyBytes = key.getBytes();
@@ -90,7 +97,28 @@ public class quickbloxRequest extends AsyncTask<Void, Void, String> {
             return new String(hexBytes, "UTF-8");
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }*/
+        SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), HMAC_SHA1_ALGORITHM);
+        Mac mac = null;
+        try {
+            mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
+            mac.init(signingKey);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
         }
+        return toHexString(mac.doFinal(value.getBytes()));
+    }
+
+    private static String toHexString(byte[] bytes) {
+        Formatter formatter = new Formatter();
+
+        for (byte b : bytes) {
+            formatter.format("%02x", b);
+        }
+
+        return formatter.toString();
     }
 
     @Override
@@ -129,13 +157,12 @@ public class quickbloxRequest extends AsyncTask<Void, Void, String> {
             cred.put("nonce", nonce);
 
             String str =  "application_id="+appIdQB+"&auth_key="+authKeyQB+"&nonce="+nonce+"&timestamp="+timeStamp;
-
-//            String str = "application_id="+appIdQB+"&auth_key="+authKeyQB+"&nonce="+nonce+"&timestamp="+timeStamp+"&user=login=shubham&password=mahbuhs";
+//            String str =  "application_id="+appIdQB+"&auth_key="+authKeyQB+"&nonce="+nonce+"&timestamp="+timeStamp+"&user[login]="+userLogin+"&user[password]="+userPassword;
             Log.d("string",str);
             cred.put("signature",hmacSha1(str,authSecretQB));
 
-//            loginCred.put("login","shubham");
-//            loginCred.put("password","mahbuhs");
+//            loginCred.put("login",userLogin);
+//            loginCred.put("password",userPassword);
 //            cred.put("user",loginCred);
 
             Log.d("debug", cred.toString());
@@ -199,7 +226,7 @@ public class quickbloxRequest extends AsyncTask<Void, Void, String> {
             }
             if(tokenQB != null)
             {
-                quickbloxLogin newLogin = new quickbloxLogin(userLogin,userPassword,userEmail,userFBid,userFullName,tokenQB,context);
+                quickbloxLogin newLogin = new quickbloxLogin(userLogin,userPassword,userEmail,userFullName,tokenQB,context);
                 newLogin.execute();
             }
             else

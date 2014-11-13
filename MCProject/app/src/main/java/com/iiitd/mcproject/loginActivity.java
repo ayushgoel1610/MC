@@ -55,7 +55,7 @@ public class loginActivity extends FragmentActivity {
     private boolean passFlag = false;
     private String userLogin;
     private String userEmail;
-    private String userFBid;
+    //private String userFBid;
     private String userFullName;
 
     @Override
@@ -81,15 +81,16 @@ public class loginActivity extends FragmentActivity {
                     progressBar.setVisibility(View.VISIBLE);
                     loginBtn.setVisibility(View.GONE);
 
-                    userLogin = user.asMap().get("email").toString();
+                    userLogin = user.getName();
+                    userLogin = userLogin.replaceAll(" ","");
                     userEmail = user.asMap().get("email").toString();
-                    userFBid = user.getId();
+                    //userFBid = user.getId();
                     userFullName = user.getName();
 
 //                    userNameView.setText("Hello, " + user.getName());
                     userToken = Session.getActiveSession().getAccessToken();
 //                    Log.d("debug",""+user.getInnerJSONObject());
-//                    Log.d("debug", "userToken: " + userToken);
+                    Log.d("debug", "userToken: " + userToken);
 
 
                     SharedPreferences sp = getSharedPreferences(Common.PREF,MODE_PRIVATE);
@@ -101,8 +102,10 @@ public class loginActivity extends FragmentActivity {
                     }
                     else
                     {
-                        quickbloxLogin ql1 = new quickbloxLogin(loginActivity.this);
-                        ql1.userChat_auth();
+                        RailsServerSignUp r1 = new RailsServerSignUp(loginActivity.this);
+                        r1.userChat_auth();
+//                        quickbloxLogin ql1 = new quickbloxLogin(loginActivity.this);
+//                        ql1.userChat_auth();
                     }
                 }
 //                else
@@ -140,9 +143,9 @@ public class loginActivity extends FragmentActivity {
        editor.putString("userLogin",userLogin);
        editor.putString("userPassword",userPassword);
        editor.putString("userEmail",userEmail);
-       editor.putString("userFBId",userFBid);
+       //editor.putString("userFBId",userFBid);
        editor.commit();
-       quickbloxRequest newReq = new quickbloxRequest(userLogin, userPassword, userEmail, userFBid, userFullName, loginActivity.this);
+       quickbloxRequest newReq = new quickbloxRequest(userLogin, userPassword, userEmail, userFullName, loginActivity.this);
        newReq.execute();
     }
 
