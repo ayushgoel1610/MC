@@ -159,6 +159,7 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
     protected void onPostExecute(String str)
     {
         pDialog.dismiss();
+        getRailsToken(str);
         userChat_auth();
         if(str != null)
         {
