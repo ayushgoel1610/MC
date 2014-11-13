@@ -258,6 +258,8 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 display.setText(request_status);
+                progressBar.setVisibility(View.INVISIBLE);
+                display.setVisibility(View.VISIBLE);
             }
         }.execute(null , null , null);
     }
@@ -416,7 +418,6 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
             }
             if(pair_status_count > 2){
                 mytimer.cancel();
-
             }
         } catch (JSONException e) {
             e.printStackTrace();
