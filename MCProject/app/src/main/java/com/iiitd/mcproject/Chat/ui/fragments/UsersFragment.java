@@ -56,6 +56,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
     Timer mytimer ;
     int topic_id;
     int user_id = 1;
+    int pair_id;
 
     int pair_status_count = 0;
     private String request_status = "" ;
@@ -417,6 +418,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
             }else{
                 pair_status = response.get("status").toString();
                 pair_status_count = 4;
+                pair_id = (Integer)response.get("pair_id");
               //QuickBlocksChat();
             }
         } catch (JSONException e) {
@@ -435,7 +437,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         //Log.v("UserId", " " + getUserIds(usersAdapter.getSelected()));
         //dialogToCreate.setOccupantsIds(getUserIds(usersAdapter.getSelected()));
         ArrayList<Integer> occupantIdsList = new ArrayList<Integer>();
-        occupantIdsList.add(1703563);
+        occupantIdsList.add(pair_id);
         dialogToCreate.setOccupantsIds(occupantIdsList);
 
         QBChatService.getInstance().getGroupChatManager().createDialog(dialogToCreate, new QBEntityCallbackImpl<QBDialog>() {

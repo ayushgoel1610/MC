@@ -21,6 +21,12 @@
             android:label="MCProject">
         </activity>
 
+
+        <activity
+            android:name=".Search"
+            android:label="MCProject">
+        </activity>
+
         <activity
             android:name=".Chat.ui.activities.TopicChat"
             android:label="MCProject">

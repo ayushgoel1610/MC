@@ -20,12 +20,11 @@ public class SearchableActivity extends ListActivity{
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            search(query);
-        }
-    }
 
-    private void search(String query){
-        Log.d("SearchableActivity" , "The search query is : " + query);
+            Intent i = new Intent(this , Search.class);
+            i.putExtra("topic" , query);
+            startActivity(i);
+        }
     }
 
 }
