@@ -36,7 +36,8 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        /* SharedPreferences sp = getSharedPreferences(Common.PREF, 0);
+        SharedPreferences.Editor ed = sp.edit();*/
         // Init Chat
         //
 //        QBChatService.setDebugEnabled(true);

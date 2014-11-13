@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iiitd.mcproject.Chat.ui.ChatManager;
 import com.iiitd.mcproject.Chat.ui.PrivateChatManagerImpl;
@@ -39,11 +41,16 @@ public class ChatActivity extends Activity {
 
     public static final String EXTRA_MODE = "mode";
     public static final String EXTRA_DIALOG = "dialog";
+    public boolean doubleBackToExitPressedOnce = false;
     private final String PROPERTY_SAVE_TO_HISTORY = "save_to_history";
 
     private EditText messageEditText;
     private ListView messagesContainer;
     private Button sendButton;
+    private Button addB;
+    private Button subB;
+    private TextView countB;
+    private int counter;
     private ProgressBar progressBar;
 
     private Mode mode = Mode.PRIVATE;
@@ -63,22 +70,58 @@ public class ChatActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        Toast.makeText(getApplicationContext(), "Press back to exit the chat",
+                Toast.LENGTH_LONG).show();
+
         initViews();
+        counter = 0;
+        countB.setText("" + counter);
+        addB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counter++;
+                countB.setText("" + counter);
+            }
+        });
+
+        subB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counter--;
+                if (counter < 0)
+                    counter = 0;
+                countB.setText("" + counter);
+            }
+        });
+
     }
+
 
     @Override
     public void onBackPressed() {
-        try {
-            chat.release();
-        } catch (XMPPException e) {
-            Log.e(TAG, "failed to release chat", e);
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
         }
-        super.onBackPressed();
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
     private void initViews() {
         messagesContainer = (ListView) findViewById(R.id.messagesContainer);
         messageEditText = (EditText) findViewById(R.id.messageEdit);
+        addB = (Button) findViewById(R.id.addB);
+        subB = (Button) findViewById(R.id.subB);
+        countB = (TextView) findViewById(R.id.np);
         sendButton = (Button) findViewById(R.id.chatSendButton);
 
         TextView meLabel = (TextView) findViewById(R.id.meLabel);
