@@ -18,4 +18,8 @@
     <item android:drawable="@drawable/com_facebook_picker_list_pressed"  />
     <item android:drawable="@drawable/com_facebook_picker_list_longpressed"  />
 </transition>
+<<<<<<< HEAD
 <!-- From: file:/F:/AndroidStudioProjects/MC/MCProject/facebook/res/drawable/com_facebook_picker_list_selector_background_transition.xml -->
+=======
+<!-- From: file:/home/shiv/MC/Project/MC/MCProject/facebook/res/drawable/com_facebook_picker_list_selector_background_transition.xml -->
+>>>>>>> 510ce9cd31c2a54b5e7e9222c0e318557c65a894

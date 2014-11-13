@@ -1,18 +1,11 @@
 package com.iiitd.mcproject;
 
 
-import java.util.Arrays;
-import java.util.List;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.InputType;
@@ -21,20 +14,21 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.facebook.Request;
-import com.facebook.Response;
+
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class loginActivity extends FragmentActivity {
 
@@ -94,7 +88,7 @@ public class loginActivity extends FragmentActivity {
 
 
                     SharedPreferences sp = getSharedPreferences(Common.PREF,MODE_PRIVATE);
-                    String checkPass = sp.getString("userPassword","null");
+                    String checkPass = sp.getString("userRailsID","null");
 //                    Log.d("checkpass",checkPass);
                     if(checkPass.equals("null"))
                     {

@@ -1,7 +1,6 @@
-package com.iiitd.mcproject.TabFragments;
+package com.iiitd.mcproject;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -24,10 +23,6 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.iiitd.mcproject.Common;
-import com.iiitd.mcproject.R;
-import com.iiitd.mcproject.Topic;
-import com.iiitd.mcproject.TopicList;
 
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpPost;
@@ -43,190 +38,56 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TrendingFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TrendingFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
+ * Created by shiv on 13/11/14.
  */
-public class TrendingFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-    private static final String TRENDING_TOPICS_API="topics/list/";
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private long offset=0;
+public class Search extends Activity{
 
     ListView trendingTopics;
+    private static final String TOPIC_SEARCH = "/topics/search";
+    String query;
+    TopicList adapter;
+
     private ArrayList<String> topicList=new ArrayList<String>();
     private ArrayList<Integer> topicIDList=new ArrayList<Integer>();
     private ArrayList<String> imageList=new ArrayList<String>();
 
-    String tag = new String("getTopicTask");
-
-    TopicList adapter;
-
-    View inflateView;
-    Context context;
-
-    private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TrendingFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TrendingFragment newInstance(String param1, String param2) {
-        TrendingFragment fragment = new TrendingFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-    public TrendingFragment() {
-        // Required empty public constructor
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        setContentView(R.layout.activity_search);
+
+        query = getIntent().getStringExtra("topic");
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setTitle(query);
+        initList();
+        TopicTask();
     }
 
-    private void addToList(){
-        topicList.addAll(topicList);
-        imageList.addAll(imageList);
-        adapter.notifyDataSetChanged();
-    }
 
-    private void initList(){
-        adapter = new TopicList(getActivity(), topicList, imageList);
-        trendingTopics=(ListView)inflateView.findViewById(R.id.trending_list);
+    private void initList() {
+        adapter = new TopicList(this, topicList, imageList);
+        trendingTopics = (ListView) findViewById(R.id.search_list);
         trendingTopics.setAdapter(adapter);
         trendingTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 //Toast.makeText(getActivity(), "You Clicked at " + topicList.get(position), Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(getActivity() , Topic.class);
-                i.putExtra("topic" , topicList.get(position));
+                Intent i = new Intent(getApplication(), Topic.class);
+                i.putExtra("topic", topicList.get(position));
                 i.putExtra("id", topicIDList.get(position));
-                int p = topicIDList.get(position) ;
-                Log.d(tag , "The topic id is : " + Integer.toString(topicIDList.get(position)));
+                int p = topicIDList.get(position);
+                Log.d("SearchActivity", "The topic id is : " + Integer.toString(topicIDList.get(position)));
                 startActivity(i);
             }
         });
-        trendingTopics.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i2, int i3) {
-                if (trendingTopics.getLastVisiblePosition() == trendingTopics.getAdapter().getCount() - 1
-                        && trendingTopics.getChildAt(trendingTopics.getChildCount() - 1).getBottom() <= trendingTopics.getHeight()) {
-                    //scroll end reached
-                    Toast.makeText(getActivity(), "Reached end of list ", Toast.LENGTH_SHORT).show();
-                    //add more items to list
-                    //addToList();
-                }
-            }
-        });
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        inflateView= inflater.inflate(R.layout.fragment_trending, container, false);
-        //getList();
-        return inflateView;
-    }
-
-    @Override
-    public void onViewCreated (View view, Bundle savedInstanceState){
-        super.onViewCreated(view,savedInstanceState);
-
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-
-    //?maxwidth=225&maxheight=225&mode=fillcropmid
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getList();
-        //getListImage();
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
-
-    private void getList(){
-        TopicTask();
-        //initList();
-    }
 
     private void getListImage(){
-        ConnectivityManager cmgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cmgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
         if(networkInfo!=null && networkInfo.isConnected()) {
 
@@ -238,7 +99,7 @@ public class TrendingFragment extends Fragment {
                 }
             }
         }else{
-            Toast.makeText(getActivity() , "No Internet Connection" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this , "No Internet Connection" , Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -248,48 +109,39 @@ public class TrendingFragment extends Fragment {
 
             @Override
             protected String doInBackground(Void... param) {
-                String result=getTopics(offset);
+                String result=getTopics(query);
                 return result;
             }
 
             @Override
             protected void onPostExecute(String msg) {
-                Log.i(tag, msg);
-                if(msg.contains("retrieved")) {
-                    offset += 10;
-                    if(offset==10)
-                        initList();
-                    else
-                        adapter.notifyDataSetChanged();
-                    getListImage();
-                }
-                //Populate list
-                //adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
+                getListImage();
             }
         }.execute(null, null, null);
     }
 
-    private String getTopics(long offset){
+    private String getTopics(String query){
         InputStream inputStream = null;
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(Common.SERVER_URL+TRENDING_TOPICS_API);
+            HttpPost httpPost = new HttpPost(Common.SERVER_URL+TOPIC_SEARCH);
 
             String json = "";
 
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("offset", offset);
+                jsonObject.put("query", query);
             } catch (JSONException e) {
                 e.printStackTrace();
                 throw e;
             }
 
             json = jsonObject.toString();
-            Log.e(tag,json);
+            Log.d("SearchActivity",json);
 
             StringEntity se = new StringEntity(json);
-            //	        se.setContentType("application/json;charset=UTF-8");
+
             se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE,"application/json"));
 
             httpPost.setEntity(se);
@@ -299,7 +151,7 @@ public class TrendingFragment extends Fragment {
             inputStream = httpResponse.getEntity().getContent();
             StatusLine sl=httpResponse.getStatusLine();
 
-            Log.v(tag, Integer.toString(sl.getStatusCode())+" "+sl.getReasonPhrase());
+            Log.d("SearchActivity", Integer.toString(sl.getStatusCode())+" "+sl.getReasonPhrase());
 
             StringBuffer sb=new StringBuffer();
 
@@ -308,11 +160,9 @@ public class TrendingFragment extends Fragment {
                 while ((ch = inputStream.read()) != -1) {
                     sb.append((char) ch);
                 }
-            Log.v("ELSERVICES", "first input stream: "+sb.toString());
 
                 JSONObject response=new JSONObject(sb.toString());
                 JSONArray topicsArray=response.getJSONArray("list");
-
                 addNewTopics(topicsArray);
 
             } catch (IOException e) {
@@ -337,6 +187,7 @@ public class TrendingFragment extends Fragment {
             try {
                 JSONTopic=topicsArray.getJSONObject(i);
                 String topic=JSONTopic.getString("name");
+                Log.d("SearchActivity" , topic);
                 topicIDList.add(Integer.parseInt(JSONTopic.getString("id")));
                 topicList.add(topic);
                 imageList.add(null);
@@ -370,7 +221,6 @@ public class TrendingFragment extends Fragment {
 
                     String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"+ "&key="+ Common.Freebase_api_key;
                     if(image_id.equals("https://www.googleapis.com/freebase/v1/imagenull")){
-
                         return "ERROR";
                     }else if(topicList.indexOf(topic)>=0){
                         imageList.add(topicList.indexOf(topic),image_id);
@@ -498,4 +348,5 @@ public class TrendingFragment extends Fragment {
             }
         }.execute(null, null, null);
     }
+
 }

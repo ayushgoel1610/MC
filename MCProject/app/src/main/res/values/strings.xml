@@ -28,7 +28,7 @@
         <item>About</item>
     </string-array>
 
-    <string name="title_activity_master">MasterActivity</string>
+    <string name="title_activity_master">Master</string>
     <string name="title_activity_searchable">SearchableActivity</string>
 
 </resources>

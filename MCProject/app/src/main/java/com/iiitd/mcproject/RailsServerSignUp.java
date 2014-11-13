@@ -159,6 +159,7 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
     protected void onPostExecute(String str)
     {
         pDialog.dismiss();
+        getRailsToken(str);
         userChat_auth();
         if(str != null)
         {
@@ -182,6 +183,8 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
             editor.putString("userRailsID",railsID);
             editor.putString("userRailsToken",railsToken);
             editor.commit();
+            Log.d("sharedPref",sharedPref.getString("userRailsID","null"));
+            Log.d("sharedPref",sharedPref.getString("userRailsToken","null"));
 
         } catch (JSONException e) {
             e.printStackTrace();

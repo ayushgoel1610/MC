@@ -1,4 +1,3 @@
-
 package com.iiitd.mcproject;
 
 import android.app.Activity;
@@ -9,13 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.view.MenuItem;
 
-import com.iiitd.mcproject.MasterActivity;
-import com.iiitd.mcproject.R;
-
-import java.util.concurrent.ExecutionException;
-
+import com.iiitd.mcproject.Chat.ui.activities.TopicChat;
 
 public class MyActivity extends Activity {
 
@@ -30,25 +24,20 @@ public class MyActivity extends Activity {
         chatBtn = (Button) findViewById(R.id.chat);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d("debug","reached login");
-                        Intent loginIntent = new Intent(MyActivity.this, loginActivity.class);
-                        startActivity(loginIntent);
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                Log.d("debug", "reached login");
+                Intent loginIntent = new Intent(MyActivity.this, loginActivity.class);
+                startActivity(loginIntent);
+            }
+        });
 
-                chatBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        chatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
-    }
-
-    public void toMainTabs(View view){
-        Intent intent= new Intent(this,MasterActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -58,15 +47,24 @@ public class MyActivity extends Activity {
         return true;
     }
 
+    public void toMainTabs(View view){
+        Intent intent= new Intent(this,MasterActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void toTopicChat(View view){
+        Intent intent= new Intent(this,TopicChat.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
+
 }
