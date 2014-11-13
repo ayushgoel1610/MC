@@ -73,6 +73,7 @@ public class TrendingFragment extends Fragment {
     private ArrayList<String> topicList=new ArrayList<String>();
     private ArrayList<String> topicIDList=new ArrayList<String>();
     private ArrayList<String> imageList=new ArrayList<String>();
+    private ArrayList<String> categoryList=new ArrayList<String>();
 
     String tag = new String("getTopicTask");
 
@@ -120,7 +121,7 @@ public class TrendingFragment extends Fragment {
     }
 
     private void initList(){
-        adapter = new TopicList(getActivity(), topicList, imageList);
+        adapter = new TopicList(getActivity(), topicList, imageList,categoryList);
         trendingTopics=(ListView)inflateView.findViewById(R.id.trending_list);
         trendingTopics.setAdapter(adapter);
         trendingTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -131,6 +132,7 @@ public class TrendingFragment extends Fragment {
                 Intent i = new Intent(getActivity() , Topic.class);
                 i.putExtra("topic" , topicList.get(position));
                 i.putExtra("id", topicIDList.get(position));
+                i.putExtra("category", categoryList.get(position));
                 startActivity(i);
             }
         });
@@ -234,12 +236,12 @@ public class TrendingFragment extends Fragment {
             int count=0;
             for (String topic : topicList) {
                 Log.v(tag,"count, offset: "+count+", "+offset);
-                if(count>=offset-10)
-                    try {
-                        KnowledgeGraphTask(topic);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+               if((lastSize==10 && count>=offset-10) || (lastSize<10 && count>=offset+lastSize))
+                        try {
+                            KnowledgeGraphTask(topic);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                 count++;
             }
         }else{
@@ -349,6 +351,7 @@ public class TrendingFragment extends Fragment {
                 JSONTopic=topicsArray.getJSONObject(i);
                 String topic=JSONTopic.getString("name");
                 topicIDList.add(JSONTopic.getString("id"));
+                categoryList.add(JSONTopic.getString("category"));
                 topicList.add(topic);
                 imageList.add(null);
             } catch (JSONException e) {

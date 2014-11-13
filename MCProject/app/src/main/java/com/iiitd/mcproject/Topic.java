@@ -12,7 +12,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -85,6 +84,8 @@ public class Topic extends Activity{
                         image_id = null;
                         Log.d(tag, "Connected to internet");
                         topic=getIntent().getStringExtra("topic");
+                        TextView topicHeader=(TextView)findViewById(R.id.topicHeader);
+                        topicHeader.setText(topic);
                         new KnowledgeGraphTask().execute(topic);
                 }else{
                     Toast.makeText(getBaseContext(), "No internet connection", Toast.LENGTH_SHORT).show();
@@ -228,10 +229,10 @@ public class Topic extends Activity{
             super.onPostExecute(aVoid);
             bar.setVisibility(View.INVISIBLE);
             summary.setText(description);
-            summary.setMovementMethod(new ScrollingMovementMethod());
+            //summary.setMovementMethod(new ScrollingMovementMethod());
             summary.setVisibility(View.VISIBLE);
             image.setVisibility(View.VISIBLE);
-            String imageUrl = "https://www.googleapis.com/freebase/v1/image" + image_id + "?maxwidth=500&maxheight=500&mode=fillcropmid" + "&key="+Common.Freebase_api_key;
+            String imageUrl = "https://www.googleapis.com/freebase/v1/image" + image_id + "?maxwidth=750&maxheight=750&mode=fillcropmid" + "&key="+Common.Freebase_api_key;
 
             final Resources res = context.getResources();
             final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);
@@ -240,7 +241,7 @@ public class Topic extends Activity{
             final Bitmap letterTile = tileProvider.getLetterTile(topic, imageUrl, tileSize, tileSize);
 
             Drawable db=new BitmapDrawable(context.getResources(), letterTile);
-            Picasso.with(getBaseContext()).load(imageUrl).placeholder(db).error(db).into(image);
+            Picasso.with(getBaseContext()).load(imageUrl).fit().centerCrop().placeholder(db).error(db).into(image);
         }
     }
 }

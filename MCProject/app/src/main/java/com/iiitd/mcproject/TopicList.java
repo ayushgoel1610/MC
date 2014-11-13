@@ -23,13 +23,15 @@ public class TopicList extends ArrayAdapter<String> {
     private final Activity context;
     private final ArrayList<String> topics;
     private final ArrayList<String> imageId;
+    private final ArrayList<String> categories;
 
     public TopicList(Activity context,
-                     ArrayList<String> topics, ArrayList<String> imageId) {
+                     ArrayList<String> topics, ArrayList<String> imageId, ArrayList<String> categories) {
         super(context, R.layout.topic_list_row, topics);
         this.context = context;
         this.topics = topics;
         this.imageId = imageId;
+        this.categories= categories;
     }
 
     @Override
@@ -37,8 +39,10 @@ public class TopicList extends ArrayAdapter<String> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.topic_list_row, null, true);
         TextView txtTitle = (TextView) rowView.findViewById(R.id.name);
+        TextView txtCategory = (TextView) rowView.findViewById(R.id.category);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.image);
         txtTitle.setText(topics.get(position));
+        txtCategory.setText(categories.get(position));
         String imageUrl=null;
         if(position<imageId.size())
             imageUrl = imageId.get(position);
