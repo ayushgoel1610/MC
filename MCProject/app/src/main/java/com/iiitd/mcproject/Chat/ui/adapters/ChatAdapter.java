@@ -70,11 +70,11 @@ public class ChatAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         Log.v("Incoming and Outgoing", " " + chatMessage.getSenderId());
-        Log.v("Incoming and Outgoing", " " + ((ApplicationSingleton) context.getApplication()).getCurrentUser().getId());
+//        Log.v("Incoming and Outgoing", " " + ((ApplicationSingleton) context.getApplication()).getCurrentUser().getId());
         if (chatMessage.getSenderId() == null)
             setAlignment(holder, true);
         else
-            setAlignment(holder, chatMessage.getSenderId() == ((ApplicationSingleton) context.getApplication()).getCurrentUser().getId());
+            setAlignment(holder, false);
         holder.txtMessage.setText(chatMessage.getBody());
         if (chatMessage.getSenderId() != null) {
             holder.txtInfo.setText(chatMessage.getSenderId() + ": " + getTimeText(chatMessage));

@@ -31,5 +31,12 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:19.1.+'
 
-}
+    compile 'commons-codec:commons-codec:1.9';
 
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    compile project(':facebook')
+
+
+
+}

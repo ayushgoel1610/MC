@@ -23,6 +23,7 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.iiitd.mcproject.Chat.ui.activities.NewDialogActivity;
 import com.iiitd.mcproject.Chat.ui.activities.SplashActivity;
 import com.squareup.picasso.Picasso;
 
@@ -83,7 +84,7 @@ public class Topic extends Activity{
 
 
     public void runChatClient(View view){
-        Intent intent = new Intent(this, SplashActivity.class);
+        Intent intent = new Intent(this, NewDialogActivity.class);
         startActivity(intent);
     }
 
