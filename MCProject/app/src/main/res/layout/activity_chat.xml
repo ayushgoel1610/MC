@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:paddingBottom="15dp">
+
 
         <!--<NumberPicker
             android:id="@+id/numberPicker1"
@@ -20,22 +22,35 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp" />-->
 
+
+        <ImageView
+            android:id="@+id/splash_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:longClickable="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/chat"
+            android:visibility="visible" />
         <Button
             android:id="@+id/addB"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="45dp"
+            android:background="#47F7F4"
             android:text="+" />
         <TextView
             android:id="@+id/np"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="50dp"
-            android:layout_marginBottom="48dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000000"/>
+            android:textColor="#000000"
+            android:textSize="25dp"
+            android:layout_centerHorizontal="true"
+            android:text=""/>
+
         <EditText
             android:id="@+id/messageEdit"
             android:layout_width="match_parent"
@@ -43,15 +58,17 @@
             android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@+id/chatSendButton"
             android:autoText="true"
+            android:background="#CEFFF9"
             android:hint="message text" />
         <Button
             android:id="@+id/subB"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="40dp"
-            android:layout_marginRight="170dp"
+            android:layout_marginBottom="45dp"
+            android:layout_marginRight="10dp"
+            android:background="#47F7F4"
             android:text="-" />
 
         <Button
@@ -68,7 +85,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="100dp"
             android:layout_above="@+id/np"
             android:layout_below="@+id/meLabel"
             android:layout_marginTop="10dp"
@@ -83,6 +100,7 @@
             android:layout_gravity="left|center_vertical"
             android:text="Friend"
             android:singleLine="false"
+            android:textColor="#F9CCDE"
             android:textSize="20dp" />
 
         <TextView
@@ -91,6 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="You"
+            android:textColor="#F9CCDE"
             android:textSize="20dp" />
 
         <ProgressBar

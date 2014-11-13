@@ -3,9 +3,9 @@ package com.iiitd.mcproject.Chat.ui.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -99,13 +99,13 @@ public class ChatActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
+        /*if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Press again to exit chat", Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
 
@@ -113,7 +113,29 @@ public class ChatActivity extends Activity {
             public void run() {
                 doubleBackToExitPressedOnce=false;
             }
-        }, 2000);
+        }, 2000);*/
+        AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+        alertbox.setTitle("Quit Chat");
+        alertbox.setMessage("Do you want to exit the chat?");
+        alertbox.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(getApplicationContext(), "'yes' button clicked", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        });
+
+        // set a negative/no button and create a listener
+        alertbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                //Toast.makeText(getApplicationContext(), "'No' button clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alertbox.show();
     }
 
     private void initViews() {
