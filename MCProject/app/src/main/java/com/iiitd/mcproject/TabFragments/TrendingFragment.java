@@ -67,6 +67,7 @@ public class TrendingFragment extends Fragment {
     private String mParam2;
 
     private long offset=0;
+    private int lastSize=10;
 
     ListView trendingTopics;
     private ArrayList<String> topicList=new ArrayList<String>();
@@ -113,9 +114,9 @@ public class TrendingFragment extends Fragment {
     }
 
     private void addToList(){
-        topicList.addAll(topicList);
-        imageList.addAll(imageList);
-        adapter.notifyDataSetChanged();
+//        topicList.addAll(topicList);
+//        imageList.addAll(imageList);
+//        adapter.notifyDataSetChanged();
     }
 
     private void initList(){
@@ -146,7 +147,10 @@ public class TrendingFragment extends Fragment {
                     //scroll end reached
                     Toast.makeText(getActivity(), "Reached end of list ", Toast.LENGTH_SHORT).show();
                     //add more items to list
-                    //addToList();
+//                    addToList();
+                    Log.v(tag,"last size: "+lastSize);
+                    if(lastSize==10)
+                        getList();
                 }
             }
         });
@@ -157,7 +161,8 @@ public class TrendingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         inflateView= inflater.inflate(R.layout.fragment_trending, container, false);
-        //getList();
+        if(lastSize==10)
+            getList();
         return inflateView;
     }
 
@@ -199,7 +204,6 @@ public class TrendingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getList();
         //getListImage();
     }
 
@@ -227,13 +231,16 @@ public class TrendingFragment extends Fragment {
         ConnectivityManager cmgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
         if(networkInfo!=null && networkInfo.isConnected()) {
-
+            int count=0;
             for (String topic : topicList) {
-                try {
-                    KnowledgeGraphTask(topic);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Log.v(tag,"count, offset: "+count+", "+offset);
+                if(count>=offset-10)
+                    try {
+                        KnowledgeGraphTask(topic);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                count++;
             }
         }else{
             Toast.makeText(getActivity() , "No Internet Connection" , Toast.LENGTH_SHORT).show();
@@ -254,12 +261,17 @@ public class TrendingFragment extends Fragment {
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
                 if(msg.contains("retrieved")) {
-                    offset += 10;
+                    if(lastSize==10)
+                        offset += 10;
                     if(offset==10)
                         initList();
                     else
-                        adapter.notifyDataSetChanged();
-
+                        try {
+                            adapter.notifyDataSetChanged();
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
                     getListImage();
                 }
                 //Populate list
@@ -311,7 +323,7 @@ public class TrendingFragment extends Fragment {
 
                 JSONObject response=new JSONObject(sb.toString());
                 JSONArray topicsArray=response.getJSONArray("list");
-
+                lastSize=response.getInt("size");
                 addNewTopics(topicsArray);
 
             } catch (IOException e) {
@@ -340,6 +352,8 @@ public class TrendingFragment extends Fragment {
                 topicList.add(topic);
                 imageList.add(null);
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e){
                 e.printStackTrace();
             }
         }
@@ -493,7 +507,12 @@ public class TrendingFragment extends Fragment {
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
                 //Populate list
-                adapter.notifyDataSetChanged();
+                try {
+                    adapter.notifyDataSetChanged();
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+                }
             }
         }.execute(null, null, null);
     }

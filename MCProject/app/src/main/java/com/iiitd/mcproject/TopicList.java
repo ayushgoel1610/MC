@@ -1,6 +1,10 @@
 package com.iiitd.mcproject;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,11 +44,17 @@ public class TopicList extends ArrayAdapter<String> {
             imageUrl = imageId.get(position);
 
 //        Log.v("topic list",topics.get(position)+" "+imageUrl);
+        final Resources res = context.getResources();
+        final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);
+
+        final LetterTileProvider tileProvider = new LetterTileProvider(context);
+        final Bitmap letterTile = tileProvider.getLetterTile(topics.get(position), topics.get(position), tileSize, tileSize);
 
         if(imageUrl==null) {
-            imageView.setImageResource(R.drawable.ic_launcher);
+            imageView.setImageDrawable(new BitmapDrawable(context.getResources(), letterTile));
         }else {
-            Picasso.with(context).load(imageUrl).error(R.drawable.ic_launcher).into(imageView);
+            Drawable db=new BitmapDrawable(context.getResources(), letterTile);
+            Picasso.with(context).load(imageUrl).placeholder(db).error(db).into(imageView);
         }
         return rowView;
     }
