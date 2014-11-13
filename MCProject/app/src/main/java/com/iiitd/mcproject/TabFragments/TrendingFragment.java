@@ -261,7 +261,6 @@ public class TrendingFragment extends Fragment {
                         initList();
                     else
                         adapter.notifyDataSetChanged();
-
                     getListImage();
                 }
                 //Populate list

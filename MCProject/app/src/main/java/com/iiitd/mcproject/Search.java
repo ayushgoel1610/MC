@@ -43,7 +43,6 @@ import java.util.ArrayList;
  */
 public class Search extends Activity{
 
-
     ListView trendingTopics;
     private static final String TOPIC_SEARCH = "/topics/search";
     String query;
@@ -61,34 +60,31 @@ public class Search extends Activity{
         query = getIntent().getStringExtra("topic");
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setTitle(query);
+        initList();
         TopicTask();
-
     }
 
-    private void initList(){
+
+    private void initList() {
         adapter = new TopicList(this, topicList, imageList);
-        trendingTopics=(ListView)findViewById(R.id.trending_list);
+        trendingTopics = (ListView) findViewById(R.id.search_list);
         trendingTopics.setAdapter(adapter);
         trendingTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
-                Intent i = new Intent(getApplication()  , Topic.class);
-                i.putExtra("topic" , topicList.get(position));
+                //Toast.makeText(getActivity(), "You Clicked at " + topicList.get(position), Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplication(), Topic.class);
+                i.putExtra("topic", topicList.get(position));
                 i.putExtra("id", topicIDList.get(position));
-                int p = topicIDList.get(position) ;
-                Log.d("SearchActivity" , "The topic id is : " + Integer.toString(topicIDList.get(position)));
+                int p = topicIDList.get(position);
+                Log.d("SearchActivity", "The topic id is : " + Integer.toString(topicIDList.get(position)));
                 startActivity(i);
             }
         });
-
     }
 
-    private void getList(){
-        TopicTask();
-        //initList();
-    }
 
     private void getListImage(){
         ConnectivityManager cmgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -119,7 +115,8 @@ public class Search extends Activity{
 
             @Override
             protected void onPostExecute(String msg) {
-
+                adapter.notifyDataSetChanged();
+                getListImage();
             }
         }.execute(null, null, null);
     }
@@ -141,7 +138,7 @@ public class Search extends Activity{
             }
 
             json = jsonObject.toString();
-            Log.e("SearchActivity",json);
+            Log.d("SearchActivity",json);
 
             StringEntity se = new StringEntity(json);
 
@@ -154,7 +151,7 @@ public class Search extends Activity{
             inputStream = httpResponse.getEntity().getContent();
             StatusLine sl=httpResponse.getStatusLine();
 
-            Log.v("SearchActivity", Integer.toString(sl.getStatusCode())+" "+sl.getReasonPhrase());
+            Log.d("SearchActivity", Integer.toString(sl.getStatusCode())+" "+sl.getReasonPhrase());
 
             StringBuffer sb=new StringBuffer();
 
@@ -166,7 +163,6 @@ public class Search extends Activity{
 
                 JSONObject response=new JSONObject(sb.toString());
                 JSONArray topicsArray=response.getJSONArray("list");
-
                 addNewTopics(topicsArray);
 
             } catch (IOException e) {
@@ -191,6 +187,7 @@ public class Search extends Activity{
             try {
                 JSONTopic=topicsArray.getJSONObject(i);
                 String topic=JSONTopic.getString("name");
+                Log.d("SearchActivity" , topic);
                 topicIDList.add(Integer.parseInt(JSONTopic.getString("id")));
                 topicList.add(topic);
                 imageList.add(null);
@@ -351,6 +348,5 @@ public class Search extends Activity{
             }
         }.execute(null, null, null);
     }
-
 
 }
