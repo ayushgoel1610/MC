@@ -344,8 +344,10 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                     mHandler.sendMessage(msg);
                 }if(pair_status_count > 2){
                     progressBar.setVisibility(View.INVISIBLE);
-                    display.setText(pair_status);
+                    //display.setText(pair_status);
+                    display.setText("No user found :P ");
                     display.setVisibility(View.VISIBLE);
+                    mytimer.cancel();
                 }
             }
         }.execute(null , null , null);
@@ -379,6 +381,8 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         org.apache.http.HttpResponse httpResponse = null;
         try {
             httpResponse = httpclient.execute(httpPost);
+            pair_status_count++;
+            Log.v("TopicChat" , "pair count = " + pair_status_count);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -407,7 +411,6 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
             pair_status = response.get("status").toString();
             Log.d("TopicChat" , pair_status + "  " + "IN") ;
             if(pair_status.equals("No users available") || pair_status.equals("No users available!Request expired.")){
-                pair_status_count++;
                 pair_status = response.get("status").toString() + " " + Integer.toString(pair_status_count);
                 Log.d("TopicChat" , pair_status);
                 Log.d("TopicChat" , Integer.toString(pair_status_count));
@@ -415,9 +418,6 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                 pair_status = response.get("status").toString();
                 pair_status_count = 4;
               //QuickBlocksChat();
-            }
-            if(pair_status_count > 2){
-                mytimer.cancel();
             }
         } catch (JSONException e) {
             e.printStackTrace();
