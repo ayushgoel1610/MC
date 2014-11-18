@@ -30,7 +30,7 @@
             android:layout_gravity="center"
             android:longClickable="true"
             android:scaleType="fitXY"
-            android:src="@drawable/chat"
+            android:src="@drawable/chat_bg"
             android:visibility="visible" />
         <Button
             android:id="@+id/addB"

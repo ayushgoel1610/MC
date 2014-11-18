@@ -77,7 +77,6 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
     private Handler chatHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
             QuickBlocksChat();
         }
     };
@@ -85,7 +84,6 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
     private Handler pairHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
             PairTask();
         }
     };
@@ -151,7 +149,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         Bundle bundle = new Bundle();
         bundle.putSerializable(ChatActivity.EXTRA_MODE, ChatActivity.Mode.PRIVATE);
         bundle.putSerializable(ChatActivity.EXTRA_DIALOG, dialog);
-        bundle.putInt("paid_id",pair_id);
+        bundle.putInt("pair_id",pair_id);
         ChatActivity.start(getActivity(), bundle);
     }
 
@@ -366,6 +364,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
     }
 
     private void QuickBlocksChat(){
+        Log.d("QuickBlocks" , "Entered QB chat after handler");
         QBDialog dialogToCreate = new QBDialog();
         dialogToCreate.setName("doesn't matter");
         //if(usersAdapter.getSelected().size() == 1){
