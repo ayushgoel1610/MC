@@ -53,6 +53,8 @@ public class Topic extends Activity{
 
     String tag = new String("Topic");
 
+    TopicObject chatTopic=new TopicObject();
+
     String image_id;
     String description;
     String text;
