@@ -19,19 +19,19 @@ import java.util.ArrayList;
 /**
  * Created by Vedant on 30-10-2014.
  */
-public class TopicList extends ArrayAdapter<String> {
+public class TopicList extends ArrayAdapter<TopicObject> {
     private final Activity context;
-    private final ArrayList<String> topics;
-    private final ArrayList<String> imageId;
-    private final ArrayList<String> categories;
+    private final ArrayList<TopicObject> topics;
+//    private final ArrayList<String> imageId;
+//    private final ArrayList<String> categories;
 
     public TopicList(Activity context,
-                     ArrayList<String> topics, ArrayList<String> imageId, ArrayList<String> categories) {
+                     ArrayList<TopicObject> topics) {
         super(context, R.layout.topic_list_row, topics);
         this.context = context;
         this.topics = topics;
-        this.imageId = imageId;
-        this.categories= categories;
+//        this.imageId = imageId;
+//        this.categories= categories;
     }
 
     @Override
@@ -41,20 +41,20 @@ public class TopicList extends ArrayAdapter<String> {
         TextView txtTitle = (TextView) rowView.findViewById(R.id.name);
         TextView txtCategory = (TextView) rowView.findViewById(R.id.category);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.image);
-        txtTitle.setText(topics.get(position));
-        txtCategory.setText(categories.get(position));
+        txtTitle.setText(topics.get(position).getName());
+        txtCategory.setText(topics.get(position).getCategory());
         String imageUrl=null;
-        if(position<imageId.size())
-            imageUrl = imageId.get(position);
+        if(position<topics.size())
+            imageUrl = topics.get(position).getImage();
 
 //        Log.v("topic list",topics.get(position)+" "+imageUrl);
         final Resources res = context.getResources();
         final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);
 
         final LetterTileProvider tileProvider = new LetterTileProvider(context);
-        final Bitmap letterTile = tileProvider.getLetterTile(topics.get(position), topics.get(position), tileSize, tileSize);
+        final Bitmap letterTile = tileProvider.getLetterTile(topics.get(position).getName(), topics.get(position).getName(), tileSize, tileSize);
 
-        if(imageUrl==null) {
+        if(imageUrl=="") {
             imageView.setImageDrawable(new BitmapDrawable(context.getResources(), letterTile));
         }else {
             Drawable db=new BitmapDrawable(context.getResources(), letterTile);

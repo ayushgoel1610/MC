@@ -28,6 +28,7 @@ import com.iiitd.mcproject.Common;
 import com.iiitd.mcproject.R;
 import com.iiitd.mcproject.Topic;
 import com.iiitd.mcproject.TopicList;
+import com.iiitd.mcproject.TopicObject;
 
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpPost;
@@ -70,10 +71,10 @@ public class TrendingFragment extends Fragment {
     private int lastSize=10;
 
     ListView trendingTopics;
-    private ArrayList<String> topicList=new ArrayList<String>();
-    private ArrayList<Integer> topicIDList=new ArrayList<Integer>();
-    private ArrayList<String> imageList=new ArrayList<String>();
-    private ArrayList<String> categoryList=new ArrayList<String>();
+
+
+    private ArrayList<TopicObject> topicObjectList=new ArrayList<TopicObject>();
+
 
     String tag = new String("getTopicTask");
 
@@ -121,7 +122,7 @@ public class TrendingFragment extends Fragment {
     }
 
     private void initList(){
-        adapter = new TopicList(getActivity(), topicList, imageList,categoryList);
+        adapter = new TopicList(getActivity(), topicObjectList);
         trendingTopics=(ListView)inflateView.findViewById(R.id.trending_list);
         trendingTopics.setAdapter(adapter);
         trendingTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -130,14 +131,10 @@ public class TrendingFragment extends Fragment {
                                     int position, long id) {
                 //Toast.makeText(getActivity(), "You Clicked at " + topicList.get(position), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getActivity() , Topic.class);
-                i.putExtra("topic" , topicList.get(position));
-                i.putExtra("id", topicIDList.get(position));
-
-                int p = topicIDList.get(position) ;
-                Log.d(tag , "The topic id is : " + Integer.toString(topicIDList.get(position)));
-
-                i.putExtra("category", categoryList.get(position));
-
+                TopicObject clickedTopic=topicObjectList.get(position);
+                i.putExtra("topic" , clickedTopic.getName());
+                i.putExtra("id", clickedTopic.getId());
+                i.putExtra("category", clickedTopic.getCategory());
                 startActivity(i);
             }
         });
@@ -239,11 +236,11 @@ public class TrendingFragment extends Fragment {
         NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
         if(networkInfo!=null && networkInfo.isConnected()) {
             int count=0;
-            for (String topic : topicList) {
+            for (TopicObject topicObject : topicObjectList) {
                 Log.v(tag,"count, offset: "+count+", "+offset);
                if((lastSize==10 && count>=offset-10) || (lastSize<10 && count>=offset+lastSize))
                         try {
-                            KnowledgeGraphTask(topic);
+                            KnowledgeGraphTask(topicObject);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -358,13 +355,13 @@ public class TrendingFragment extends Fragment {
                 JSONTopic=topicsArray.getJSONObject(i);
                 String topic=JSONTopic.getString("name");
 
-                topicIDList.add(Integer.parseInt(JSONTopic.getString("id")));
+                TopicObject topicObject=new TopicObject();
+                topicObject.putId(JSONTopic.getInt("id"));
+                topicObject.putCategory(JSONTopic.getString("category"));
+                topicObject.putName(JSONTopic.getString("name"));
+                topicObject.putImage("");
+                topicObjectList.add(topicObject);
 
-
-                categoryList.add(JSONTopic.getString("category"));
-
-                topicList.add(topic);
-                imageList.add(null);
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (NullPointerException e){
@@ -373,7 +370,7 @@ public class TrendingFragment extends Fragment {
         }
     }
 
-    private void KnowledgeGraphTask(final String topicName)
+    private void KnowledgeGraphTask(final TopicObject topicObject)
     {
         new AsyncTask<Void , String , String>() {
 
@@ -382,9 +379,12 @@ public class TrendingFragment extends Fragment {
             @Override
             protected String doInBackground(Void... param) {
                 Log.d(tag, "inside the KnowledgeGraphTask");
-                Log.d(tag , "The topic is : " + topicName);
-                String topic = topicName;
+                Log.d(tag , "The topic is : " + topicObject.getName());
+                String topic = topicObject.getName();
                 topic = topic.replace(" " , "_");
+
+                String category = topicObject.getCategory();
+                category=category.replace(" ","_");
 
                 String topic_id = getTopicId(topic);
                 Log.d(tag , "The topic id is : " + topic_id );
@@ -395,13 +395,16 @@ public class TrendingFragment extends Fragment {
                     return "ERROR";
                 }else{
 
-                    String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"+ "&key="+ Common.Freebase_api_key;
+                    String image_id = "https://www.googleapis.com/freebase/v1/image"
+                            + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"
+                            + "&key="+ Common.Freebase_api_key;
                     if(image_id.equals("https://www.googleapis.com/freebase/v1/imagenull")){
 
                         return "ERROR";
-                    }else if(topicList.indexOf(topic)>=0){
-                        imageList.add(topicList.indexOf(topic),image_id);
+                    }else if(topicObjectList.indexOf(topicObject)>=0){
+                        //imageList.add(topicList.indexOf(topic),image_id);
 //                        Log.v(tag,"Adding image: "+image_id);
+                        topicObjectList.get(topicObjectList.indexOf(topicObject)).putImage(image_id);
                         return image_id;
                     }
                 }
