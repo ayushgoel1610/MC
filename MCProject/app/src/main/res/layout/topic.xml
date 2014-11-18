@@ -40,7 +40,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="Chat"
-        android:id="@+id/button"
+        android:id="@+id/topic_chat"
         android:layout_marginBottom="10dp"
         android:onClick="runChatClient"
         android:layout_alignParentBottom="true"

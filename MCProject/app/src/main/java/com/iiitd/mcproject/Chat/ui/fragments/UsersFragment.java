@@ -53,10 +53,8 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
     private static final String CHAT_PAIR="chats/pair";
 
 
-
     TextView display ;
 
-    Timer mytimer ;
     int topic_id;
     int user_id;
     int pair_id;
@@ -76,11 +74,19 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
     private int currentPage = 0;
     private List<QBUser> users = new ArrayList<QBUser>();
 
-    private Handler mHandler = new Handler(){
+    private Handler chatHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             QuickBlocksChat();
+        }
+    };
+
+    private Handler pairHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            PairTask();
         }
     };
 
@@ -94,8 +100,6 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF, getActivity().MODE_PRIVATE);
         Log.d("Int value", pref.getString("userRailsID", "null"));
         user_id = Integer.parseInt(pref.getString("userRailsID", "null"));
-//        user_id = 10;
-//        usersList = (PullToRefreshListView) v.findViewById(R.id.usersList);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
         display = (TextView)v.findViewById(R.id.user_fragment_status);
@@ -105,103 +109,8 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
 
         RequestTask();
 
-
-
-        mytimer = new Timer();
-        mytimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                PairTask();
-            }
-        } , 0 ,5000);
-
-
-        /*createChatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                 //((ApplicationSingleton)getActivity().getApplication()).addDialogsUsers(usersAdapter.getSelected());
-
-                // Create new group dialog
-                //
-<<<<<<< HEAD
-                QBDialog dialogToCreate = new QBDialog();
-                dialogToCreate.setName("doesn't matter");
-                //if(usersAdapter.getSelected().size() == 1){
-                    dialogToCreate.setType(QBDialogType.PRIVATE);
-                //}else {
-                    //dialogToCreate.setType(QBDialogType.GROUP);
-                //}
-                //Log.v("UserId", " " + getUserIds(usersAdapter.getSelected()));
-                //dialogToCreate.setOccupantsIds(getUserIds(usersAdapter.getSelected()));
-                ArrayList<Integer> occupantIdsList = new ArrayList<Integer>();
-                occupantIdsList.add(1751723);
-                dialogToCreate.setOccupantsIds(occupantIdsList);
-
-                QBChatService.getInstance().getGroupChatManager().createDialog(dialogToCreate, new QBEntityCallbackImpl<QBDialog>() {
-                    @Override
-                    public void onSuccess(QBDialog dialog, Bundle args) {
-                        //if(usersAdapter.getSelected().size() == 1){
-                            Log.v("Started chat", "started chat");
-                            startSingleChat(dialog);
-
-                    }
-
-                    @Override
-                    public void onError(List<String> errors) {
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                        dialog.setMessage("dialog creation errors: " + errors).create().show();
-                    }
-                });
-=======
-
-            QBDialog dialogToCreate = new QBDialog();
-            dialogToCreate.setName("doesn't matter");
-            //if(usersAdapter.getSelected().size() == 1){
-            dialogToCreate.setType(QBDialogType.PRIVATE);
-            //}else {
-            //dialogToCreate.setType(QBDialogType.GROUP);
-            //}
-            //Log.v("UserId", " " + getUserIds(usersAdapter.getSelected()));
-            //dialogToCreate.setOccupantsIds(getUserIds(usersAdapter.getSelected()));
-            ArrayList<Integer> occupantIdsList = new ArrayList<Integer>();
-            occupantIdsList.add(1703563);
-            dialogToCreate.setOccupantsIds(occupantIdsList);
-
-            QBChatService.getInstance().getGroupChatManager().createDialog(dialogToCreate, new QBEntityCallbackImpl<QBDialog>() {
-                @Override
-                public void onSuccess(QBDialog dialog, Bundle args) {
-                    //if(usersAdapter.getSelected().size() == 1){
-                    Log.v("Started chat", "started chat");
-                    startSingleChat(dialog);
-
-                }
-
-                @Override
-                public void onError(List<String> errors) {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                    dialog.setMessage("dialog creation errors: " + errors).create().show();
-                }
-            });
->>>>>>> 510ce9cd31c2a54b5e7e9222c0e318557c65a894
-            /*}
-        });*/
-
-        /*usersList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                // Do work to refresh the list here.
-                loadNextPage();
-                listViewIndex = usersList.getRefreshableView().getFirstVisiblePosition();
-                View v = usersList.getRefreshableView().getChildAt(0);
-                listViewTop = (v == null) ? 0 : v.getTop();
-            }
-        });
-
-        loadNextPage();*/
         return v;
     }
-
 
     public static QBPagedRequestBuilder getQBPagedRequestBuilder(int page) {
         QBPagedRequestBuilder pagedRequestBuilder = new QBPagedRequestBuilder();
@@ -211,24 +120,9 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         return pagedRequestBuilder;
     }
 
-
     @Override
     public void onSuccess(ArrayList<QBUser> newUsers, Bundle bundle){
 
-        // save users
-        //
-        /*users.addAll(newUsers);
-        Log.v("Saved User","saved users");
-        Log.v("users", " " + newUsers);
-
-        // Prepare users list for simple adapter.
-        //
-        usersAdapter = new UsersAdapter(users, getActivity());
-        usersList.setAdapter(usersAdapter);
-        usersList.onRefreshComplete();
-        usersList.getRefreshableView().setSelectionFromTop(listViewIndex, listViewTop);
-
-        progressBar.setVisibility(View.GONE);*/
     }
 
     @Override
@@ -284,7 +178,6 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         return ids;
     }
 
-
     private void RequestTask(){
         new AsyncTask<Void , Void , Void>(){
             @Override
@@ -299,6 +192,9 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                 display.setText(request_status);
                 progressBar.setVisibility(View.INVISIBLE);
                 display.setVisibility(View.VISIBLE);
+                Message msg = new Message();
+                msg.arg1 = 1;
+                pairHandler.sendMessage(msg);
             }
         }.execute(null , null , null);
     }
@@ -379,15 +275,20 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                     display.setVisibility(View.VISIBLE);
                     Message msg = new Message();
                     msg.arg1 = 1;
-                    mytimer.cancel();
-                    mHandler.sendMessage(msg);
-                }if(pair_status_count > 2){
-                    progressBar.setVisibility(View.INVISIBLE);
-                    //display.setText(pair_status);
-                    display.setText("No user found :P ");
-                    display.setVisibility(View.VISIBLE);
-                    mytimer.cancel();
+                    chatHandler.sendMessage(msg);
+                    return;
                 }
+                if(pair_status_count < 3){
+                    Message msg = new Message();
+                    msg.arg1 = 1;
+                    pairHandler.sendMessage(msg);
+                    return;
+                }else{
+                    progressBar.setVisibility(View.INVISIBLE);
+                    display.setText(pair_status);
+                    display.setVisibility(View.VISIBLE);
+                }
+                Log.d("UserFragment" , "Test");
             }
         }.execute(null , null , null);
     }
@@ -458,7 +359,6 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                 pair_status_count = 4;
                 pair_id = (Integer)response.get("pair_id");
                 Log.d("USerFragment " , response.getString("pair_id"));
-              //QuickBlocksChat();
             }
         } catch (JSONException e) {
             e.printStackTrace();

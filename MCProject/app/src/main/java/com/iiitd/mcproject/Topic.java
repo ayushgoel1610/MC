@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -46,6 +47,7 @@ public class Topic extends Activity{
     //TEST COMMIT
     //TEST COMMIT 2
 
+    Button chat;
     ImageView image;
     ProgressBar bar ;
     TextView summary;
@@ -74,7 +76,8 @@ public class Topic extends Activity{
         image = (ImageView)findViewById(R.id.topic_image);
         image.setVisibility(View.INVISIBLE);
 
-        //Toast.makeText(this , "the topic id is : " + Integer.toString(getIntent().getIntExtra("id" , -1)) , Toast.LENGTH_SHORT).show();
+        chat = (Button) findViewById(R.id.topic_chat);
+        chat.setVisibility(View.INVISIBLE);
 
         Log.d(tag , "Inside FreeBase Class");
                 ConnectivityManager cmgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -233,6 +236,7 @@ public class Topic extends Activity{
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             bar.setVisibility(View.INVISIBLE);
+            chat.setVisibility(View.VISIBLE);
             summary.setText(description);
             //summary.setMovementMethod(new ScrollingMovementMethod());
             summary.setVisibility(View.VISIBLE);

@@ -270,14 +270,12 @@ public class TrendingFragment extends Fragment {
                     if(offset==10)
                         initList();
                     else
-
                         try {
                             adapter.notifyDataSetChanged();
                         }
                         catch (NullPointerException e){
                             e.printStackTrace();
                         }
-
                     getListImage();
                 }
                 //Populate list
