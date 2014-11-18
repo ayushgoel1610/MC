@@ -1,6 +1,10 @@
 package com.iiitd.mcproject;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +23,15 @@ public class TopicList extends ArrayAdapter<String> {
     private final Activity context;
     private final ArrayList<String> topics;
     private final ArrayList<String> imageId;
+    private final ArrayList<String> categories;
 
     public TopicList(Activity context,
-                     ArrayList<String> topics, ArrayList<String> imageId) {
+                     ArrayList<String> topics, ArrayList<String> imageId, ArrayList<String> categories) {
         super(context, R.layout.topic_list_row, topics);
         this.context = context;
         this.topics = topics;
         this.imageId = imageId;
+        this.categories= categories;
     }
 
     @Override
@@ -33,18 +39,26 @@ public class TopicList extends ArrayAdapter<String> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.topic_list_row, null, true);
         TextView txtTitle = (TextView) rowView.findViewById(R.id.name);
+        TextView txtCategory = (TextView) rowView.findViewById(R.id.category);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.image);
         txtTitle.setText(topics.get(position));
+        txtCategory.setText(categories.get(position));
         String imageUrl=null;
         if(position<imageId.size())
             imageUrl = imageId.get(position);
 
 //        Log.v("topic list",topics.get(position)+" "+imageUrl);
+        final Resources res = context.getResources();
+        final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);
+
+        final LetterTileProvider tileProvider = new LetterTileProvider(context);
+        final Bitmap letterTile = tileProvider.getLetterTile(topics.get(position), topics.get(position), tileSize, tileSize);
 
         if(imageUrl==null) {
-            imageView.setImageResource(R.drawable.ic_launcher);
+            imageView.setImageDrawable(new BitmapDrawable(context.getResources(), letterTile));
         }else {
-            Picasso.with(context).load(imageUrl).error(R.drawable.ic_launcher).into(imageView);
+            Drawable db=new BitmapDrawable(context.getResources(), letterTile);
+            Picasso.with(context).load(imageUrl).placeholder(db).error(db).into(imageView);
         }
         return rowView;
     }

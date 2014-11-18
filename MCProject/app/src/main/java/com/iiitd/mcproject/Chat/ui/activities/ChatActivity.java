@@ -57,12 +57,14 @@ public class ChatActivity extends Activity {
     private ChatManager chat;
     private ChatAdapter adapter;
     private QBDialog dialog;
+    private static int pair_id;
 
     private ArrayList<QBChatHistoryMessage> history;
 
     public static void start(Context context, Bundle bundle) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtras(bundle);
+        pair_id = intent.getIntExtra("pair_id", -1);
         context.startActivity(intent);
     }
 
@@ -163,7 +165,7 @@ public class ChatActivity extends Activity {
             case PRIVATE:
                 //Integer opponentID = ((ApplicationSingleton)getApplication()).getOpponentIDForPrivateDialog(dialog);
 
-                chat = new PrivateChatManagerImpl(this, 1751723);
+                chat = new PrivateChatManagerImpl(this, pair_id);
 
                 companionLabel.setText("Friend");
 

@@ -116,11 +116,7 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
             json = outerJSON.toString();
             Log.d("json",json);
 
-
             StringEntity se = new StringEntity(json);
-            //	        se.setContentType("application/json;charset=UTF-8");
-//            se.setContentType(new BasicHeader("Accept", "application/json"));
-//            se.setContentType(new BasicHeader("Content-type","application/json"));
             httpPost.setHeader("Accept","application/json");
             httpPost.setHeader("Content-type","application/json");
             httpPost.setEntity(se);
@@ -133,14 +129,11 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
 
             Log.v("debug", Integer.toString(sl.getStatusCode()) + " " + sl.getReasonPhrase());
 
-            StringBuffer sb = new StringBuffer();
-
             try {
                 int ch;
                 while ((ch = inputStream.read()) != -1) {
                     sb.append((char) ch);
                 }
-                Log.d("system response", sb.toString());
             } catch (IOException e) {
                 e.printStackTrace();
                 throw e;
@@ -155,26 +148,38 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
         return sb.toString();
     }
 
-        @Override
+    @Override
     protected void onPostExecute(String str)
     {
         pDialog.dismiss();
-        getRailsToken(str);
-        userChat_auth();
         if(str != null)
         {
             Log.d("system response",str);
+            getRailsToken(str);
         }
         else
             Log.d("system response","is null");
+        userChat_auth();
+
     }
 
-    private void getRailsToken(String string)
+    private void getRailsToken(String str1)
     {
-        try {
-            JSONObject json = new JSONObject(string);
-            railsID=json.getString("id");
-            railsToken=json.getString("token");
+        try
+        {
+            Log.d("string",str1);
+            str1 = str1.substring(1,str1.length()-1);
+            String[] res = str1.split(",");
+            for (String abc : res) {
+                String[] pair = abc.split(":");
+                if (pair[0].equals("\"id\""))
+                    railsID = pair[1];
+                if(pair[0].equals("\"token\""))
+                {
+                    railsToken = pair[1];
+                    railsToken = railsToken.substring(1,railsToken.length()-1);
+                }
+            }
             Log.d("railsID",railsID);
             Log.d("railsToken",railsToken);
             SharedPreferences sharedPref;
@@ -183,10 +188,8 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
             editor.putString("userRailsID",railsID);
             editor.putString("userRailsToken",railsToken);
             editor.commit();
-            Log.d("sharedPref",sharedPref.getString("userRailsID","null"));
-            Log.d("sharedPref",sharedPref.getString("userRailsToken","null"));
 
-        } catch (JSONException e) {
+        } catch (StringIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
 

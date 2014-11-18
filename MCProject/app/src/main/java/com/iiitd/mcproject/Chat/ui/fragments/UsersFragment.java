@@ -93,9 +93,9 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         View v = inflater.inflate(R.layout.fragment_users, container, false);
         SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF, getActivity().MODE_PRIVATE);
         Log.d("Int value", pref.getString("userRailsID", "null"));
-        //user_id = Integer.parseInt(pref.getString("userRailsID", "null"));
-        user_id = 10;
-        //usersList = (PullToRefreshListView) v.findViewById(R.id.usersList);
+        user_id = Integer.parseInt(pref.getString("userRailsID", "null"));
+//        user_id = 10;
+//        usersList = (PullToRefreshListView) v.findViewById(R.id.usersList);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
         display = (TextView)v.findViewById(R.id.user_fragment_status);
@@ -257,7 +257,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         Bundle bundle = new Bundle();
         bundle.putSerializable(ChatActivity.EXTRA_MODE, ChatActivity.Mode.PRIVATE);
         bundle.putSerializable(ChatActivity.EXTRA_DIALOG, dialog);
-
+        bundle.putInt("paid_id",pair_id);
         ChatActivity.start(getActivity(), bundle);
     }
 
@@ -457,6 +457,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                 pair_status = response.get("status").toString();
                 pair_status_count = 4;
                 pair_id = (Integer)response.get("pair_id");
+                Log.d("USerFragment " , response.getString("pair_id"));
               //QuickBlocksChat();
             }
         } catch (JSONException e) {
