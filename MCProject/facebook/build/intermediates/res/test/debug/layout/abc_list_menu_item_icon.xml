@@ -26,4 +26,8 @@
            android:scaleType="centerInside"
            android:duplicateParentState="true"/>
 
+<<<<<<< HEAD
+<!-- From: file:/F:/AndroidStudioProjects/MC/MCProject/facebook/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/layout/abc_list_menu_item_icon.xml -->
+=======
 <!-- From: file:/home/shiv/MC/Project/MC/MCProject/facebook/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/layout/abc_list_menu_item_icon.xml -->
+>>>>>>> 510ce9cd31c2a54b5e7e9222c0e318557c65a894

@@ -3,6 +3,7 @@ package com.iiitd.mcproject.Chat.ui.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iiitd.mcproject.Chat.ui.ChatManager;
 import com.iiitd.mcproject.Chat.ui.PrivateChatManagerImpl;
@@ -39,23 +41,30 @@ public class ChatActivity extends Activity {
 
     public static final String EXTRA_MODE = "mode";
     public static final String EXTRA_DIALOG = "dialog";
+    public boolean doubleBackToExitPressedOnce = false;
     private final String PROPERTY_SAVE_TO_HISTORY = "save_to_history";
 
     private EditText messageEditText;
     private ListView messagesContainer;
     private Button sendButton;
+    private Button addB;
+    private Button subB;
+    private TextView countB;
+    private int counter;
     private ProgressBar progressBar;
 
     private Mode mode = Mode.PRIVATE;
     private ChatManager chat;
     private ChatAdapter adapter;
     private QBDialog dialog;
+    private static int pair_id;
 
     private ArrayList<QBChatHistoryMessage> history;
 
     public static void start(Context context, Bundle bundle) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtras(bundle);
+        pair_id = intent.getIntExtra("pair_id", -1);
         context.startActivity(intent);
     }
 
@@ -63,22 +72,80 @@ public class ChatActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        Toast.makeText(getApplicationContext(), "Press back to exit the chat",
+                Toast.LENGTH_LONG).show();
+
         initViews();
+        counter = 0;
+        countB.setText("" + counter);
+        addB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counter++;
+                countB.setText("" + counter);
+            }
+        });
+
+        subB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counter--;
+                if (counter < 0)
+                    counter = 0;
+                countB.setText("" + counter);
+            }
+        });
+
     }
+
 
     @Override
     public void onBackPressed() {
-        try {
-            chat.release();
-        } catch (XMPPException e) {
-            Log.e(TAG, "failed to release chat", e);
+        /*if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
         }
-        super.onBackPressed();
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Press again to exit chat", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);*/
+        AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+        alertbox.setTitle("Quit Chat");
+        alertbox.setMessage("Do you want to exit the chat?");
+        alertbox.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(getApplicationContext(), "'yes' button clicked", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        });
+
+        // set a negative/no button and create a listener
+        alertbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                //Toast.makeText(getApplicationContext(), "'No' button clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alertbox.show();
     }
 
     private void initViews() {
         messagesContainer = (ListView) findViewById(R.id.messagesContainer);
         messageEditText = (EditText) findViewById(R.id.messageEdit);
+        addB = (Button) findViewById(R.id.addB);
+        subB = (Button) findViewById(R.id.subB);
+        countB = (TextView) findViewById(R.id.np);
         sendButton = (Button) findViewById(R.id.chatSendButton);
 
         TextView meLabel = (TextView) findViewById(R.id.meLabel);
@@ -98,7 +165,7 @@ public class ChatActivity extends Activity {
             case PRIVATE:
                 //Integer opponentID = ((ApplicationSingleton)getApplication()).getOpponentIDForPrivateDialog(dialog);
 
-                chat = new PrivateChatManagerImpl(this, 1751723);
+                chat = new PrivateChatManagerImpl(this, pair_id);
 
                 companionLabel.setText("Friend");
 

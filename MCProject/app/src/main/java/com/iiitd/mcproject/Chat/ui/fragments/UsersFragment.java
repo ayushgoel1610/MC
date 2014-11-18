@@ -1,6 +1,7 @@
 package com.iiitd.mcproject.Chat.ui.fragments;
 
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,11 +52,13 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
     private static final String CHAT_REQUEST="chats/request";
     private static final String CHAT_PAIR="chats/pair";
 
+
+
     TextView display ;
 
     Timer mytimer ;
     int topic_id;
-    int user_id = 1;
+    int user_id;
     int pair_id;
 
     int pair_status_count = 0;
@@ -88,7 +91,11 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_users, container, false);
-        //usersList = (PullToRefreshListView) v.findViewById(R.id.usersList);
+        SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF, getActivity().MODE_PRIVATE);
+        Log.d("Int value", pref.getString("userRailsID", "null"));
+        user_id = Integer.parseInt(pref.getString("userRailsID", "null"));
+//        user_id = 10;
+//        usersList = (PullToRefreshListView) v.findViewById(R.id.usersList);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
         display = (TextView)v.findViewById(R.id.user_fragment_status);
@@ -117,6 +124,36 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
 
                 // Create new group dialog
                 //
+<<<<<<< HEAD
+                QBDialog dialogToCreate = new QBDialog();
+                dialogToCreate.setName("doesn't matter");
+                //if(usersAdapter.getSelected().size() == 1){
+                    dialogToCreate.setType(QBDialogType.PRIVATE);
+                //}else {
+                    //dialogToCreate.setType(QBDialogType.GROUP);
+                //}
+                //Log.v("UserId", " " + getUserIds(usersAdapter.getSelected()));
+                //dialogToCreate.setOccupantsIds(getUserIds(usersAdapter.getSelected()));
+                ArrayList<Integer> occupantIdsList = new ArrayList<Integer>();
+                occupantIdsList.add(1751723);
+                dialogToCreate.setOccupantsIds(occupantIdsList);
+
+                QBChatService.getInstance().getGroupChatManager().createDialog(dialogToCreate, new QBEntityCallbackImpl<QBDialog>() {
+                    @Override
+                    public void onSuccess(QBDialog dialog, Bundle args) {
+                        //if(usersAdapter.getSelected().size() == 1){
+                            Log.v("Started chat", "started chat");
+                            startSingleChat(dialog);
+
+                    }
+
+                    @Override
+                    public void onError(List<String> errors) {
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                        dialog.setMessage("dialog creation errors: " + errors).create().show();
+                    }
+                });
+=======
 
             QBDialog dialogToCreate = new QBDialog();
             dialogToCreate.setName("doesn't matter");
@@ -146,6 +183,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                     dialog.setMessage("dialog creation errors: " + errors).create().show();
                 }
             });
+>>>>>>> 510ce9cd31c2a54b5e7e9222c0e318557c65a894
             /*}
         });*/
 
@@ -219,7 +257,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         Bundle bundle = new Bundle();
         bundle.putSerializable(ChatActivity.EXTRA_MODE, ChatActivity.Mode.PRIVATE);
         bundle.putSerializable(ChatActivity.EXTRA_DIALOG, dialog);
-
+        bundle.putInt("paid_id",pair_id);
         ChatActivity.start(getActivity(), bundle);
     }
 
@@ -419,6 +457,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                 pair_status = response.get("status").toString();
                 pair_status_count = 4;
                 pair_id = (Integer)response.get("pair_id");
+                Log.d("USerFragment " , response.getString("pair_id"));
               //QuickBlocksChat();
             }
         } catch (JSONException e) {

@@ -5,14 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -51,7 +47,7 @@ public class Search extends Activity{
     private ArrayList<String> topicList=new ArrayList<String>();
     private ArrayList<Integer> topicIDList=new ArrayList<Integer>();
     private ArrayList<String> imageList=new ArrayList<String>();
-
+    private ArrayList<String> categoryList=new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +63,7 @@ public class Search extends Activity{
 
 
     private void initList() {
-        adapter = new TopicList(this, topicList, imageList);
+        adapter = new TopicList(this, topicList, imageList, categoryList);
         trendingTopics = (ListView) findViewById(R.id.search_list);
         trendingTopics.setAdapter(adapter);
         trendingTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -80,6 +76,7 @@ public class Search extends Activity{
                 i.putExtra("id", topicIDList.get(position));
                 int p = topicIDList.get(position);
                 Log.d("SearchActivity", "The topic id is : " + Integer.toString(topicIDList.get(position)));
+                i.putExtra("category", categoryList.get(position));
                 startActivity(i);
             }
         });
@@ -191,6 +188,7 @@ public class Search extends Activity{
                 topicIDList.add(Integer.parseInt(JSONTopic.getString("id")));
                 topicList.add(topic);
                 imageList.add(null);
+                categoryList.add(JSONTopic.getString("category"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

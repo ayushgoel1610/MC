@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:longClickable="true"
         android:scaleType="fitXY"
-        android:src="@drawable/qb_splash_bg"
+        android:src="@drawable/chat"
         android:visibility="visible" />
 
     <ImageView

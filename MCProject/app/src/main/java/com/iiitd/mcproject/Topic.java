@@ -4,11 +4,14 @@ package com.iiitd.mcproject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -53,11 +56,16 @@ public class Topic extends Activity{
     String image_id;
     String description;
     String text;
+    String topic;
+
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.topic);
+
+        context=this;
 
         bar = (ProgressBar)findViewById(R.id.topic_search_progressBar);
         bar.setVisibility(View.INVISIBLE);
@@ -79,7 +87,10 @@ public class Topic extends Activity{
                         image.setImageDrawable(null);
                         image_id = null;
                         Log.d(tag, "Connected to internet");
-                        new KnowledgeGraphTask().execute(getIntent().getStringExtra("topic"));
+                        topic=getIntent().getStringExtra("topic");
+                        TextView topicHeader=(TextView)findViewById(R.id.topicHeader);
+                        topicHeader.setText(topic);
+                        new KnowledgeGraphTask().execute(topic);
                 }else{
                     Toast.makeText(getBaseContext(), "No internet connection", Toast.LENGTH_SHORT).show();
                 }
@@ -223,11 +234,19 @@ public class Topic extends Activity{
             super.onPostExecute(aVoid);
             bar.setVisibility(View.INVISIBLE);
             summary.setText(description);
-            summary.setMovementMethod(new ScrollingMovementMethod());
+            //summary.setMovementMethod(new ScrollingMovementMethod());
             summary.setVisibility(View.VISIBLE);
             image.setVisibility(View.VISIBLE);
-            String imageUrl = "https://www.googleapis.com/freebase/v1/image" + image_id + "?maxwidth=500&maxheight=500&mode=fillcropmid" + "&key="+Common.Freebase_api_key;
-            Picasso.with(getBaseContext()).load(imageUrl).error(R.drawable.ic_launcher).into(image);
+            String imageUrl = "https://www.googleapis.com/freebase/v1/image" + image_id + "?maxwidth=750&maxheight=750&mode=fillcropmid" + "&key="+Common.Freebase_api_key;
+
+            final Resources res = context.getResources();
+            final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);
+
+            final LetterTileProvider tileProvider = new LetterTileProvider(context);
+            final Bitmap letterTile = tileProvider.getLetterTile(topic, imageUrl, tileSize, tileSize);
+
+            Drawable db=new BitmapDrawable(context.getResources(), letterTile);
+            Picasso.with(getBaseContext()).load(imageUrl).fit().centerCrop().placeholder(db).error(db).into(image);
         }
     }
 }

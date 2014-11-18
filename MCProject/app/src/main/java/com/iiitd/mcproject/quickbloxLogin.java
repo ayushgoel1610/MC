@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,7 +40,6 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
 {
     private String userLogin;
     private String userEmail;
-    private String userFBid;
     private String userFullName;
     private String userPassword;
     private String usertokenQB;
@@ -47,9 +47,16 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
     private static final String APP_ID = "15476";
     private static final String AUTH_KEY = "GeO3pbwR999HM9w";
     private static final String AUTH_SECRET = "h9LvUs4uLShEG7S";
-    //
-    private static final String USER_LOGIN = "test";
-    private static final String USER_PASSWORD = "password";
+
+    //private static final String USER_LOGIN = "ayushgoel1610_6682746_32656";
+    //private static final String USER_PASSWORD = "password";
+
+//    private static final String USER_LOGIN = "testuser";
+//    private static final String USER_PASSWORD = "password";
+
+    private static String USER_LOGIN ;
+    private static String USER_PASSWORD;
+    private static String USER_QB_ID;
 
     static final int AUTO_PRESENCE_INTERVAL_IN_SECONDS = 30;
 
@@ -70,14 +77,13 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
         this.context = cnt;
     }
 
-    public quickbloxLogin (String a, String b, String c, String d, String e, String f, Context cnt)
+    public quickbloxLogin (String a, String b, String c, String d, String e, Context cnt)
     {
         this.userLogin = a;
         this.userPassword = b;
         this.userEmail = c;
-        this.userFBid = d;
-        this.userFullName = e;
-        this.usertokenQB = f;
+        this.userFullName = d;
+        this.usertokenQB = e;
         this.context = cnt;
     }
 
@@ -114,7 +120,6 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
             userObj.put("login",userLogin);
             userObj.put("password",userPassword);
             userObj.put("email",userEmail);
-            userObj.put("facebook_id",userFBid);
             userObj.put("full_name",userFullName);
 
             loginObj.put("user", userObj);
@@ -163,50 +168,93 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
     @Override
     protected void onPostExecute(String str)
     {
-        userChat_auth();
+//        userChat_auth();
         pDialog.dismiss();
         if(str != null)
+        {
             Log.d("system response",str);
+            getQBId(str);
+            if(USER_QB_ID!=null)
+            {
+                Log.d("QB ID:",USER_QB_ID);
+                SharedPreferences sharedPref;
+                sharedPref = context.getSharedPreferences(Common.PREF, context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("userQBId",USER_QB_ID);
+                editor.commit();
+            }
+            else
+                Log.d("QB ID:","not found");
+            RailsServerSignUp r1 = new RailsServerSignUp(userLogin,userEmail,userFullName,userPassword,usertokenQB,USER_QB_ID,context);
+            r1.execute();
+        }
         else
             Log.d("system response","is null");
+
     }
 
-    public void userChat_auth(){
-        QBSettings.getInstance().fastConfigInit(APP_ID, AUTH_KEY, AUTH_SECRET);
-        if (!QBChatService.isInitialized()) {
-            QBChatService.init(context);
+    private void getQBId(String inputStr)
+    {
+        try {
+            inputStr = inputStr.substring(9, inputStr.length() - 2);
+            String[] res = inputStr.split(",");
+            for (String abc : res) {
+                Log.d("qb strings", abc);
+                String[] pair = abc.split(":");
+                if (pair[0].equals("\"id\""))
+                    USER_QB_ID = pair[1];
+                break;
+            }
         }
-        chatService = QBChatService.getInstance();
-
-
-        // create QB user
-        //
-        final QBUser user = new QBUser();
-        user.setLogin(USER_LOGIN);
-        user.setPassword(USER_PASSWORD);
-        QBAuth.createSession(user, new QBEntityCallbackImpl<QBSession>() {
-            @Override
-            public void onSuccess(QBSession session, Bundle args) {
-
-                // save current user
-                //
-                user.setId(session.getUserId());
-                //((ApplicationSingleton)getApplication()).setCurrentUser(user);
-                Log.d("debug","on success");
-
-                // login to Chat
-                //
-                loginToChat(user);
-            }
-
-            @Override
-            public void onError(List<String> errors) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                dialog.setMessage("create session errors: " + errors).create().show();
-            }
-        });
-
+        catch (StringIndexOutOfBoundsException ex) {
+            ex.printStackTrace();
+        }
     }
+
+    /*
+    public void userChat_auth(){
+    SharedPreferences sp = context.getSharedPreferences(Common.PREF, context.MODE_PRIVATE);
+    this.USER_LOGIN = sp.getString("userLogin","null");
+    this.USER_PASSWORD = sp.getString("userPassword","null");
+    if(USER_PASSWORD.equals("null") || USER_LOGIN.equals("null"))
+        Log.d("debug","user login and password are null");
+    else
+        Log.d("debug","userLogon:"+USER_LOGIN+" userPass:"+USER_PASSWORD);
+    QBSettings.getInstance().fastConfigInit(APP_ID, AUTH_KEY, AUTH_SECRET);
+    if (!QBChatService.isInitialized()) {
+        QBChatService.init(context);
+    }
+    chatService = QBChatService.getInstance();
+
+
+    // create QB user
+    //
+    final QBUser user = new QBUser();
+    user.setLogin(USER_LOGIN);
+    user.setPassword(USER_PASSWORD);
+    QBAuth.createSession(user, new QBEntityCallbackImpl<QBSession>() {
+        @Override
+        public void onSuccess(QBSession session, Bundle args) {
+
+            // save current user
+            //
+            user.setId(session.getUserId());
+            //((ApplicationSingleton)getApplication()).setCurrentUser(user);
+            Log.d("debug","on success");
+
+            // login to Chat
+            //
+            loginToChat(user);
+        }
+
+        @Override
+        public void onError(List<String> errors) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+            dialog.setMessage("create session errors: " + errors).create().show();
+        }
+    });
+
+}
 
     private void loginToChat(final QBUser user){
 
@@ -227,7 +275,7 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
                 Intent intent = new Intent(context, MasterActivity.class);
                 context.startActivity(intent);
 
-               // context.finish();
+                // context.finish();
             }
 
             @Override
@@ -237,5 +285,6 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
             }
         });
     }
+    */
 
 }
