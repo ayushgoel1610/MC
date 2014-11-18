@@ -44,10 +44,8 @@ public class Search extends Activity{
     String query;
     TopicList adapter;
 
-    private ArrayList<String> topicList=new ArrayList<String>();
-    private ArrayList<Integer> topicIDList=new ArrayList<Integer>();
-    private ArrayList<String> imageList=new ArrayList<String>();
-    private ArrayList<String> categoryList=new ArrayList<String>();
+    private ArrayList<TopicObject> topicObjectList=new ArrayList<TopicObject>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +59,8 @@ public class Search extends Activity{
         TopicTask();
     }
 
-
     private void initList() {
-        adapter = new TopicList(this, topicList, imageList, categoryList);
+        adapter = new TopicList(this, topicObjectList);
         trendingTopics = (ListView) findViewById(R.id.search_list);
         trendingTopics.setAdapter(adapter);
         trendingTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -72,25 +69,23 @@ public class Search extends Activity{
                                     int position, long id) {
                 //Toast.makeText(getActivity(), "You Clicked at " + topicList.get(position), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplication(), Topic.class);
-                i.putExtra("topic", topicList.get(position));
-                i.putExtra("id", topicIDList.get(position));
-                int p = topicIDList.get(position);
-                Log.d("SearchActivity", "The topic id is : " + Integer.toString(topicIDList.get(position)));
-                i.putExtra("category", categoryList.get(position));
+                TopicObject clickedTopic = topicObjectList.get(position);
+                i.putExtra("topic", clickedTopic.getName());
+                i.putExtra("id", clickedTopic.getId());
+                i.putExtra("category", clickedTopic.getCategory());
                 startActivity(i);
             }
         });
     }
-
 
     private void getListImage(){
         ConnectivityManager cmgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
         if(networkInfo!=null && networkInfo.isConnected()) {
 
-            for (String topic : topicList) {
+            for (TopicObject topicObject : topicObjectList)  {
                 try {
-                    KnowledgeGraphTask(topic);
+                    KnowledgeGraphTask(topicObject);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -184,18 +179,19 @@ public class Search extends Activity{
             try {
                 JSONTopic=topicsArray.getJSONObject(i);
                 String topic=JSONTopic.getString("name");
-                Log.d("SearchActivity" , topic);
-                topicIDList.add(Integer.parseInt(JSONTopic.getString("id")));
-                topicList.add(topic);
-                imageList.add(null);
-                categoryList.add(JSONTopic.getString("category"));
+                TopicObject topicObject=new TopicObject();
+                topicObject.putId(JSONTopic.getInt("id"));
+                topicObject.putCategory(JSONTopic.getString("category"));
+                topicObject.putName(JSONTopic.getString("name"));
+                topicObject.putImage("");
+                topicObjectList.add(topicObject);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void KnowledgeGraphTask(final String topicName)
+    private void KnowledgeGraphTask(final TopicObject topicObject)
     {
         new AsyncTask<Void , String , String>() {
 
@@ -204,8 +200,8 @@ public class Search extends Activity{
             @Override
             protected String doInBackground(Void... param) {
                 Log.d(tag, "inside the KnowledgeGraphTask");
-                Log.d(tag , "The topic is : " + topicName);
-                String topic = topicName;
+                Log.d(tag , "The topic is : " + topicObject.getName());
+                String topic = topicObject.getName();
                 topic = topic.replace(" " , "_");
 
                 String topic_id = getTopicId(topic);
@@ -220,9 +216,10 @@ public class Search extends Activity{
                     String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"+ "&key="+ Common.Freebase_api_key;
                     if(image_id.equals("https://www.googleapis.com/freebase/v1/imagenull")){
                         return "ERROR";
-                    }else if(topicList.indexOf(topic)>=0){
-                        imageList.add(topicList.indexOf(topic),image_id);
+                    }else if(topicObjectList.indexOf(topicObject)>=0){
+                        //imageList.add(topicList.indexOf(topic),image_id);
 //                        Log.v(tag,"Adding image: "+image_id);
+                        topicObjectList.get(topicObjectList.indexOf(topicObject)).putImage(image_id);
                         return image_id;
                     }
                 }
@@ -346,5 +343,4 @@ public class Search extends Activity{
             }
         }.execute(null, null, null);
     }
-
 }
