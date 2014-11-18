@@ -1,6 +1,8 @@
 package com.iiitd.mcproject;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -8,9 +10,14 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.api.client.http.GenericUrl;
@@ -43,6 +50,9 @@ public class Search extends Activity{
     private static final String TOPIC_SEARCH = "/topics/search";
     String query;
     TopicList adapter;
+    ProgressBar progress;
+    TextView no_result;
+    int resp_size = 0;
 
     private ArrayList<TopicObject> topicObjectList=new ArrayList<TopicObject>();
 
@@ -50,13 +60,26 @@ public class Search extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
+        progress = (ProgressBar) findViewById(R.id.search_progressBar);
         query = getIntent().getStringExtra("topic");
+        no_result = (TextView) findViewById(R.id.search_noresult_textView);
+        no_result.setVisibility(View.INVISIBLE);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
         getActionBar().setTitle(query);
         initList();
         TopicTask();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        ComponentName cn = new ComponentName(this, SearchableActivity.class);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(cn));
+        searchView.setIconifiedByDefault(false);
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void initList() {
@@ -107,8 +130,16 @@ public class Search extends Activity{
 
             @Override
             protected void onPostExecute(String msg) {
-                adapter.notifyDataSetChanged();
-                getListImage();
+                if(resp_size > 0) {
+                    adapter.notifyDataSetChanged();
+                    getListImage();
+                }else {
+                    Log.d("Search", "onPostExecute");
+                    String dis = "Could not find topic " + "\"" + query + "\"";
+                    no_result.setText(dis);
+                    no_result.setVisibility(View.VISIBLE);
+                    progress.setVisibility(View.INVISIBLE);
+                }
             }
         }.execute(null, null, null);
     }
@@ -152,11 +183,14 @@ public class Search extends Activity{
                 while ((ch = inputStream.read()) != -1) {
                     sb.append((char) ch);
                 }
-
                 JSONObject response=new JSONObject(sb.toString());
                 JSONArray topicsArray=response.getJSONArray("list");
-                addNewTopics(topicsArray);
-
+                resp_size = topicsArray.length();
+                if(resp_size > 0) {
+                    addNewTopics(topicsArray);
+                }else{
+                    Log.d("Search" , "No results found");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 throw e;
@@ -165,7 +199,6 @@ public class Search extends Activity{
                     inputStream.close();
                 }
             }
-
         }
         catch (Exception e){
             return "ERROR : Due to "+e.getMessage();
@@ -196,6 +229,13 @@ public class Search extends Activity{
         new AsyncTask<Void , String , String>() {
 
             String tag = new String("KnowledgeGraphTask");
+
+            @Override
+            protected void onPreExecute() {
+                progress.setVisibility(View.VISIBLE);
+                trendingTopics.setVisibility(View.INVISIBLE);
+                super.onPreExecute();
+            }
 
             @Override
             protected String doInBackground(Void... param) {
@@ -339,7 +379,9 @@ public class Search extends Activity{
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
                 //Populate list
-                adapter.notifyDataSetChanged();
+                progress.setVisibility(View.INVISIBLE);
+                    trendingTopics.setVisibility(View.VISIBLE);
+                    adapter.notifyDataSetChanged();
             }
         }.execute(null, null, null);
     }

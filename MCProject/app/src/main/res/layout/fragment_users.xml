@@ -12,7 +12,8 @@
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
         android:text="Status"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        />
 
 
 
@@ -30,6 +31,16 @@
         android:id="@+id/progressBar"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="RETRY"
+        android:id="@+id/retry_chat_button"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        />
 
 
 </RelativeLayout>

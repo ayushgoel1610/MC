@@ -20,7 +20,6 @@ public class SearchableActivity extends ListActivity{
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-
             Intent i = new Intent(this , Search.class);
             i.putExtra("topic" , query);
             startActivity(i);

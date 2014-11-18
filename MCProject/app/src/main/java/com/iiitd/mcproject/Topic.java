@@ -79,6 +79,10 @@ public class Topic extends Activity{
         chat = (Button) findViewById(R.id.topic_chat);
         chat.setVisibility(View.INVISIBLE);
 
+        topic=getIntent().getStringExtra("topic");
+
+        getActionBar().setTitle(topic);
+
         Log.d(tag , "Inside FreeBase Class");
                 ConnectivityManager cmgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
@@ -90,7 +94,6 @@ public class Topic extends Activity{
                         image.setImageDrawable(null);
                         image_id = null;
                         Log.d(tag, "Connected to internet");
-                        topic=getIntent().getStringExtra("topic");
                         TextView topicHeader=(TextView)findViewById(R.id.topicHeader);
                         topicHeader.setText(topic);
                         new KnowledgeGraphTask().execute(topic);
@@ -103,6 +106,7 @@ public class Topic extends Activity{
     public void runChatClient(View view){
         Intent intent = new Intent(this, NewDialogActivity.class);
         intent.putExtra("id" , getIntent().getIntExtra("id" , -1));
+        intent.putExtra("topic" , topic);
         startActivity(intent);
     }
 

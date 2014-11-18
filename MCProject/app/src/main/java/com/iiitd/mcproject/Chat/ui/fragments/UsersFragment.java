@@ -52,8 +52,8 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
     private static final String CHAT_REQUEST="chats/request";
     private static final String CHAT_PAIR="chats/pair";
 
-
     TextView display ;
+    Button retry ;
 
     int topic_id;
     int user_id;
@@ -102,12 +102,29 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         progressBar.setVisibility(View.VISIBLE);
         display = (TextView)v.findViewById(R.id.user_fragment_status);
         display.setVisibility(View.INVISIBLE);
+        retry = (Button) v.findViewById(R.id.retry_chat_button);
+        retry.setVisibility(View.INVISIBLE);
         Log.d("UserFragment" , "The topic id is : " + Integer.toString(getActivity().getIntent().getIntExtra("id" , -1)));
         topic_id = getActivity().getIntent().getIntExtra("id" , -1);
 
-        RequestTask();
+        Request();
+
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Request();
+            }
+        });
 
         return v;
+    }
+
+    public void Request(){
+        progressBar.setVisibility(View.VISIBLE);
+        display.setVisibility(View.INVISIBLE);
+        retry.setVisibility(View.INVISIBLE);
+        pair_status_count = 0;
+        RequestTask();
     }
 
     public static QBPagedRequestBuilder getQBPagedRequestBuilder(int page) {
@@ -188,8 +205,8 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 display.setText(request_status);
-                progressBar.setVisibility(View.INVISIBLE);
-                display.setVisibility(View.VISIBLE);
+                //progressBar.setVisibility(View.INVISIBLE);
+                //display.setVisibility(View.VISIBLE);
                 Message msg = new Message();
                 msg.arg1 = 1;
                 pairHandler.sendMessage(msg);
@@ -283,8 +300,9 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                     return;
                 }else{
                     progressBar.setVisibility(View.INVISIBLE);
-                    display.setText(pair_status);
+                    display.setText("NO USERS FOUND :P");
                     display.setVisibility(View.VISIBLE);
+                    retry.setVisibility(View.VISIBLE);
                 }
                 Log.d("UserFragment" , "Test");
             }

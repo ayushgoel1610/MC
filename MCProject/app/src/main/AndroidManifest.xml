@@ -24,6 +24,7 @@
 
         <activity
             android:name=".Search"
+            android:parentActivityName=".MasterActivity" >
             android:label="MCProject">
         </activity>
 

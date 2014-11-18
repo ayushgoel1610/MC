@@ -43,6 +43,9 @@ public class NewDialogActivity extends ActionBarActivity {
                 actionBar.setSelectedNavigationItem(position);
             }
         });
+
+        getActionBar().setTitle(getIntent().getStringExtra("topic"));
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public static class SectionsPagerAdapter extends FragmentPagerAdapter {

@@ -98,15 +98,11 @@ public class MasterActivity extends Activity
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.master, menu);
-
         SearchManager searchManager = (SearchManager)getSystemService(SEARCH_SERVICE);
-
         ComponentName cn = new ComponentName(this, SearchableActivity.class);
-
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-      searchView.setSearchableInfo(searchManager.getSearchableInfo(cn));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(cn));
         searchView.setIconifiedByDefault(false);
-
         return super.onCreateOptionsMenu(menu);
     }
 
