@@ -57,6 +57,8 @@ public class CategoryTopicActivity extends Activity {
     private ArrayList<TopicObject> topicObjectList=new ArrayList<TopicObject>();
     TopicList adapter;
 
+
+    private int count = 0;
     private long offset=0;
     private int lastSize=10;
     private String category;
@@ -67,6 +69,7 @@ public class CategoryTopicActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_topic);
         category = getIntent().getStringExtra("category");
+        getList();
     }
 
     @Override
@@ -138,10 +141,11 @@ public class CategoryTopicActivity extends Activity {
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
                 if(msg.contains("retrieved")) {
-                    if(lastSize==10)
+                    if(lastSize==10 || count == 0)
                         offset += 10;
-                    if(offset==10)
+                    if(offset==10) {
                         initList();
+                    }
                     else
                         try {
                             adapter.notifyDataSetChanged();
@@ -149,6 +153,7 @@ public class CategoryTopicActivity extends Activity {
                         catch (NullPointerException e){
                             e.printStackTrace();
                         }
+                    count++;
                     getListImage();
                 }
                 //Populate list
@@ -407,13 +412,14 @@ public class CategoryTopicActivity extends Activity {
     }
 
     private void getListImage(){
+        Log.d(tag , "Entered getListImage");
         ConnectivityManager cmgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
         if(networkInfo!=null && networkInfo.isConnected()) {
             int count=0;
             for (TopicObject topicObject : topicObjectList) {
                 Log.v(tag,"count, offset: "+count+", "+offset);
-                if((lastSize==10 && count>=offset-10) || (lastSize<10 && count>=offset+lastSize))
+                if((lastSize==10 && count>=offset-10) || (lastSize<10 && count>=offset+lastSize) || this.count == 1)
                     try {
                         KnowledgeGraphTask(topicObject);
                     } catch (Exception e) {

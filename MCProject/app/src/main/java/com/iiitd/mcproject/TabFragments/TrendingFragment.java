@@ -67,6 +67,8 @@ public class TrendingFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+
+    private int count = 0;
     private long offset=0;
     private int lastSize=10;
 
@@ -263,7 +265,7 @@ public class TrendingFragment extends Fragment {
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
                 if(msg.contains("retrieved")) {
-                    if(lastSize==10)
+                    if(lastSize==10 || count==0)
                         offset += 10;
                     if(offset==10)
                         initList();
@@ -274,6 +276,7 @@ public class TrendingFragment extends Fragment {
                         catch (NullPointerException e){
                             e.printStackTrace();
                         }
+                    count++;
                     getListImage();
                 }
                 //Populate list

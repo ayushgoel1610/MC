@@ -2,6 +2,7 @@ package com.iiitd.mcproject.TabFragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.iiitd.mcproject.CategoryTopicActivity;
 import com.iiitd.mcproject.Common;
 import com.iiitd.mcproject.R;
 
@@ -104,9 +106,9 @@ public class CategoryFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Toast.makeText(getActivity(), "You Clicked at " + categoryList.get(position), Toast.LENGTH_SHORT).show();
-                //Intent i = new Intent(getActivity() , Topic.class);
-
-                //startActivity(i);
+                Intent i = new Intent(getActivity() , CategoryTopicActivity.class);
+                i.putExtra("category" , categoryList.get(position) );
+                startActivity(i);
             }
         });
     }
