@@ -96,6 +96,7 @@ public class Search extends Activity{
                 i.putExtra("topic", clickedTopic.getName());
                 i.putExtra("id", clickedTopic.getId());
                 i.putExtra("category", clickedTopic.getCategory());
+                i.putExtra("image",clickedTopic.getImage());
                 startActivity(i);
             }
         });
@@ -231,18 +232,14 @@ public class Search extends Activity{
             String tag = new String("KnowledgeGraphTask");
 
             @Override
-            protected void onPreExecute() {
-                progress.setVisibility(View.VISIBLE);
-                trendingTopics.setVisibility(View.INVISIBLE);
-                super.onPreExecute();
-            }
-
-            @Override
             protected String doInBackground(Void... param) {
                 Log.d(tag, "inside the KnowledgeGraphTask");
                 Log.d(tag , "The topic is : " + topicObject.getName());
                 String topic = topicObject.getName();
                 topic = topic.replace(" " , "_");
+
+                String category = topicObject.getCategory();
+                category=category.replace(" ","_");
 
                 String topic_id = getTopicId(topic);
                 Log.d(tag , "The topic id is : " + topic_id );
@@ -253,8 +250,11 @@ public class Search extends Activity{
                     return "ERROR";
                 }else{
 
-                    String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"+ "&key="+ Common.Freebase_api_key;
+                    String image_id = "https://www.googleapis.com/freebase/v1/image"
+                            + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"
+                            + "&key="+ Common.Freebase_api_key;
                     if(image_id.equals("https://www.googleapis.com/freebase/v1/imagenull")){
+
                         return "ERROR";
                     }else if(topicObjectList.indexOf(topicObject)>=0){
                         //imageList.add(topicList.indexOf(topic),image_id);
@@ -379,9 +379,12 @@ public class Search extends Activity{
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
                 //Populate list
-                progress.setVisibility(View.INVISIBLE);
-                    trendingTopics.setVisibility(View.VISIBLE);
+                try {
                     adapter.notifyDataSetChanged();
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+                }
             }
         }.execute(null, null, null);
     }

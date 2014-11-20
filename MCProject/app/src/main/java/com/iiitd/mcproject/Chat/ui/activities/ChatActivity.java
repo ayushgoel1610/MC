@@ -23,6 +23,7 @@ import com.iiitd.mcproject.Chat.ui.ChatManager;
 import com.iiitd.mcproject.Chat.ui.PrivateChatManagerImpl;
 import com.iiitd.mcproject.Chat.ui.adapters.ChatAdapter;
 import com.iiitd.mcproject.Common;
+import com.iiitd.mcproject.MasterActivity;
 import com.iiitd.mcproject.R;
 import com.quickblox.chat.QBChatService;
 import com.quickblox.chat.model.QBChatHistoryMessage;
@@ -54,6 +55,8 @@ public class ChatActivity extends Activity {
     private static final String TAG = ChatActivity.class.getSimpleName();
     private static final String END_CHAT="endchat";
 
+    String chat_status;
+
     public static final String EXTRA_MODE = "mode";
     public static final String EXTRA_DIALOG = "dialog";
     public boolean doubleBackToExitPressedOnce = false;
@@ -65,7 +68,7 @@ public class ChatActivity extends Activity {
     private Button addB;
     private Button subB;
     private TextView countB;
-    private int counter;
+    private int reputation;
     private ProgressBar progressBar;
 
     private Mode mode = Mode.PRIVATE;
@@ -76,6 +79,7 @@ public class ChatActivity extends Activity {
 
     private ArrayList<QBChatHistoryMessage> history;
 
+    int flag = 0;
     public static void start(Context context, Bundle bundle) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtras(bundle);
@@ -91,23 +95,23 @@ public class ChatActivity extends Activity {
                 Toast.LENGTH_LONG).show();
 
         initViews();
-        counter = 0;
-        countB.setText("" + counter);
+        reputation = 0;
+        countB.setText("" + reputation);
         addB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                counter++;
-                countB.setText("" + counter);
+                reputation++;
+                countB.setText("" + reputation);
             }
         });
 
         subB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                counter--;
-                if (counter < 0)
-                    counter = 0;
-                countB.setText("" + counter);
+                reputation--;
+                if (reputation < 0)
+                    reputation = 0;
+                countB.setText("" + reputation);
             }
         });
 
@@ -131,22 +135,19 @@ public class ChatActivity extends Activity {
             }
         }, 2000);*/
 
-        SharedPreferences pref = getSharedPreferences(Common.PREF, MODE_PRIVATE);
-        int chat = pref.getInt("chat", 0);
-        Log.d("ChatActivity" , "The chat id is : "  + chat);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.remove("chat");
-        editor.commit();
 
         AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
         alertbox.setTitle("Quit Chat");
-        alertbox.setMessage("The User reputation is : " + counter + "\nDo you want to exit the chat?");
+        alertbox.setMessage("The User reputation is : " + reputation + "\nDo you want to exit the chat?");
         alertbox.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
 
             public void onClick(DialogInterface arg0, int arg1) {
                 Toast.makeText(getApplicationContext(), "'yes' button clicked", Toast.LENGTH_SHORT).show();
-                return;
+                EndChat();
+                Log.d("ChatActivity" , "sent request");
+                flag = 1;
+                finish();
             }
         });
 
@@ -276,11 +277,78 @@ public class ChatActivity extends Activity {
 
     public static enum Mode {PRIVATE, GROUP}
 
-    private class EndChat extends AsyncTask<Void , Void, Void>{
-        @Override
-        protected Void doInBackground(Void... params) {
-            return null;
-        }
+    private void EndChat(){
+        new AsyncTask<Void , Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                SendRepuation();
+                return null;
+            }
+        }.execute(null , null , null);
     }
 
+    private void SendRepuation(){
+        InputStream inputStream = null;
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(Common.SERVER_URL+END_CHAT);
+        JSONObject jsonObject = new JSONObject();
+
+        String json = new String();
+
+        SharedPreferences pref = getSharedPreferences(Common.PREF, MODE_PRIVATE);
+        int chat = pref.getInt("chat", 0);
+        int user_id = Integer.parseInt(pref.getString("userRailsID", null));
+        Log.d("ChatActivity" , "The chat id is : "  + chat  + " the user id is : " + user_id);
+
+        try {
+            jsonObject.put("id" , chat);
+            jsonObject.put("user_id" , user_id);
+            jsonObject.put("reputation" , reputation);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        json=jsonObject.toString();
+
+        StringEntity se = null;
+        try {
+            se = new StringEntity(json);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE,"application/json"));
+
+        httpPost.setEntity(se);
+        org.apache.http.HttpResponse httpResponse = null;
+        try {
+            httpResponse = httpclient.execute(httpPost);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            inputStream = httpResponse.getEntity().getContent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        StatusLine sl=httpResponse.getStatusLine();
+
+        Log.v("TopicChat", Integer.toString(sl.getStatusCode()) + " " + sl.getReasonPhrase());
+
+        StringBuffer sb=new StringBuffer();
+
+        int ch;
+        try {
+            while ((ch = inputStream.read()) != -1) {
+                sb.append((char) ch);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            JSONObject response=new JSONObject(sb.toString());
+            String chat_status = response.get("shabbo").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
