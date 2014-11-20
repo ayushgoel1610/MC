@@ -135,6 +135,7 @@ public class TrendingFragment extends Fragment {
                 i.putExtra("topic" , clickedTopic.getName());
                 i.putExtra("id", clickedTopic.getId());
                 i.putExtra("category", clickedTopic.getCategory());
+                i.putExtra("image",clickedTopic.getImage());
                 startActivity(i);
             }
         });
