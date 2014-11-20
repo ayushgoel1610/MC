@@ -77,7 +77,6 @@ public class Topic extends Activity{
         image.setVisibility(View.INVISIBLE);
 
         chat = (Button) findViewById(R.id.topic_chat);
-        chat.setVisibility(View.INVISIBLE);
 
         topic=getIntent().getStringExtra("topic");
 
@@ -240,7 +239,6 @@ public class Topic extends Activity{
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             bar.setVisibility(View.INVISIBLE);
-            chat.setVisibility(View.VISIBLE);
             summary.setText(description);
             //summary.setMovementMethod(new ScrollingMovementMethod());
             summary.setVisibility(View.VISIBLE);

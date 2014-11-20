@@ -29,8 +29,4 @@
         android:foreground="?android:attr/windowContentOverlay"/>
 
 </LinearLayout>
-<<<<<<< HEAD
-<!-- From: file:/F:/AndroidStudioProjects/MC/MCProject/facebook/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/layout/abc_simple_decor.xml -->
-=======
 <!-- From: file:/home/shiv/MC/Project/MC/MCProject/facebook/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/layout/abc_simple_decor.xml -->
->>>>>>> 510ce9cd31c2a54b5e7e9222c0e318557c65a894

@@ -20,8 +20,4 @@
     <padding android:left="5dp" android:top="0dp"
         android:right="5dp" android:bottom="1dp" />
 </shape>
-<<<<<<< HEAD
-<!-- From: file:/F:/AndroidStudioProjects/MC/MCProject/facebook/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/drawable/abc_search_dropdown_dark.xml -->
-=======
 <!-- From: file:/home/shiv/MC/Project/MC/MCProject/facebook/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/drawable/abc_search_dropdown_dark.xml -->
->>>>>>> 510ce9cd31c2a54b5e7e9222c0e318557c65a894
