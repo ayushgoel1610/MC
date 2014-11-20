@@ -55,9 +55,11 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
     TextView display ;
     Button retry ;
 
-    int topic_id;
-    int user_id;
-    int pair_id;
+    int topic_id;           //Topic ID
+    int user_id;            //User quickblocks id , retrieved from SharedPref
+    int pair_id;            //Other user quikcblocks id , getting from my Rails server.
+    int chat;               //The chat_id at my rails server, use this to send the reputation
+
 
     int pair_status_count = 0;
     private String request_status = "" ;
@@ -115,7 +117,6 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                 Request();
             }
         });
-
         return v;
     }
 
@@ -304,7 +305,6 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                     display.setVisibility(View.VISIBLE);
                     retry.setVisibility(View.VISIBLE);
                 }
-                Log.d("UserFragment" , "Test");
             }
         }.execute(null , null , null);
     }
@@ -374,7 +374,12 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                 pair_status = response.get("status").toString();
                 pair_status_count = 4;
                 pair_id = (Integer)response.get("pair_id");
-                Log.d("USerFragment " , response.getString("pair_id"));
+                chat = (Integer)response.get("chat");
+                Log.d("USerFragment " , "pair_id : " + response.getString("pair_id") + " chat_id : " + response.get("chat"));
+                SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF, getActivity().MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putInt("chat" , chat);
+                editor.commit();
             }
         } catch (JSONException e) {
             e.printStackTrace();
