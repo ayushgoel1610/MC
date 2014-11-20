@@ -2,10 +2,10 @@
 <merger version="2" >
 
     <dataSet config="main" >
-        <source path="/home/shiv/MC/Project/MC/MCProject/facebook/src/main/assets" />
+        <source path="C:\mc_project\MC\MCProject\facebook\src\main\assets" />
     </dataSet>
     <dataSet config="debug" >
-        <source path="/home/shiv/MC/Project/MC/MCProject/facebook/src/debug/assets" />
+        <source path="C:\mc_project\MC\MCProject\facebook\src\debug\assets" />
     </dataSet>
 
 </merger>
