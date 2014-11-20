@@ -90,17 +90,15 @@ public class MainTabsFragment extends Fragment
                 case 1:
                     fragment=new TrendingFragment();
                     break;
-                case 2:
-                    fragment=new RecentFragment();
-                    break;
+
             }
             return fragment;
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 2 total pages.
+            return 2;
         }
 
         @Override
@@ -111,9 +109,7 @@ public class MainTabsFragment extends Fragment
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
-            }
+                }
             return null;
         }
     }
