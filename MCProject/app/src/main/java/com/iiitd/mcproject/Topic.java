@@ -87,17 +87,30 @@ public class Topic extends Activity{
                         summary.setText("");
                         image.setVisibility(View.INVISIBLE);
                         image.setImageDrawable(null);
-                        image_id = null;
                         Log.d(tag, "Connected to internet");
                         topic=getIntent().getStringExtra("topic");
                         TextView topicHeader=(TextView)findViewById(R.id.topicHeader);
                         topicHeader.setText(topic);
+                        image_id = getIntent().getStringExtra("image");
+                        setImage();
                         new KnowledgeGraphTask().execute(topic);
                 }else{
                     Toast.makeText(getBaseContext(), "No internet connection", Toast.LENGTH_SHORT).show();
                 }
             }
 
+    private void setImage(){
+        image.setVisibility(View.VISIBLE);
+
+        final Resources res = context.getResources();
+        final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);
+
+        final LetterTileProvider tileProvider = new LetterTileProvider(context);
+        final Bitmap letterTile = tileProvider.getLetterTile(topic, image_id, tileSize, tileSize);
+
+        Drawable db=new BitmapDrawable(context.getResources(), letterTile);
+        Picasso.with(getBaseContext()).load(image_id).fit().centerCrop().placeholder(db).error(db).into(image);
+    }
 
     public void runChatClient(View view){
         Intent intent = new Intent(this, NewDialogActivity.class);
@@ -235,20 +248,9 @@ public class Topic extends Activity{
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             bar.setVisibility(View.INVISIBLE);
-            summary.setText(description);
+            summary.setText(text);
             //summary.setMovementMethod(new ScrollingMovementMethod());
             summary.setVisibility(View.VISIBLE);
-            image.setVisibility(View.VISIBLE);
-            String imageUrl = "https://www.googleapis.com/freebase/v1/image" + image_id + "?maxwidth=750&maxheight=750&mode=fillcropmid" + "&key="+Common.Freebase_api_key;
-
-            final Resources res = context.getResources();
-            final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);
-
-            final LetterTileProvider tileProvider = new LetterTileProvider(context);
-            final Bitmap letterTile = tileProvider.getLetterTile(topic, imageUrl, tileSize, tileSize);
-
-            Drawable db=new BitmapDrawable(context.getResources(), letterTile);
-            Picasso.with(getBaseContext()).load(imageUrl).fit().centerCrop().placeholder(db).error(db).into(image);
         }
     }
 }
