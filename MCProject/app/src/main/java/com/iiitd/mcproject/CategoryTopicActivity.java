@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -53,9 +54,12 @@ public class CategoryTopicActivity extends Activity {
 
     private final String CATEGORY_TOPIC = "topics/list" ;
 
-    ListView categoryTopics;
+
     private ArrayList<TopicObject> topicObjectList=new ArrayList<TopicObject>();
+
+    ListView categoryTopics;
     TopicList adapter;
+    ProgressBar progress;
 
 
     private int count = 0;
@@ -68,7 +72,11 @@ public class CategoryTopicActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_topic);
+        categoryTopics=(ListView)findViewById(R.id.category_topic_list);
+        progress = (ProgressBar) findViewById(R.id.category_progressBar);
         category = getIntent().getStringExtra("category");
+        categoryTopics.setVisibility(View.INVISIBLE);
+        progress.setVisibility(View.VISIBLE);
         getList();
     }
 
@@ -86,7 +94,6 @@ public class CategoryTopicActivity extends Activity {
 
     private void initList(){
         adapter = new TopicList(this, topicObjectList);
-        categoryTopics=(ListView)findViewById(R.id.category_topic_list);
         categoryTopics.setAdapter(adapter);
         categoryTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -253,6 +260,14 @@ public class CategoryTopicActivity extends Activity {
 
             String tag = new String("KnowledgeGraphTask");
 
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progress.setVisibility(View.VISIBLE);
+                categoryTopics.setVisibility(View.INVISIBLE);
+            }
+
             @Override
             protected String doInBackground(Void... param) {
                 Log.d(tag, "inside the KnowledgeGraphTask");
@@ -403,6 +418,8 @@ public class CategoryTopicActivity extends Activity {
                 //Populate list
                 try {
                     adapter.notifyDataSetChanged();
+                    progress.setVisibility(View.INVISIBLE);
+                    categoryTopics.setVisibility(View.VISIBLE);
                 }
                 catch (NullPointerException e){
                     e.printStackTrace();
@@ -432,12 +449,4 @@ public class CategoryTopicActivity extends Activity {
         }
 
     }
-
-
-
-
-
-
-
-
 }

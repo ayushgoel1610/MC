@@ -61,6 +61,7 @@ public class Search extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         progress = (ProgressBar) findViewById(R.id.search_progressBar);
+        progress.setVisibility(View.VISIBLE);
         query = getIntent().getStringExtra("topic");
         no_result = (TextView) findViewById(R.id.search_noresult_textView);
         no_result.setVisibility(View.INVISIBLE);
@@ -106,7 +107,6 @@ public class Search extends Activity{
         ConnectivityManager cmgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
         if(networkInfo!=null && networkInfo.isConnected()) {
-
             for (TopicObject topicObject : topicObjectList)  {
                 try {
                     KnowledgeGraphTask(topicObject);
@@ -117,7 +117,6 @@ public class Search extends Activity{
         }else{
             Toast.makeText(this , "No Internet Connection" , Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void TopicTask(){
@@ -378,6 +377,7 @@ public class Search extends Activity{
             @Override
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
+                progress.setVisibility(View.INVISIBLE);
                 //Populate list
                 try {
                     adapter.notifyDataSetChanged();
