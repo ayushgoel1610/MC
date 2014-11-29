@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :users
   resources :topics
+  post 'location',to: 'users#setlocation'
   post 'chats', to: 'chats#create'
   post 'endchat',to: 'chats#end_chat'
   post 'topics/list',to: 'topics#topicList'

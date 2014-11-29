@@ -12,7 +12,13 @@ class ChatsController < ApplicationController
 	end
 	def pair_request
 		@topic=Topic.find(params[:topic_id])
-		@topic.chatqueues.create(user_id1: params[:user_id],req_count: 0)
+		flag=0
+		if params[:locflag]
+			flag=params[:locflag]
+		else
+			flag=0
+		end
+		@topic.chatqueues.create(user_id1: params[:user_id],req_count: 0,locflag: flag)
 		response={
 			status: "Wait for pairing"
 		}.to_json
@@ -31,43 +37,83 @@ class ChatsController < ApplicationController
 		@targetpair.req_count+=1
 		@targetpair.save
 		if @targetpair.user_id2.nil?
-			for element in @topic.chatqueues
-				if(element.user_id1!=params[:user_id])
-					@chat=Chat.new(userid_1: params[:user_id],userid_2: element.user_id1,topic_id: params[:topic_id])
-					@chat.save
-					@user=User.find(element.user_id1)
-					response={
-						status: "user found",
-						pair_id: @user.chat_id,
-						chat: @chat.id
-					}.to_json
-					element.user_id2=params[:user_id]
-					element.chat=@chat.id
-					element.save
-					@targetpair.delete
-					puts response
-					render :json => response
-					return
+			if(@targetpair.locflag==1)
+				for element in @topic.chatqueues
+					if((element.user_id1!=params[:user_id])&&(User.find(element.user_id1).location==User.find(params[:user_id]).location))
+						@chat=Chat.new(userid_1: params[:user_id],userid_2: element.user_id1,topic_id: params[:topic_id])
+						@chat.save
+						@user=User.find(element.user_id1)
+						response={
+							status: "user found in your location",
+							pair_id: @user.chat_id,
+							chat: @chat.id
+						}.to_json
+						element.user_id2=params[:user_id]
+						element.chat=@chat.id
+						element.save
+						@targetpair.delete
+						puts response
+						render :json => response
+						return
+					end
 				end
-			end
-			response={
-				status: "No users available"
-			}.to_json
-			if(@targetpair.req_count==3)
-				@targetpair.delete
 				response={
-					status: "No users available!Request expired."
-				}
+					status: "No users available(Location Specific)"
+				}.to_json
+				if(@targetpair.req_count==3)
+					@targetpair.delete
+					response={
+						status: "No users available with your location!Request expired."
+					}
+				end
+				render :json => response
+			else
+				for element in @topic.chatqueues
+					if(element.user_id1!=params[:user_id])
+						@chat=Chat.new(userid_1: params[:user_id],userid_2: element.user_id1,topic_id: params[:topic_id])
+						@chat.save
+						@user=User.find(element.user_id1)
+						response={
+							status: "user found",
+							pair_id: @user.chat_id,
+							chat: @chat.id
+						}.to_json
+						element.user_id2=params[:user_id]
+						element.chat=@chat.id
+						element.save
+						@targetpair.delete
+						puts response
+						render :json => response
+						return
+					end
+				end
+				response={
+					status: "No users available"
+				}.to_json
+				if(@targetpair.req_count==3)
+					@targetpair.delete
+					response={
+						status: "No users available!Request expired."
+					}
+				end
+				render :json => response
 			end
-			render :json => response
 		else
 			@chat=Chat.find(@targetpair.chat)
 			@user=User.find(@targetpair.user_id2)
-			response={
-				status: "user found",
-				pair_id: @user.chat_id,
-				chat: @chat.id
-			}.to_json
+			if(@targetpair.locflag==1)
+				response={
+					status: "user found according to location",
+					pair_id: @user.chat_id,
+					chat: @chat.id
+				}.to_json
+			else
+				response={
+					status: "user found",
+					pair_id: @user.chat_id,
+					chat: @chat.id
+				}.to_json
+			end
 			@targetpair.delete
 			render :json => response
 			return

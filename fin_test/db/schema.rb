@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141120145908) do
+ActiveRecord::Schema.define(version: 20141129080954) do
 
   create_table "api_keys", force: true do |t|
     t.string   "access_token"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20141120145908) do
     t.integer  "topic_id"
     t.integer  "req_count"
     t.integer  "chat"
+    t.integer  "locflag"
   end
 
   create_table "chats", force: true do |t|
@@ -75,6 +76,7 @@ ActiveRecord::Schema.define(version: 20141120145908) do
     t.string   "token"
     t.integer  "reputation"
     t.integer  "chat_id"
+    t.string   "location"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

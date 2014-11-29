@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-    skip_before_action :require_token,only:[:new,:create,:login]
+    skip_before_action :require_token,only:[:new,:create,:login,:setlocation]
 	skip_before_filter  :verify_authenticity_token
 	protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
     def create
@@ -15,6 +15,13 @@ class UsersController < ApplicationController
         		format.json { render json: @user.errors, status: :unprocessable_entity }
       	end
     end
+    end
+    def setlocation
+        User.find(params[:id]).update_attribute("location",params[:location])
+        status={
+            status: "Location set"
+        }.to_json
+        render json: status
     end
     def show
     	@user=User.find(params[:id])
