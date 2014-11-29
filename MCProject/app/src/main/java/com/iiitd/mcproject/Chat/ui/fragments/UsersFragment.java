@@ -42,8 +42,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 //import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -57,7 +55,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
 
     int topic_id;
     int user_id;
-    int pair_id;
+    int pair_id = 1980087;
 
     int pair_status_count = 0;
     private String request_status = "" ;
@@ -107,7 +105,8 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         Log.d("UserFragment" , "The topic id is : " + Integer.toString(getActivity().getIntent().getIntExtra("id" , -1)));
         topic_id = getActivity().getIntent().getIntExtra("id" , -1);
 
-        Request();
+       // Request();
+        QuickBlocksChat();
 
         retry.setOnClickListener(new View.OnClickListener() {
             @Override

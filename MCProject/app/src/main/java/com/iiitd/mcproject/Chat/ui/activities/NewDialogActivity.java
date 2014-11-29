@@ -20,6 +20,7 @@ public class NewDialogActivity extends ActionBarActivity {
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
+    public static int exit_flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,5 +80,10 @@ public class NewDialogActivity extends ActionBarActivity {
         startActivity(i);
         finish();
 
+    }
+    @Override
+    public void onResume(){
+        if (exit_flag == 1)
+            super.onBackPressed();
     }
 }

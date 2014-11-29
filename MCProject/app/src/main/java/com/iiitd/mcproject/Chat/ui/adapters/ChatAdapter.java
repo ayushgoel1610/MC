@@ -2,6 +2,7 @@ package com.iiitd.mcproject.Chat.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -9,11 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.iiitd.mcproject.ApplicationSingleton;
 import com.iiitd.mcproject.R;
 import com.quickblox.chat.model.QBChatHistoryMessage;
 import com.quickblox.chat.model.QBMessage;
@@ -26,6 +28,7 @@ public class ChatAdapter extends BaseAdapter {
     private static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
     private final List<QBMessage> chatMessages;
     private Activity context;
+    private static int flag;
 
     public ChatAdapter(Activity context, List<QBMessage> chatMessages) {
         this.context = context;
@@ -69,6 +72,7 @@ public class ChatAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
         Log.v("Incoming and Outgoing", " " + chatMessage.getSenderId());
 //        Log.v("Incoming and Outgoing", " " + ((ApplicationSingleton) context.getApplication()).getCurrentUser().getId());
         if (chatMessage.getSenderId() == null)
@@ -80,7 +84,24 @@ public class ChatAdapter extends BaseAdapter {
             holder.txtInfo.setText(chatMessage.getSenderId() + ": " + getTimeText(chatMessage));
         } else {
             holder.txtInfo.setText(getTimeText(chatMessage));
+
         }
+
+          ImageView imageView = (ImageView) holder.content.findViewById(R.id.photo);
+          imageView.setVisibility(View.GONE);
+
+//        Log.v("chat property",chatMessage.getProperty("uri"));
+            if (chatMessage.getProperty("uri") != null) {
+                Log.v("URI", chatMessage.getProperty("uri"));
+                //ImageView photo = new ImageView(context);
+                imageView.setLayoutParams(new LinearLayout.LayoutParams(120, 120));
+                //holder.content.addView(photo);
+                imageView.setVisibility(View.VISIBLE);
+                imageView.setImageBitmap(BitmapFactory.decodeFile(chatMessage.getProperty("uri")));
+                ProgressBar pb = (ProgressBar) holder.content.findViewById(R.id.progressBar);
+                pb.setVisibility(View.GONE);
+            }
+
 
         return convertView;
     }
@@ -141,6 +162,8 @@ public class ChatAdapter extends BaseAdapter {
         holder.content = (LinearLayout) v.findViewById(R.id.content);
         holder.contentWithBG = (LinearLayout) v.findViewById(R.id.contentWithBackground);
         holder.txtInfo = (TextView) v.findViewById(R.id.txtInfo);
+
+
         return holder;
     }
 

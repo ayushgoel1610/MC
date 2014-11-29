@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingBottom="15dp">
+        android:paddingBottom="0dp">
 
 
         <!--<NumberPicker
@@ -54,9 +54,9 @@
         <EditText
             android:id="@+id/messageEdit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/chatSendButton"
+            android:layout_toLeftOf="@+id/photoSendButton"
             android:autoText="true"
             android:background="#CEFFF9"
             android:hint="message text" />
@@ -78,6 +78,15 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:text="Send" />
+
+        <Button
+            android:id="@+id/photoSendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="60dp"
+            android:text="Photo" />
 
         <ListView
             android:id="@+id/messagesContainer"
