@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,8 +60,31 @@ public class MainTabsFragment extends Fragment
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) v.findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        Log.v(TAG,"onCreateView");
+
+        setRetainInstance(true);
 
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.v(TAG, "onDestroy");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mViewPager.getAdapter().notifyDataSetChanged();
+        Log.v(TAG, "onResume");
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.v(TAG, "onPause");
     }
 
     @Override
@@ -82,6 +106,7 @@ public class MainTabsFragment extends Fragment
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+            Log.v(TAG, "getItem");
             Fragment fragment=null;
             switch(position){
                 case 0:

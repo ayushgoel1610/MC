@@ -113,6 +113,7 @@ public class TrendingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setRetainInstance(true);
     }
 
     private void addToList(){
@@ -203,6 +204,12 @@ public class TrendingFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.v(tag, "onDestroy");
     }
 
 
