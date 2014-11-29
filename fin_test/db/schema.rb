@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141103194613) do
+ActiveRecord::Schema.define(version: 20141120145908) do
 
   create_table "api_keys", force: true do |t|
     t.string   "access_token"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20141103194613) do
     t.integer  "chat_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   create_table "topics", force: true do |t|
@@ -62,6 +63,7 @@ ActiveRecord::Schema.define(version: 20141103194613) do
     t.integer  "avg_reputation"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   create_table "users", force: true do |t|

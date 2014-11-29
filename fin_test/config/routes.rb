@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   post 'chats/pair',to: 'chats#ret_pair'
   post 'login',to: 'users#login'
   post 'logout',to: 'users#logout'
+  post 'topics/search', to: 'topics#index'
+  post 'topics/categories', to: 'topics#categories'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

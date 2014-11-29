@@ -1,6 +1,20 @@
 class TopicsController < ApplicationController
-	skip_before_action :require_token,only:[:topicList,:new,:create]
+	skip_before_action :require_token,only:[:topicList,:new,:create,:index,:incrhealth,:categories]
 	protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
+	def index
+		@topics
+		if params[:query]
+			@topics=Topic.search(params[:query]).order(health: :desc)
+		else
+			@topics=Topic.order(health: :desc)
+		end
+		@topicList={
+			list: @topics,
+			size: @topics.size
+		}.to_json
+		render :json => @topicList
+
+	end
 	def show
 		@topic=Topic.find(params[:id])
 		respond_to do |format|
@@ -38,12 +52,29 @@ class TopicsController < ApplicationController
 		end
 	end
 	def topicList
-		@topics=Topic.order(health: :desc).limit(10).offset(params[:offset])
-		@topicList={
-			list: @topics,
-			size: @topics.size
+		if(params[:category])
+			@categoryTopics=Topic.where("category =\'#{params[:category]}\'").limit(10).offset(params[:offset])
+			@topicList={
+				list: @categoryTopics,
+				size: @categoryTopics.size
+			}.to_json
+			render :json => @topicList
+		else
+			@topics=Topic.order(health: :desc).limit(10).offset(params[:offset])
+			@topicList={
+				list: @topics,
+				size: @topics.size
+			}.to_json
+			render :json => @topicList
+		end
+	end
+	def categories
+		@categories=Topic.uniq.pluck(:category)
+		@categoryList={
+			list: @categories,
+			size: @categories.size
 		}.to_json
-		render :json => @topicList
+		render :json => @categoryList
 	end
 	private
 		def topic_params

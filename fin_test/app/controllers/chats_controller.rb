@@ -23,7 +23,11 @@ class ChatsController < ApplicationController
 	def ret_pair
 		@topic=Topic.find(params[:topic_id])
 		@userlist=@topic.chatqueues
+		@userlist.each do |blah|
+			puts blah.user_id1
+		end
 		@targetpair=@topic.chatqueues.find_by_user_id1(params[:user_id])
+		puts "Bleh"+@targetpair.user_id1.to_s
 		@targetpair.req_count+=1
 		@targetpair.save
 		if @targetpair.user_id2.nil?
@@ -34,8 +38,8 @@ class ChatsController < ApplicationController
 					@user=User.find(element.user_id1)
 					response={
 						status: "user found",
-						user_id: @user.chat_id,
-						chat: @chat
+						pair_id: @user.chat_id,
+						chat: @chat.id
 					}.to_json
 					element.user_id2=params[:user_id]
 					element.chat=@chat.id
@@ -61,8 +65,8 @@ class ChatsController < ApplicationController
 			@user=User.find(@targetpair.user_id2)
 			response={
 				status: "user found",
-				user_id: @user.chat_id,
-				chat: @chat
+				pair_id: @user.chat_id,
+				chat: @chat.id
 			}.to_json
 			@targetpair.delete
 			render :json => response
@@ -73,24 +77,38 @@ class ChatsController < ApplicationController
 	end
 	def end_chat
 		@chat=Chat.find(params[:id])
-		@user1=@chat.userid_1
-		@user2=@chat.userid_2
+		@user1=User.find(@chat.userid_1)
+		@user2=User.find(@chat.userid_2)
 		@topic=Topic.find(@chat.topic_id)
-		if(params[:userid]==@chat.userid_1)
+		if(params[:user_id]==@chat.userid_1)
 			@chat.reputation_2=params[:reputation]
 			@user2.reputation += params[:reputation]
+			@chat.save
+			@user2.save
 			UsersController.new.update_recents(@chat.userid_2,@chat.userid_1,params[:reputation],@chat.topic_id)
 			UsersController.new.update_userTopics(@chat.userid_2,@chat.topic_id,params[:reputation])
-		elsif (params[:userid]==@chat.userid_2)
+		elsif (params[:user_id]==@chat.userid_2)
 			@chat.reputation_1=params[:reputation]
 			@user1.reputation+=params[:reputation]
+			@chat.save
+			@user1.save
 			UsersController.new.update_recents(@chat.userid_2,@chat.userid_1,params[:reputation],@chat.topic_id)
 			UsersController.new.update_userTopics(@chat.userid_1,@chat.topic_id,params[:reputation])
 		end
+		puts @topic
+		if(@topic.user_count==nil)
+			@topic.user_count=0;
+			@topic.save
+		end
 		topic_total=@topic.health*@topic.user_count
 		TopicsController.new.incr_user_count(@chat.topic_id)
+		@topic=Topic.find(@chat.topic_id)
 		@topic.health=(topic_total+params[:reputation])/@topic.user_count
 		@topic.save
+		response={
+			status: "chat ended"
+		}.to_json
+		render :json => response
 
 
 

@@ -63,11 +63,11 @@ class UsersController < ApplicationController
     end
     def update_userTopics(user_id,topic_id,reputation)
         @user=User.find(user_id)
-        @topics=@user.UserTopic.all
+        @topics=@user.userTopics.all
         @topic=@topics.find_by_topic_id(topic_id)
         if(@topic)
             @topic.num_chats +=1
-            @topic.avg_reputation=(total_rep+reputation)
+            @topic.avg_reputation=(@topic.avg_reputation+reputation)
             @topic.save
         else
             @user.userTopics.create(topic_id: topic_id,num_chats: 1,avg_reputation: reputation)
