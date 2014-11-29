@@ -201,7 +201,7 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
         if(USER_PASSWORD.equals("null") || USER_LOGIN.equals("null"))
             Log.d("debug","user login and password are null");
         else
-            Log.d("debug","userLogon:"+USER_LOGIN+" userPass:"+USER_PASSWORD);
+            Log.d("debug","userLogin:"+USER_LOGIN+" userPass:"+USER_PASSWORD);
         QBSettings.getInstance().fastConfigInit(APP_ID, AUTH_KEY, AUTH_SECRET);
         if (!QBChatService.isInitialized()) {
             QBChatService.init(context);

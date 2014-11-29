@@ -118,6 +118,7 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
             userObj.put("login",userLogin);
             userObj.put("password",userPassword);
             userObj.put("email",userEmail);
+            userObj.put("full_name",userLogin);
 
             loginObj.put("user", userObj);
 

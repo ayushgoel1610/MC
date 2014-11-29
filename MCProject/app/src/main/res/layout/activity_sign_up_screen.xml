@@ -26,7 +26,8 @@
             android:background="@drawable/edittext_top_bg"
             android:padding="10dp"
             android:hint="Email"
-            android:textColorHint="#bbbbbb"/>
+            android:textColorHint="#bbbbbb"
+            android:imeOptions="actionNext"/>
         <EditText
             android:id="@+id/UserName"
             android:layout_width="match_parent"
@@ -35,7 +36,8 @@
             android:layout_marginTop="-2dp"
             android:padding="10dp"
             android:hint="User Name"
-            android:textColorHint="#bbbbbb"/>
+            android:textColorHint="#bbbbbb"
+            android:imeOptions="actionNext"/>
         <EditText
             android:id="@+id/Pass"
             android:layout_width="match_parent"
@@ -45,7 +47,8 @@
             android:background="@drawable/edittext_default_bg"
             android:hint="Password"
             android:textColorHint="#bbbbbb"
-            android:password="true"/>
+            android:password="true"
+            android:imeOptions="actionNext"/>
         <EditText
             android:id="@+id/PassConfirm"
             android:layout_width="match_parent"
@@ -55,7 +58,8 @@
             android:padding="10dp"
             android:hint="Confirm Password"
             android:textColorHint="#bbbbbb"
-            android:password="true"/>
+            android:password="true"
+            android:imeOptions="actionNext"/>
         <Button
             android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
@@ -65,7 +69,7 @@
             android:text="Sign Up"
             style="@style/DefaultButtonText"
             android:background="@drawable/button_default_bg"
-            />
+            android:imeOptions="actionNext"/>
     </LinearLayout>
 
 </RelativeLayout>

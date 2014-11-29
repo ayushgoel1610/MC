@@ -44,13 +44,7 @@ public class loginActivityTest extends Activity
             waitProgessbar.setVisibility(View.VISIBLE);
             RailsServerSignUp r1 = new RailsServerSignUp(loginActivityTest.this);
             r1.userChat_auth();
-//            waitText.setText("Loading Topics...");
         }
-//        else
-//        {
-//            RailsServerSignUp r1 = new RailsServerSignUp(loginActivityTest.this);
-//            r1.userChat_auth();
-//        }
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override

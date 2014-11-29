@@ -122,7 +122,6 @@ public class userLoginRequest extends AsyncTask<Void, Void, String> {
         }
         else
             Log.d("system response","is null");
-            //userChat_auth();
     }
 
     private void getUserDetails(String string)
@@ -136,7 +135,10 @@ public class userLoginRequest extends AsyncTask<Void, Void, String> {
             if (pair[0].equals("\"id\""))
                 userRailsID = pair[1];
             if (pair[0].equals("\"name\""))
+            {
                 userLogin = pair[1];
+                userLogin = userLogin.substring(1,userLogin.length()-1);
+            }
             if(pair[0].equals("\"token\""))
             {
                 userRailsToken = pair[1];
@@ -154,6 +156,20 @@ public class userLoginRequest extends AsyncTask<Void, Void, String> {
         editor.putString("userRailsID",userRailsID);
         editor.putString("userRailsToken",userRailsToken);
         editor.commit();
+
+        SharedPreferences sp = context.getSharedPreferences(Common.PREF,Context.MODE_PRIVATE);
+        String checkSP1 = sp.getString("userLogin","null");
+        String checkSP2 = sp.getString("userPassword","null");
+        String checkSP3 = sp.getString("userEmail","null");
+        String checkSP4 = sp.getString("userQBId","null");
+        String checkSP5 = sp.getString("userRailsID","null");
+        String checkSP6 = sp.getString("userRailsToken","null");
+        Log.d("checkSP1",checkSP1);
+        Log.d("checkSP2",checkSP2);
+        Log.d("checkSP3",checkSP3);
+        Log.d("checkSP4",checkSP4);
+        Log.d("checkSP5",checkSP5);
+        Log.d("checkSP6",checkSP6);
     }
 
 }

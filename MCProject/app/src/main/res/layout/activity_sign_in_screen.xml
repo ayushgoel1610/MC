@@ -26,7 +26,8 @@
             android:background="@drawable/edittext_top_bg"
             android:padding="10dp"
             android:hint="Email"
-            android:textColorHint="#cccccc"/>
+            android:textColorHint="#cccccc"
+            android:imeOptions="actionNext"/>
         <EditText
             android:id="@+id/Pass"
             android:layout_width="match_parent"
@@ -34,8 +35,11 @@
             android:layout_marginTop="-2dp"
             android:padding="10dp"
             android:hint="Password"
+            android:background="@drawable/edittext_top_bg"
             android:textColorHint="#cccccc"
-            android:password="true"/>/>
+            android:password="true"
+            android:imeOptions="actionDone"/>
+        />
         <Button
             android:id="@+id/btnSignIn"
             android:layout_width="match_parent"
