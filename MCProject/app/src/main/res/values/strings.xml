@@ -38,8 +38,6 @@
         <item>Home</item>
         <item>Profile</item>
         <item>Settings</item>
-        <item>Help</item>
-        <item>About</item>
     </string-array>
 
     <string name="title_activity_master">Master</string>
@@ -56,4 +54,8 @@
         <item>#2093cd</item>
         <item>#ad62a7</item>
     </array>
+
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
 </resources>
