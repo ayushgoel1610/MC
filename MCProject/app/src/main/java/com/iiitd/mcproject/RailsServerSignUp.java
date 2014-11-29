@@ -64,14 +64,13 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
     private JSONObject userObj = new JSONObject();
     private JSONObject bigObj = new JSONObject();
 
-    public RailsServerSignUp(String a, String b, String c, String d, String e, String f, Context cnt)
+    public RailsServerSignUp(String a, String b, String c, String d, String e, Context cnt)
     {
         this.userLogin = a;
         this.userEmail = b;
-        this.userFullName = c;
-        this.userPassword = d;
-        this.usertokenQB = e;
-        this.userQBId = f;
+        this.userPassword = c;
+        this.usertokenQB = d;
+        this.userQBId = e;
         this.context = cnt;
     }
 

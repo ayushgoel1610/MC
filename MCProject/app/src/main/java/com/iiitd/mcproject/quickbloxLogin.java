@@ -40,7 +40,6 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
 {
     private String userLogin;
     private String userEmail;
-    private String userFullName;
     private String userPassword;
     private String usertokenQB;
 
@@ -77,13 +76,12 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
         this.context = cnt;
     }
 
-    public quickbloxLogin (String a, String b, String c, String d, String e, Context cnt)
+    public quickbloxLogin (String a, String b, String c, String d, Context cnt)
     {
         this.userLogin = a;
         this.userPassword = b;
         this.userEmail = c;
-        this.userFullName = d;
-        this.usertokenQB = e;
+        this.usertokenQB = d;
         this.context = cnt;
     }
 
@@ -120,7 +118,6 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
             userObj.put("login",userLogin);
             userObj.put("password",userPassword);
             userObj.put("email",userEmail);
-            userObj.put("full_name",userFullName);
 
             loginObj.put("user", userObj);
 
@@ -185,7 +182,7 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
             }
             else
                 Log.d("QB ID:","not found");
-            RailsServerSignUp r1 = new RailsServerSignUp(userLogin,userEmail,userFullName,userPassword,usertokenQB,USER_QB_ID,context);
+            RailsServerSignUp r1 = new RailsServerSignUp(userLogin,userEmail,userPassword,usertokenQB,USER_QB_ID,context);
             r1.execute();
         }
         else
