@@ -1,7 +1,11 @@
 package com.iiitd.mcproject.Chat.ui;
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.iiitd.mcproject.Chat.ui.activities.ChatActivity;
 import com.quickblox.chat.QBChatService;
@@ -29,7 +33,7 @@ public class PrivateChatManagerImpl extends QBMessageListenerImpl<QBPrivateChat>
     private static final String TAG = "PrivateChatManagerImpl";
 
     private ChatActivity chatActivity;
-
+    private String photo_uri;
     private QBPrivateChatManager privateChatManager;
     private QBPrivateChat privateChat;
 
@@ -62,6 +66,7 @@ public class PrivateChatManagerImpl extends QBMessageListenerImpl<QBPrivateChat>
         privateChatManager.removePrivateChatManagerListener(this);
     }
 
+    QBChatMessage receivedmessage;
     @Override
     public void processMessage(QBPrivateChat chat, final QBChatMessage message) {
         Log.w(TAG, "new incoming message: " + message);
@@ -72,6 +77,7 @@ public class PrivateChatManagerImpl extends QBMessageListenerImpl<QBPrivateChat>
                                            Integer fileId = Integer.parseInt(attachment.getId());
 
                                            // download a file
+                                           Toast.makeText(chatActivity, "Receiving image from friend..", Toast.LENGTH_SHORT).show();
                                            QBContent.downloadFileTask(fileId, new QBEntityCallbackImpl<InputStream>() {
                                                @Override
                                                public void onSuccess(InputStream inputStream, Bundle params) {
@@ -86,11 +92,24 @@ public class PrivateChatManagerImpl extends QBMessageListenerImpl<QBPrivateChat>
                                                            buffer.write(byt, 0, i);
                                                        }
                                                        buffer.close();
+                                                       Log.v("Before calling getURI", "");
+                                                       photo_uri = destinationFile.getAbsolutePath();
+                                                       QBChatMessage returnmessage = new QBChatMessage();
+                                                        returnmessage = message;
+                                                       Log.v("PhotoPath", photo_uri);
+                                                       //returnmessage.removeProperty("uri");
+                                                       returnmessage.setBody(photo_uri);
+                                                       returnmessage.setProperty("uri", "sample property");
+                                                       Log.v("The message",  returnmessage + "");
+                                                       Log.v("Property saved", returnmessage.getBody());
+                                                       //chatActivity.showMessage(returnmessage);
+                                                       chatActivity.adapter.notifyDataSetChanged();
+                                                       return;
                                                    } catch (Exception e) {
-
+                                                        Log.v("Error in photo", e + "");
                                                    }
-                                                   Log.v("PhotoPath", destinationFile.getAbsolutePath());
-                                                   message.setProperty("URI", destinationFile.getAbsolutePath());
+
+
 
 
                                                }
@@ -98,14 +117,50 @@ public class PrivateChatManagerImpl extends QBMessageListenerImpl<QBPrivateChat>
                                                @Override
                                                public void onError(List<String> errors) {
                                                    // errors
+                                                   Log.v("Error uploading photo", errors + "");
                                                }
                                            });
                                        }
                                    }
                                });
+        Log.v("SHow", "show message already getting called");
         chatActivity.showMessage(message);
     }
 
+    public String getURI(File file, String path){
+        Log.v("Entered GETuri","");
+        /*String filePath = file.getAbsolutePath();
+        Cursor cursor = chatActivity.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[] { MediaStore.Images.Media._ID },
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[] { filePath }, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor
+                    .getColumnIndex(MediaStore.MediaColumns._ID));
+            int id_photo = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            photo_uri =  Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id_photo).toString();
+        } else {
+            if (file.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                photo_uri =  chatActivity.getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values).toString();
+            }
+        }*/
+        Uri selectedImage = Uri.parse(path);
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+        Cursor cursor = chatActivity.getContentResolver().query(selectedImage,
+                filePathColumn, null, null, null);
+        cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        photo_uri = cursor.getString(columnIndex);
+        cursor.close();
+        Log.v("Uri returned from function", "Entered the function" + photo_uri);
+        return  photo_uri;
+    }
     @Override
     public void processError(QBPrivateChat chat, QBChatException error, QBChatMessage originChatMessage){
 

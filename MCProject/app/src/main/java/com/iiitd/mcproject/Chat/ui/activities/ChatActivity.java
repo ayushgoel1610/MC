@@ -70,7 +70,7 @@ public class ChatActivity extends Activity {
 
     private Mode mode = Mode.PRIVATE;
     private ChatManager chat;
-    private ChatAdapter adapter;
+    public ChatAdapter adapter;
     private QBDialog dialog;
     private static int pair_id;
     private static View messageview;
@@ -220,7 +220,7 @@ public class ChatActivity extends Activity {
                 QBChatMessage chatMessage = new QBChatMessage();
                 chatMessage.setBody(messageText);
                 chatMessage.setProperty(PROPERTY_SAVE_TO_HISTORY, "1");
-                chatMessage.removeProperty("URI");
+                //chatMessage.removeProperty("URI");
 
                 try {
                     chat.sendMessage(chatMessage);
@@ -232,6 +232,7 @@ public class ChatActivity extends Activity {
 
                 messageEditText.setText("");
                 pb.setVisibility(View.GONE);
+                Toast.makeText(ChatActivity.this, "Sending image..", Toast.LENGTH_SHORT).show();
                 if(mode == Mode.PRIVATE) {
                     showMessage(chatMessage);
                 }
@@ -286,6 +287,7 @@ public class ChatActivity extends Activity {
                     QBAttachment attachment = new QBAttachment("photo");
                     attachment.setId(file.getId().toString());
                     chatMessage.addAttachment(attachment);
+                    chatMessage.setBody("::ImageFile::");
                     //chatMessage.setBody("::Photo Sent::");
                     chatMessage.setProperty("uri",picturePath);
 

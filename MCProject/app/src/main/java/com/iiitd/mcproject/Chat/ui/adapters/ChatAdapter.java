@@ -3,6 +3,7 @@ package com.iiitd.mcproject.Chat.ui.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,6 +21,7 @@ import com.iiitd.mcproject.R;
 import com.quickblox.chat.model.QBChatHistoryMessage;
 import com.quickblox.chat.model.QBMessage;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -80,18 +82,16 @@ public class ChatAdapter extends BaseAdapter {
         else
             setAlignment(holder, false);
         holder.txtMessage.setText(chatMessage.getBody());
-        if (chatMessage.getSenderId() != null) {
-            holder.txtInfo.setText(chatMessage.getSenderId() + ": " + getTimeText(chatMessage));
-        } else {
-            holder.txtInfo.setText(getTimeText(chatMessage));
+        holder.txtInfo.setText(getTimeText(chatMessage));
 
-        }
+
 
           ImageView imageView = (ImageView) holder.content.findViewById(R.id.photo);
           imageView.setVisibility(View.GONE);
 
 //        Log.v("chat property",chatMessage.getProperty("uri"));
             if (chatMessage.getProperty("uri") != null) {
+
                 Log.v("URI", chatMessage.getProperty("uri"));
                 //ImageView photo = new ImageView(context);
                 imageView.setLayoutParams(new LinearLayout.LayoutParams(120, 120));
@@ -101,6 +101,17 @@ public class ChatAdapter extends BaseAdapter {
                 ProgressBar pb = (ProgressBar) holder.content.findViewById(R.id.progressBar);
                 pb.setVisibility(View.GONE);
             }
+        if (chatMessage.getBody() != null) {
+            if (chatMessage.getBody().contains("/sdcard/")) {
+                imageView.setLayoutParams(new LinearLayout.LayoutParams(120, 120));
+                //holder.content.addView(photo);
+                imageView.setVisibility(View.VISIBLE);
+                Log.v("Image path", chatMessage.getBody());
+                imageView.setImageURI(Uri.fromFile(new File(chatMessage.getBody())));
+
+            }
+
+        }
 
 
         return convertView;
