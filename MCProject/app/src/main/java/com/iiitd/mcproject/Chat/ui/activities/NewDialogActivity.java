@@ -84,7 +84,9 @@ public class NewDialogActivity extends ActionBarActivity {
     @Override
     public void onResume(){
         super.onResume();
-        if (exit_flag == 1)
+        if (exit_flag == 1) {
+            exit_flag = 0;
             super.onBackPressed();
+        }
     }
 }

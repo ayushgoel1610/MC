@@ -44,6 +44,7 @@ public class PrivateChatManagerImpl extends QBMessageListenerImpl<QBPrivateChat>
 
         privateChatManager.addPrivateChatManagerListener(this);
 
+
         // init private chat
         //
         privateChat = privateChatManager.getChat(opponentID);
@@ -69,8 +70,21 @@ public class PrivateChatManagerImpl extends QBMessageListenerImpl<QBPrivateChat>
     QBChatMessage receivedmessage;
     @Override
     public void processMessage(QBPrivateChat chat, final QBChatMessage message) {
+        int flag = 0;
         Log.w(TAG, "new incoming message: " + message);
+        if (message.getBody().contains("EXITCHAT")) {
+            flag = 1;
+            chatActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    chatActivity.receivedExitMessage();
 
+                    return;
+                }
+            });
+        if (flag == 1)
+            return;
+        }
         chatActivity.runOnUiThread(new Runnable() {
                                    public void run() {
                                        for (QBAttachment attachment : message.getAttachments()) {

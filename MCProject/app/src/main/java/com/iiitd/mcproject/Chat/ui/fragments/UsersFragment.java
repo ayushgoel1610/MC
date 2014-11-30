@@ -411,13 +411,13 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
                 startSingleChat(dialog);
 
             }
-
             @Override
             public void onError(List<String> errors) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                 dialog.setMessage("dialog creation errors: " + errors).create().show();
             }
         });
+
             /*}
         });*/
 
