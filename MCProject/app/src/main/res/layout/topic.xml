@@ -2,7 +2,8 @@
 
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="10dp">
 
 
     <ProgressBar
@@ -22,7 +23,9 @@
             android:id="@+id/topic_search_text"
 
             android:textSize="16sp"
-            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/sidey_colour_text"
+            android:fontFamily="sans-serif-condensed-light"
+            android:textStyle="bold|italic"
 
             android:layout_width="match_parent"
             android:layout_height="200dp"
