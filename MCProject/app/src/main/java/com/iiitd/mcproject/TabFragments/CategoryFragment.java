@@ -100,6 +100,7 @@ public class CategoryFragment extends Fragment {
         adapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, android.R.id.text1,categoryArray);
         categoryListView=(ListView)inflateView.findViewById(R.id.categoryListView);
         categoryListView.setAdapter(adapter);
+        //YoYo.with(Techniques.SlideInUp).duration(700).playOn(categoryListView);
         categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
