@@ -26,11 +26,6 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.iiitd.mcproject.Common;
-import com.iiitd.mcproject.R;
-import com.iiitd.mcproject.Topic;
-import com.iiitd.mcproject.TopicList;
-import com.iiitd.mcproject.TopicObject;
 
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpPost;
@@ -243,7 +238,7 @@ public class CategoryTopicActivity extends Activity {
                 topicObject.putId(JSONTopic.getInt("id"));
                 topicObject.putCategory(JSONTopic.getString("category"));
                 topicObject.putName(JSONTopic.getString("name"));
-                topicObject.putImage("");
+                topicObject.putImage("/placeholder/url");
                 topicObjectList.add(topicObject);
 
             } catch (JSONException e) {

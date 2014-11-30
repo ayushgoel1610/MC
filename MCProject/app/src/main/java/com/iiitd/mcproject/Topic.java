@@ -97,6 +97,7 @@ public class Topic extends Activity{
                         TextView topicHeader=(TextView)findViewById(R.id.topicHeader);
                         topicHeader.setText(topic);
                         image_id = getIntent().getStringExtra("image");
+                    Log.v(tag,"Image path: "+image_id);
                         setImage();
                         new KnowledgeGraphTask().execute(topic);
                 }else{

@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.iiitd.mcproject.CategoryTopicActivity;
 import com.iiitd.mcproject.Common;
@@ -107,10 +106,11 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Toast.makeText(getActivity(), "You Clicked at " + categoryList.get(position), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "You Clicked at " + categoryList.get(position), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getActivity() , CategoryTopicActivity.class);
                 i.putExtra("category" , categoryList.get(position) );
                 startActivity(i);
+                //getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
     }

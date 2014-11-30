@@ -138,6 +138,7 @@ public class TrendingFragment extends Fragment {
                 i.putExtra("id", clickedTopic.getId());
                 i.putExtra("category", clickedTopic.getCategory());
                 i.putExtra("image",clickedTopic.getImage());
+                Log.v(tag,"Image path: "+clickedTopic.getImage());
                 //YoYo.with(Techniques.FadeOut).duration(700).playOn(trendingTopics);
                 startActivity(i);
             }
@@ -367,7 +368,7 @@ public class TrendingFragment extends Fragment {
                 topicObject.putId(JSONTopic.getInt("id"));
                 topicObject.putCategory(JSONTopic.getString("category"));
                 topicObject.putName(JSONTopic.getString("name"));
-                topicObject.putImage("");
+                topicObject.putImage("/placeholder/url");
                 topicObjectList.add(topicObject);
 
             } catch (JSONException e) {
