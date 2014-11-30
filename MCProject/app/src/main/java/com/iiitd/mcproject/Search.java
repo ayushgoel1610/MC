@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -69,6 +70,19 @@ public class Search extends Activity{
         getActionBar().setTitle(query);
         initList();
         TopicTask();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result",1);
+                setResult(RESULT_OK,returnIntent);
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

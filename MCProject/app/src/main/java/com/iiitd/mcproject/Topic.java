@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -79,9 +80,10 @@ public class Topic extends Activity{
         image.setVisibility(View.INVISIBLE);
 
         chat = (Button) findViewById(R.id.topic_chat);
-
         topic=getIntent().getStringExtra("topic");
 
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setTitle(topic);
 
         Log.d(tag , "Inside FreeBase Class");
@@ -104,6 +106,15 @@ public class Topic extends Activity{
                     Toast.makeText(getBaseContext(), "No internet connection", Toast.LENGTH_SHORT).show();
                 }
             }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void setImage(){
         image.setVisibility(View.VISIBLE);

@@ -159,10 +159,10 @@ public class ChatActivity extends Activity {
 
 
             public void onClick(DialogInterface arg0, int arg1) {
-                Toast.makeText(getApplicationContext(), "'yes' button clicked", Toast.LENGTH_SHORT).show();
 
-                finish();
-                return;
+        sendExitMessage();
+        finish();
+        return;
             }
         });
 
@@ -175,6 +175,49 @@ public class ChatActivity extends Activity {
             }
         });
 
+        alertbox.show();
+    }
+
+    private void sendExitMessage(){
+        Log.v("Exit message pressed","");
+        QBChatMessage chatMessage = new QBChatMessage();
+        chatMessage.setBody("EXITCHAT");
+        chatMessage.setProperty(PROPERTY_SAVE_TO_HISTORY, "1");
+        //chatMessage.removeProperty("URI");
+
+        try {
+            chat.sendMessage(chatMessage);
+        } catch (XMPPException e) {
+            Log.e(TAG, "failed to send a message", e);
+        } catch (SmackException sme){
+            Log.e(TAG, "failed to send a message", sme);
+        }
+
+        messageEditText.setText("");
+        pb.setVisibility(View.GONE);
+
+        if(mode == Mode.PRIVATE) {
+            //showMessage(chatMessage);
+        }
+        EndChat();
+
+    }
+
+    public void receivedExitMessage(){
+        Log.v("Entered", "entered received");
+        //Toast.makeText(getApplicationContext(), "The user exited the chat", Toast.LENGTH_LONG).show();
+        AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+        alertbox.setTitle("Chat Over");
+        alertbox.setMessage("The other user exited the chat");
+        alertbox.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+
+            public void onClick(DialogInterface arg0, int arg1) {
+
+                finish();
+                return;
+            }
+        });
         alertbox.show();
     }
 
@@ -241,7 +284,7 @@ public class ChatActivity extends Activity {
 
                 messageEditText.setText("");
                 pb.setVisibility(View.GONE);
-                Toast.makeText(ChatActivity.this, "Sending image..", Toast.LENGTH_SHORT).show();
+
                 if(mode == Mode.PRIVATE) {
                     showMessage(chatMessage);
                 }
@@ -284,6 +327,7 @@ public class ChatActivity extends Activity {
             File file = new File(picturePath);
             //Log.v("file", "" + file);
             Boolean fileIsPublic = false;
+            Toast.makeText(ChatActivity.this, "Sending image..", Toast.LENGTH_SHORT).show();
             QBContent.uploadFileTask(file, fileIsPublic, null, new QBEntityCallbackImpl<QBFile>() {
                 @Override
                 public void onSuccess(QBFile file, Bundle params) {

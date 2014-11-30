@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -71,9 +72,20 @@ public class CategoryTopicActivity extends Activity {
         progress = (ProgressBar) findViewById(R.id.category_progressBar);
         category = getIntent().getStringExtra("category");
         getActionBar().setTitle(category);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         categoryTopics.setVisibility(View.INVISIBLE);
         progress.setVisibility(View.VISIBLE);
         getList();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
