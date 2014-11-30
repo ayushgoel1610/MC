@@ -13,11 +13,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.api.client.http.GenericUrl;
@@ -26,6 +26,11 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.iiitd.mcproject.Common;
+import com.iiitd.mcproject.R;
+import com.iiitd.mcproject.Topic;
+import com.iiitd.mcproject.TopicList;
+import com.iiitd.mcproject.TopicObject;
 
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpPost;
@@ -42,33 +47,37 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
- * Created by shiv on 13/11/14.
+ * Created by shiv on 20/11/14.
  */
-public class Search extends Activity{
+public class CategoryTopicActivity extends Activity {
 
-    ListView trendingTopics;
-    private static final String TOPIC_SEARCH = "/topics/search";
-    String query;
-    TopicList adapter;
-    ProgressBar progress;
-    TextView no_result;
-    int resp_size = 0;
+
+    private final String CATEGORY_TOPIC = "topics/list" ;
+
 
     private ArrayList<TopicObject> topicObjectList=new ArrayList<TopicObject>();
+
+    ListView categoryTopics;
+    TopicList adapter;
+    ProgressBar progress;
+
+
+    private int count = 0;
+    private long offset=0;
+    private int lastSize=10;
+    private String category;
+    private String tag = "CategoryTopic";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        progress = (ProgressBar) findViewById(R.id.search_progressBar);
+        setContentView(R.layout.activity_category_topic);
+        categoryTopics=(ListView)findViewById(R.id.category_topic_list);
+        progress = (ProgressBar) findViewById(R.id.category_progressBar);
+        category = getIntent().getStringExtra("category");
+        categoryTopics.setVisibility(View.INVISIBLE);
         progress.setVisibility(View.VISIBLE);
-        query = getIntent().getStringExtra("topic");
-        no_result = (TextView) findViewById(R.id.search_noresult_textView);
-        no_result.setVisibility(View.INVISIBLE);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setTitle(query);
-        initList();
-        TopicTask();
+        getList();
     }
 
     @Override
@@ -83,40 +92,47 @@ public class Search extends Activity{
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void initList() {
+    private void initList(){
         adapter = new TopicList(this, topicObjectList);
-        trendingTopics = (ListView) findViewById(R.id.search_list);
-        trendingTopics.setAdapter(adapter);
-        trendingTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        categoryTopics.setAdapter(adapter);
+        categoryTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 //Toast.makeText(getActivity(), "You Clicked at " + topicList.get(position), Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(getApplication(), Topic.class);
-                TopicObject clickedTopic = topicObjectList.get(position);
-                i.putExtra("topic", clickedTopic.getName());
+                Intent i = new Intent(getApplicationContext() , Topic.class);
+                TopicObject clickedTopic=topicObjectList.get(position);
+                i.putExtra("topic" , clickedTopic.getName());
                 i.putExtra("id", clickedTopic.getId());
                 i.putExtra("category", clickedTopic.getCategory());
                 i.putExtra("image",clickedTopic.getImage());
                 startActivity(i);
             }
         });
-    }
+        categoryTopics.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
 
-    private void getListImage(){
-        ConnectivityManager cmgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
-        if(networkInfo!=null && networkInfo.isConnected()) {
-            for (TopicObject topicObject : topicObjectList)  {
-                try {
-                    KnowledgeGraphTask(topicObject);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i2, int i3) {
+                if (categoryTopics.getLastVisiblePosition() == categoryTopics.getAdapter().getCount() - 1
+                        && categoryTopics.getChildAt(categoryTopics.getChildCount() - 1).getBottom() <= categoryTopics.getHeight()) {
+                    //scroll end reached
+                    Toast.makeText(getApplicationContext(), "Reached end of list ", Toast.LENGTH_SHORT).show();
+                    //add more items to list
+//                    addToList();
+                    Log.v(tag, "last size: " + lastSize);
+                    if(lastSize==10)
+                        getList();
                 }
             }
-        }else{
-            Toast.makeText(this , "No Internet Connection" , Toast.LENGTH_SHORT).show();
-        }
+        });
+    }
+
+    private void getList(){
+        TopicTask();
     }
 
     private void TopicTask(){
@@ -124,47 +140,57 @@ public class Search extends Activity{
 
             @Override
             protected String doInBackground(Void... param) {
-                String result=getTopics(query);
+                String result=getTopics(offset);
                 return result;
             }
 
             @Override
             protected void onPostExecute(String msg) {
-                if(resp_size > 0) {
-                    adapter.notifyDataSetChanged();
+                Log.i(tag, msg);
+                if(msg.contains("retrieved")) {
+                    if(lastSize==10 || count == 0)
+                        offset += 10;
+                    if(offset==10) {
+                        initList();
+                    }
+                    else
+                        try {
+                            adapter.notifyDataSetChanged();
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
+                    count++;
                     getListImage();
-                }else {
-                    Log.d("Search", "onPostExecute");
-                    String dis = "Could not find topic " + "\"" + query + "\"";
-                    no_result.setText(dis);
-                    no_result.setVisibility(View.VISIBLE);
-                    progress.setVisibility(View.INVISIBLE);
                 }
+                //Populate list
+                //adapter.notifyDataSetChanged();
             }
         }.execute(null, null, null);
     }
 
-    private String getTopics(String query){
+    private String getTopics(long offset){
         InputStream inputStream = null;
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(Common.SERVER_URL+TOPIC_SEARCH);
+            HttpPost httpPost = new HttpPost(Common.SERVER_URL+CATEGORY_TOPIC);
 
             String json = "";
 
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("query", query);
+                jsonObject.put("offset", offset);
+                jsonObject.put("category", category);
             } catch (JSONException e) {
                 e.printStackTrace();
                 throw e;
             }
 
             json = jsonObject.toString();
-            Log.d("SearchActivity",json);
+            Log.e(tag,json);
 
             StringEntity se = new StringEntity(json);
-
+            //	        se.setContentType("application/json;charset=UTF-8");
             se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE,"application/json"));
 
             httpPost.setEntity(se);
@@ -174,7 +200,7 @@ public class Search extends Activity{
             inputStream = httpResponse.getEntity().getContent();
             StatusLine sl=httpResponse.getStatusLine();
 
-            Log.d("SearchActivity", Integer.toString(sl.getStatusCode())+" "+sl.getReasonPhrase());
+            Log.v(tag, Integer.toString(sl.getStatusCode())+" "+sl.getReasonPhrase());
 
             StringBuffer sb=new StringBuffer();
 
@@ -183,14 +209,13 @@ public class Search extends Activity{
                 while ((ch = inputStream.read()) != -1) {
                     sb.append((char) ch);
                 }
+                Log.v("ELSERVICES", "first input stream: "+sb.toString());
+
                 JSONObject response=new JSONObject(sb.toString());
                 JSONArray topicsArray=response.getJSONArray("list");
-                resp_size = topicsArray.length();
-                if(resp_size > 0) {
-                    addNewTopics(topicsArray);
-                }else{
-                    Log.d("Search" , "No results found");
-                }
+                lastSize=response.getInt("size");
+                addNewTopics(topicsArray);
+
             } catch (IOException e) {
                 e.printStackTrace();
                 throw e;
@@ -199,6 +224,7 @@ public class Search extends Activity{
                     inputStream.close();
                 }
             }
+
         }
         catch (Exception e){
             return "ERROR : Due to "+e.getMessage();
@@ -212,13 +238,17 @@ public class Search extends Activity{
             try {
                 JSONTopic=topicsArray.getJSONObject(i);
                 String topic=JSONTopic.getString("name");
+
                 TopicObject topicObject=new TopicObject();
                 topicObject.putId(JSONTopic.getInt("id"));
                 topicObject.putCategory(JSONTopic.getString("category"));
                 topicObject.putName(JSONTopic.getString("name"));
                 topicObject.putImage("");
                 topicObjectList.add(topicObject);
+
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e){
                 e.printStackTrace();
             }
         }
@@ -229,6 +259,14 @@ public class Search extends Activity{
         new AsyncTask<Void , String , String>() {
 
             String tag = new String("KnowledgeGraphTask");
+
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progress.setVisibility(View.VISIBLE);
+                categoryTopics.setVisibility(View.INVISIBLE);
+            }
 
             @Override
             protected String doInBackground(Void... param) {
@@ -377,15 +415,38 @@ public class Search extends Activity{
             @Override
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
-                progress.setVisibility(View.INVISIBLE);
                 //Populate list
                 try {
                     adapter.notifyDataSetChanged();
+                    progress.setVisibility(View.INVISIBLE);
+                    categoryTopics.setVisibility(View.VISIBLE);
                 }
                 catch (NullPointerException e){
                     e.printStackTrace();
                 }
             }
         }.execute(null, null, null);
+    }
+
+    private void getListImage(){
+        Log.d(tag , "Entered getListImage");
+        ConnectivityManager cmgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
+        if(networkInfo!=null && networkInfo.isConnected()) {
+            int count=0;
+            for (TopicObject topicObject : topicObjectList) {
+                Log.v(tag,"count, offset: "+count+", "+offset);
+                if((lastSize==10 && count>=offset-10) || (lastSize<10 && count>=offset+lastSize) || this.count == 1)
+                    try {
+                        KnowledgeGraphTask(topicObject);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                count++;
+            }
+        }else{
+            Toast.makeText(getApplicationContext() , "No Internet Connection" , Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

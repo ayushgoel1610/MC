@@ -19,17 +19,20 @@
             android:name="com.iiitd.mcproject.Topic"
             android:label="MCProject" >
         </activity>
+
         <activity
-            android:name="com.iiitd.mcproject.Search"
-            android:parentActivityName="com.iiitd.mcproject.MasterActivity"
+            android:name=".CategoryTopicActivity"
             android:label="MCProject">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.iiitd.mcproject.MasterActivity" />
         </activity>
+
+
         <activity
-            android:name="com.iiitd.mcproject.Chat.ui.activities.TopicChat"
-            android:label="MCProject" >
+            android:name=".Search"
+            android:parentActivityName=".MasterActivity" >
+            android:label="MCProject">
         </activity>
         <activity
             android:name="com.iiitd.mcproject.MasterActivity"

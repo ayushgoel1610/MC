@@ -73,11 +73,4 @@ public class NewDialogActivity extends ActionBarActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        Intent i = new Intent(NewDialogActivity.this, MasterActivity.class);
-        startActivity(i);
-        finish();
-
-    }
 }
