@@ -75,6 +75,7 @@ public class CategoryTopicActivity extends Activity {
         categoryTopics=(ListView)findViewById(R.id.category_topic_list);
         progress = (ProgressBar) findViewById(R.id.category_progressBar);
         category = getIntent().getStringExtra("category");
+        getActionBar().setTitle(category);
         categoryTopics.setVisibility(View.INVISIBLE);
         progress.setVisibility(View.VISIBLE);
         getList();
