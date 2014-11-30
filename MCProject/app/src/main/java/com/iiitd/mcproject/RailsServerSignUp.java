@@ -1,5 +1,6 @@
 package com.iiitd.mcproject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -159,7 +160,6 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
         else
             Log.d("system response","is null");
         userChat_auth();
-
     }
 
     private void getRailsToken(String str1)
@@ -235,7 +235,6 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
                 dialog.setMessage("create session errors: " + errors).create().show();
             }
         });
-
     }
 
     private void loginToChat(final QBUser user){
@@ -255,8 +254,7 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
                 // go to Dialogs screen
                 //
                 Intent intent = new Intent(context, MasterActivity.class);
-                 context.startActivity(intent);
-                // context.finish();
+                context.startActivity(intent);
             }
 
             @Override
