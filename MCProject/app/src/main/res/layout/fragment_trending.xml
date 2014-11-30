@@ -7,7 +7,9 @@
     <ListView
         android:id="@+id/trending_list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:divider="#89032c"
+        android:dividerHeight="1dp">
     </ListView>
 
 </FrameLayout>
