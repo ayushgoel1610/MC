@@ -47,12 +47,11 @@ public class quickbloxRequest extends AsyncTask<Void, Void, String> {
 
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
-    public quickbloxRequest(String a, String b, String c, String d, Context cnt)
+    public quickbloxRequest(String a, String b, String c, Context cnt)
     {
         this.userLogin = a;
         this.userPassword = b;
         this.userEmail = c;
-        this.userFullName = d;
         this.context = cnt;
     }
 
@@ -198,7 +197,7 @@ public class quickbloxRequest extends AsyncTask<Void, Void, String> {
             }
             if(tokenQB != null)
             {
-                quickbloxLogin newLogin = new quickbloxLogin(userLogin,userPassword,userEmail,userFullName,tokenQB,context);
+                quickbloxLogin newLogin = new quickbloxLogin(userLogin,userPassword,userEmail,tokenQB,context);
                 newLogin.execute();
             }
             else

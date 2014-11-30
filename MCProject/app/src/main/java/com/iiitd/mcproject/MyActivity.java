@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.iiitd.mcproject.Chat.ui.activities.TopicChat;
 
 public class MyActivity extends Activity {
 
@@ -54,8 +53,7 @@ public class MyActivity extends Activity {
 
 
     public void toTopicChat(View view){
-        Intent intent= new Intent(this,TopicChat.class);
-        startActivity(intent);
+
     }
 
     @Override

@@ -20,12 +20,24 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_login">loginActivity</string>
 
+    <style name="DefaultButtonText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#979797</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:shadowColor">#f9f9f9</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
+
     <string-array name="drawer_titles">
         <item>Home</item>
         <item>Profile</item>
         <item>Settings</item>
-        <item>Help</item>
-        <item>About</item>
     </string-array>
 
     <string name="title_activity_master">Master</string>
@@ -42,4 +54,8 @@
         <item>#2093cd</item>
         <item>#ad62a7</item>
     </array>
+
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
 </resources>

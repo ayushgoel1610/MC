@@ -5,8 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 import com.iiitd.mcproject.Chat.ui.ChatManager;
 import com.iiitd.mcproject.Chat.ui.PrivateChatManagerImpl;
 import com.iiitd.mcproject.Chat.ui.adapters.ChatAdapter;
+import com.iiitd.mcproject.Common;
 import com.iiitd.mcproject.R;
 import com.quickblox.chat.QBChatService;
 import com.quickblox.chat.model.QBAttachment;
@@ -46,6 +49,7 @@ import java.util.List;
 public class ChatActivity extends Activity {
 
     private static final String TAG = ChatActivity.class.getSimpleName();
+    private static final String END_CHAT="endchat";
 
     public static final String EXTRA_MODE = "mode";
     public static final String EXTRA_DIALOG = "dialog";
@@ -115,7 +119,6 @@ public class ChatActivity extends Activity {
 
     }
 
-
     @Override
     public void onBackPressed() {
         /*if (doubleBackToExitPressedOnce) {
@@ -133,9 +136,17 @@ public class ChatActivity extends Activity {
                 doubleBackToExitPressedOnce=false;
             }
         }, 2000);*/
+
+        SharedPreferences pref = getSharedPreferences(Common.PREF, MODE_PRIVATE);
+        int chat = pref.getInt("chat", 0);
+        Log.d("ChatActivity" , "The chat id is : "  + chat);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("chat");
+        editor.commit();
+
         AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
         alertbox.setTitle("Quit Chat");
-        alertbox.setMessage("Do you want to exit the chat?");
+        alertbox.setMessage("The User reputation is : " + counter + "\nDo you want to exit the chat?");
         alertbox.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
 
@@ -393,4 +404,12 @@ public class ChatActivity extends Activity {
     }
 
     public static enum Mode {PRIVATE, GROUP}
+
+    private class EndChat extends AsyncTask<Void , Void, Void>{
+        @Override
+        protected Void doInBackground(Void... params) {
+            return null;
+        }
+    }
+
 }
