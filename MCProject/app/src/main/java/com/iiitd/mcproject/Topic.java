@@ -119,6 +119,7 @@ public class Topic extends Activity{
     }
 
     public void runChatClient(View view){
+        Log.v("Chat pressed", "Chat pressed");
         Intent intent = new Intent(this, NewDialogActivity.class);
         intent.putExtra("id" , getIntent().getIntExtra("id" , -1));
         intent.putExtra("topic" , topic);
