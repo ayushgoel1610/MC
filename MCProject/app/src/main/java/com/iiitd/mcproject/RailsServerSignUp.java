@@ -255,8 +255,7 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
                 // go to Dialogs screen
                 //
                 Intent intent = new Intent(context, MasterActivity.class);
-                context.startActivity(intent);
-
+                 context.startActivity(intent);
                 // context.finish();
             }
 
@@ -267,7 +266,4 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
             }
         });
     }
-
-
-
 }

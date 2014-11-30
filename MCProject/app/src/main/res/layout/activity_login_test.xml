@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Loading Topics..."
+            android:text="Setting Up Profile"
             android:id="@+id/loading_text"
             android:layout_above="@+id/loading_progressbar"
             android:layout_centerHorizontal="true"

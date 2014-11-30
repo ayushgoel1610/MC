@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -53,6 +54,7 @@ public class Topic extends Activity{
     ProgressBar bar ;
     TextView summary;
     EditText search_text;
+    CheckBox check;
 
     String tag = new String("Topic");
 
@@ -78,7 +80,7 @@ public class Topic extends Activity{
         summary.setVisibility(View.INVISIBLE);
         image = (ImageView)findViewById(R.id.topic_image);
         image.setVisibility(View.INVISIBLE);
-
+        check = (CheckBox) findViewById(R.id.chkIos);
         chat = (Button) findViewById(R.id.topic_chat);
         topic=getIntent().getStringExtra("topic");
 
@@ -134,6 +136,13 @@ public class Topic extends Activity{
         Intent intent = new Intent(this, NewDialogActivity.class);
         intent.putExtra("id" , getIntent().getIntExtra("id" , -1));
         intent.putExtra("topic" , topic);
+        int loc ;
+        if(check.isChecked()){
+            loc=1;
+        }else{
+            loc=0;
+        }
+        intent.putExtra("locflag" , loc);
         startActivity(intent);
     }
 

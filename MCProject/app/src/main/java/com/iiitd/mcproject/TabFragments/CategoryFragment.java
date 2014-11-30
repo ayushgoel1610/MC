@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.iiitd.mcproject.CategoryTopicActivity;
 import com.iiitd.mcproject.Common;
@@ -53,6 +54,8 @@ public class CategoryFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    ProgressBar progress;
 
     ListView categoryListView;
     private ArrayList<String> categoryList=new ArrayList<String>();
@@ -120,6 +123,8 @@ public class CategoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         inflateView= inflater.inflate(R.layout.fragment_category, container, false);
+        progress = (ProgressBar) inflateView.findViewById(R.id.category_fragment_progressBar);
+        progress.setVisibility(View.VISIBLE);
         getList();
         return inflateView;
     }
@@ -151,6 +156,11 @@ public class CategoryFragment extends Fragment {
         new AsyncTask<Void, String, String>(){
 
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
             protected String doInBackground(Void... param) {
                 String result=getTopics();
                 return result;
@@ -159,6 +169,7 @@ public class CategoryFragment extends Fragment {
             @Override
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
+                progress.setVisibility(View.INVISIBLE);
                 if(msg.contains("retrieved")) {
                     try {
                             initList();

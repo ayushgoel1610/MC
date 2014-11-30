@@ -37,7 +37,8 @@
         </activity>
         <activity
             android:name="com.iiitd.mcproject.MasterActivity"
-            android:label="@string/title_activity_master" >
+            android:label="@string/title_activity_master"
+            >
         </activity>
         <activity
             android:name="com.iiitd.mcproject.Chat.ui.activities.NewDialogActivity"
@@ -54,7 +55,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".loginActivityTest"
-            android:label="@string/app_label" >
+            android:label="@string/app_label"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

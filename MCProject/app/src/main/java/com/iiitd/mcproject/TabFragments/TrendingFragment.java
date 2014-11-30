@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.api.client.http.GenericUrl;
@@ -71,6 +73,7 @@ public class TrendingFragment extends Fragment {
     private int count = 0;
     private long offset=0;
     private int lastSize=10;
+    private int footer_flag = 0;
 
     ListView trendingTopics;
     private ArrayList<TopicObject> topicObjectList=new ArrayList<TopicObject>();
@@ -78,6 +81,7 @@ public class TrendingFragment extends Fragment {
 
     String tag = new String("getTopicTask");
 
+    ProgressBar progress;
     TopicList adapter;
 
     View inflateView;
@@ -126,6 +130,13 @@ public class TrendingFragment extends Fragment {
         adapter = new TopicList(getActivity(), topicObjectList);
         trendingTopics=(ListView)inflateView.findViewById(R.id.trending_list);
         trendingTopics.setAdapter(adapter);
+
+        if(footer_flag==0) {
+            View footerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.drawer_list_footer_item, null, false);
+            trendingTopics.addFooterView(footerView);
+            footer_flag=1;
+        }
+
         //YoYo.with(Techniques.SlideInUp).duration(700).playOn(trendingTopics);
         trendingTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -170,6 +181,8 @@ public class TrendingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         inflateView= inflater.inflate(R.layout.fragment_trending, container, false);
+        progress = (ProgressBar) inflateView.findViewById(R.id.trending_fragment_progressBar);
+        progress.setVisibility(View.VISIBLE);
         if(lastSize==10)
             getList();
         return inflateView;
@@ -266,6 +279,11 @@ public class TrendingFragment extends Fragment {
         new AsyncTask<Void, String, String>(){
 
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
             protected String doInBackground(Void... param) {
                 String result=getTopics(offset);
                 return result;
@@ -274,6 +292,7 @@ public class TrendingFragment extends Fragment {
             @Override
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
+                progress.setVisibility(View.INVISIBLE);
                 if(msg.contains("retrieved")) {
                     if(lastSize==10 || count==0)
                         offset += 10;
