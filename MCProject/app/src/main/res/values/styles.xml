@@ -1,13 +1,11 @@
 <resources>
 
-    <!--Colours. -->
-    <color name="hero_colour">#89032c</color>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="android:windowBackground">@drawable/background_gradient</item>
+        <item name="android:textColor">@color/hero_colour_text</item>
     </style>
 
     <style name="AppThemeCustom" parent="android:Theme.Holo.Light.DarkActionBar" /> -->
