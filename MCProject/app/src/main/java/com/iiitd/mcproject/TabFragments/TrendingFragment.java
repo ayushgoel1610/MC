@@ -113,6 +113,7 @@ public class TrendingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setRetainInstance(true);
     }
 
     private void addToList(){
@@ -125,6 +126,7 @@ public class TrendingFragment extends Fragment {
         adapter = new TopicList(getActivity(), topicObjectList);
         trendingTopics=(ListView)inflateView.findViewById(R.id.trending_list);
         trendingTopics.setAdapter(adapter);
+        //YoYo.with(Techniques.SlideInUp).duration(700).playOn(trendingTopics);
         trendingTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -136,6 +138,8 @@ public class TrendingFragment extends Fragment {
                 i.putExtra("id", clickedTopic.getId());
                 i.putExtra("category", clickedTopic.getCategory());
                 i.putExtra("image",clickedTopic.getImage());
+                Log.v(tag,"Image path: "+clickedTopic.getImage());
+                //YoYo.with(Techniques.FadeOut).duration(700).playOn(trendingTopics);
                 startActivity(i);
             }
         });
@@ -203,6 +207,12 @@ public class TrendingFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.v(tag, "onDestroy");
     }
 
 
@@ -358,7 +368,7 @@ public class TrendingFragment extends Fragment {
                 topicObject.putId(JSONTopic.getInt("id"));
                 topicObject.putCategory(JSONTopic.getString("category"));
                 topicObject.putName(JSONTopic.getString("name"));
-                topicObject.putImage("");
+                topicObject.putImage("/placeholder/url");
                 topicObjectList.add(topicObject);
 
             } catch (JSONException e) {

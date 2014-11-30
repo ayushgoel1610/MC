@@ -14,13 +14,17 @@
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="5dp"
-            android:textAppearance="?android:attr/textAppearanceListItem"/>
+            android:textAppearance="?android:attr/textAppearanceListItem"
+            android:fontFamily="sans-serif-condensed"
+            />
         <TextView
             android:id="@+id/category"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_gravity="bottom"
+            android:fontFamily="sans-serif-condensed-light"
+            android:textStyle="italic"
             />
     </TableRow>
 </TableLayout>

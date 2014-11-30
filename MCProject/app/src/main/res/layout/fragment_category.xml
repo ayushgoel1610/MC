@@ -10,5 +10,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/categoryListView"
-        android:layout_gravity="left|top" />
+        android:layout_gravity="left|top"
+        android:divider="#89032c"
+        android:dividerHeight="1dp"
+        />
 </FrameLayout>

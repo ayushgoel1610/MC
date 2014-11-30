@@ -97,6 +97,7 @@ public class Topic extends Activity{
                         TextView topicHeader=(TextView)findViewById(R.id.topicHeader);
                         topicHeader.setText(topic);
                         image_id = getIntent().getStringExtra("image");
+                    Log.v(tag,"Image path: "+image_id);
                         setImage();
                         new KnowledgeGraphTask().execute(topic);
                 }else{
@@ -118,6 +119,7 @@ public class Topic extends Activity{
     }
 
     public void runChatClient(View view){
+        Log.v("Chat pressed", "Chat pressed");
         Intent intent = new Intent(this, NewDialogActivity.class);
         intent.putExtra("id" , getIntent().getIntExtra("id" , -1));
         intent.putExtra("topic" , topic);

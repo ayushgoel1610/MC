@@ -3,6 +3,7 @@ package com.iiitd.mcproject;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ public class MasterActivity extends Activity
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    MainTabsFragment mainTabsFragment=MainTabsFragment.newInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +53,7 @@ public class MasterActivity extends Activity
         //First frame on opening
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_frame, MainTabsFragment.newInstance(), MainTabsFragment.TAG).commit();
+                .replace(R.id.content_frame, mainTabsFragment, MainTabsFragment.TAG).commit();
 
         //Set action bar button for drawer
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -74,7 +77,6 @@ public class MasterActivity extends Activity
 
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
     }
@@ -143,10 +145,18 @@ public class MasterActivity extends Activity
 
         switch(position) {
             case 0:
-                if(!((MainTabsFragment)getFragmentManager().findFragmentByTag( MainTabsFragment.TAG)).isVisible())
+                if(!(mainTabsFragment.isVisible()))
                 getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.content_frame, MainTabsFragment.newInstance(), MainTabsFragment.TAG).commit();
+                        .replace(R.id.content_frame, mainTabsFragment, MainTabsFragment.TAG).commit();
+                break;
+            case 1:
+                Intent intentProfile =new Intent(this, ProfileActivity.class);
+                startActivity(intentProfile);
+                break;
+            case 2:
+                Intent intentSettings =new Intent(this, SettingsActivity.class);
+                startActivity(intentSettings);
                 break;
         }
         mDrawerLayout.closeDrawer(mDrawerList);

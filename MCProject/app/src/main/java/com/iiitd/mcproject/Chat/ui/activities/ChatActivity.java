@@ -6,10 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,13 +27,15 @@ import com.iiitd.mcproject.Chat.ui.ChatManager;
 import com.iiitd.mcproject.Chat.ui.PrivateChatManagerImpl;
 import com.iiitd.mcproject.Chat.ui.adapters.ChatAdapter;
 import com.iiitd.mcproject.Common;
-import com.iiitd.mcproject.MasterActivity;
 import com.iiitd.mcproject.R;
 import com.quickblox.chat.QBChatService;
+import com.quickblox.chat.model.QBAttachment;
 import com.quickblox.chat.model.QBChatHistoryMessage;
 import com.quickblox.chat.model.QBChatMessage;
 import com.quickblox.chat.model.QBDialog;
 import com.quickblox.chat.model.QBMessage;
+import com.quickblox.content.QBContent;
+import com.quickblox.content.model.QBFile;
 import com.quickblox.core.QBEntityCallbackImpl;
 import com.quickblox.core.request.QBCustomObjectRequestBuilder;
 
@@ -44,8 +50,9 @@ import org.jivesoftware.smack.XMPPException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,26 +68,30 @@ public class ChatActivity extends Activity {
     public static final String EXTRA_DIALOG = "dialog";
     public boolean doubleBackToExitPressedOnce = false;
     private final String PROPERTY_SAVE_TO_HISTORY = "save_to_history";
+    private static int RESULT_LOAD_IMAGE = 1;
 
     private EditText messageEditText;
     private ListView messagesContainer;
     private Button sendButton;
+    private Button photoButton;
     private Button addB;
     private Button subB;
     private TextView countB;
     private int reputation;
     private ProgressBar progressBar;
+    private static ProgressBar pb;
 
     private Mode mode = Mode.PRIVATE;
     private ChatManager chat;
-    private ChatAdapter adapter;
+    public ChatAdapter adapter;
     private QBDialog dialog;
     private static int pair_id;
-
+    private static View messageview;
     private ArrayList<QBChatHistoryMessage> history;
 
     int flag = 0;
     public static void start(Context context, Bundle bundle) {
+        NewDialogActivity.exit_flag = 1;
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtras(bundle);
         pair_id = intent.getIntExtra("pair_id", -1);
@@ -91,6 +102,11 @@ public class ChatActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        LayoutInflater vi = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        messageview = vi.inflate(R.layout.list_item_message, null);
+
+        pb = (ProgressBar) messageview.findViewById(R.id.progressBar);
         Toast.makeText(getApplicationContext(), "Press back to exit the chat",
                 Toast.LENGTH_LONG).show();
 
@@ -144,10 +160,9 @@ public class ChatActivity extends Activity {
 
             public void onClick(DialogInterface arg0, int arg1) {
                 Toast.makeText(getApplicationContext(), "'yes' button clicked", Toast.LENGTH_SHORT).show();
-                EndChat();
-                Log.d("ChatActivity" , "sent request");
-                flag = 1;
+
                 finish();
+                return;
             }
         });
 
@@ -170,7 +185,7 @@ public class ChatActivity extends Activity {
         subB = (Button) findViewById(R.id.subB);
         countB = (TextView) findViewById(R.id.np);
         sendButton = (Button) findViewById(R.id.chatSendButton);
-
+        photoButton = (Button) findViewById(R.id.photoSendButton);
         TextView meLabel = (TextView) findViewById(R.id.meLabel);
         meLabel.setText("You");
         TextView companionLabel = (TextView) findViewById(R.id.companionLabel);
@@ -214,6 +229,7 @@ public class ChatActivity extends Activity {
                 QBChatMessage chatMessage = new QBChatMessage();
                 chatMessage.setBody(messageText);
                 chatMessage.setProperty(PROPERTY_SAVE_TO_HISTORY, "1");
+                //chatMessage.removeProperty("URI");
 
                 try {
                     chat.sendMessage(chatMessage);
@@ -224,13 +240,136 @@ public class ChatActivity extends Activity {
                 }
 
                 messageEditText.setText("");
-
+                pb.setVisibility(View.GONE);
+                Toast.makeText(ChatActivity.this, "Sending image..", Toast.LENGTH_SHORT).show();
                 if(mode == Mode.PRIVATE) {
                     showMessage(chatMessage);
                 }
             }
         });
+
+        photoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            }
+        });
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            final String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            //Log.v("path", picturePath);
+            //Log.v("URI", "" + selectedImage);
+            //int fileId2 = R.raw.firewalloff;
+            //InputStream is2 = getResources().openRawResource(fileId2);
+            //File file2 = FileHelper.getFileInputStream(is2, "10611988_10202173825058096_703047747_o.jpg", "Download");
+            File file = new File(picturePath);
+            //Log.v("file", "" + file);
+            Boolean fileIsPublic = false;
+            QBContent.uploadFileTask(file, fileIsPublic, null, new QBEntityCallbackImpl<QBFile>() {
+                @Override
+                public void onSuccess(QBFile file, Bundle params) {
+
+                    // create a message
+                    QBChatMessage chatMessage = new QBChatMessage();
+                    chatMessage.setProperty("save_to_history", "1"); // Save a message to history
+
+                    // attach a photo
+                    QBAttachment attachment = new QBAttachment("photo");
+                    attachment.setId(file.getId().toString());
+                    chatMessage.addAttachment(attachment);
+                    chatMessage.setBody("::ImageFile::");
+                    //chatMessage.setBody("::Photo Sent::");
+                    chatMessage.setProperty("uri",picturePath);
+
+                    // send a message
+                    try {
+                        chat.sendMessage(chatMessage);
+                    } catch (XMPPException e) {
+                        Log.e(TAG, "failed to send a message", e);
+                    } catch (SmackException sme) {
+                        Log.e(TAG, "failed to send a message", sme);
+                    }
+
+                    pb.setVisibility(View.VISIBLE);
+                    if(mode == Mode.PRIVATE) {
+                        showMessage(chatMessage);
+                    }
+
+                }
+
+                @Override
+                public void onError(List<String> errors) {
+                    // error
+                    Log.v("Error on upload", "" +  errors);
+                }
+            });
+
+            //ImageView imageView = (ImageView) findViewById(R.id.imgView);
+            //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+        }
+
+
+    }
+
+                /*int fileId = R.raw.firewalloff;
+                InputStream is = getResources().openRawResource(fileId);
+                File file = FileHelper.getFileInputStream(is, "sample_photo.png", "myFile");
+                Boolean fileIsPublic = false;
+                QBContent.uploadFileTask(file, fileIsPublic, null, new QBEntityCallbackImpl<QBFile>() {
+                    @Override
+                    public void onSuccess(QBFile file, Bundle params) {
+
+                        // create a message
+                        QBChatMessage chatMessage = new QBChatMessage();
+                        chatMessage.setProperty("save_to_history", "1"); // Save a message to history
+
+                        // attach a photo
+                        QBAttachment attachment = new QBAttachment("photo");
+                        attachment.setId(file.getId().toString());
+                        chatMessage.addAttachment(attachment);
+
+                        // send a message
+                        try {
+                            chat.sendMessage(chatMessage);
+                        } catch (XMPPException e) {
+                            Log.e(TAG, "failed to send a message", e);
+                        } catch (SmackException sme) {
+                            Log.e(TAG, "failed to send a message", sme);
+                        }
+                    }
+
+                    @Override
+                    public void onError(List<String> errors) {
+                        // error
+                        Log.v("Error on upload", "Error");
+                    }
+                });
+            }
+        });
+                Log.v("File uploaded","ok");
+
+*/
+
 
     private void loadChatHistory(){
         QBCustomObjectRequestBuilder customObjectRequestBuilder = new QBCustomObjectRequestBuilder();

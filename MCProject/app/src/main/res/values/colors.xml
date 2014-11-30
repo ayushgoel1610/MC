@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-        <color name="opaque_red">#f00</color>
-        <color name="translucent_red">#80ff0000</color>
+    <color name="opaque_red">#f00</color>
+    <color name="translucent_red">#80ff0000</color>
+    <color name="hero_colour">#89032c</color>
+    <color name="sidey_colour">#BF456A</color>
+    <color name="hero_colour_text">#520034</color>
 
 </resources>

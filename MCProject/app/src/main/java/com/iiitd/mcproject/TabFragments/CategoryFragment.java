@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.iiitd.mcproject.CategoryTopicActivity;
 import com.iiitd.mcproject.Common;
@@ -93,6 +92,7 @@ public class CategoryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setRetainInstance(true);
     }
 
     private void initList(){
@@ -101,14 +101,16 @@ public class CategoryFragment extends Fragment {
         adapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, android.R.id.text1,categoryArray);
         categoryListView=(ListView)inflateView.findViewById(R.id.categoryListView);
         categoryListView.setAdapter(adapter);
+        //YoYo.with(Techniques.SlideInUp).duration(700).playOn(categoryListView);
         categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Toast.makeText(getActivity(), "You Clicked at " + categoryList.get(position), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "You Clicked at " + categoryList.get(position), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getActivity() , CategoryTopicActivity.class);
                 i.putExtra("category" , categoryList.get(position) );
                 startActivity(i);
+                //getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
     }
@@ -246,6 +248,12 @@ public class CategoryFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.v(tag, "onDestroy");
     }
 
     /**

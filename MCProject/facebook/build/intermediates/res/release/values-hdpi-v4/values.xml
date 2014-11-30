@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- From: file:/home/shiv/MC/Project/MC/MCProject/facebook/res/values-hdpi/dimens.xml -->
-    <eat-comment />
-
+    <!-- From: file:/C:/mc_project/MC/MCProject/facebook/res/values-hdpi/dimens.xml -->
+    <eat-comment/>
     <dimen name="com_facebook_picker_divider_width">1px</dimen>
-
 </resources>

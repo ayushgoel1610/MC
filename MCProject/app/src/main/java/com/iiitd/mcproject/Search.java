@@ -216,7 +216,7 @@ public class Search extends Activity{
                 topicObject.putId(JSONTopic.getInt("id"));
                 topicObject.putCategory(JSONTopic.getString("category"));
                 topicObject.putName(JSONTopic.getString("name"));
-                topicObject.putImage("");
+                topicObject.putImage("/placeholder/url");
                 topicObjectList.add(topicObject);
             } catch (JSONException e) {
                 e.printStackTrace();

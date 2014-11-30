@@ -1,66 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"    package="com.iiitd.mcproject" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.iiitd.mcproject" >
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:name=".ApplicationSingleton"
+        android:name="com.iiitd.mcproject.ApplicationSingleton"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait">
         <activity
-            android:name=".MyActivity"
+            android:name="com.iiitd.mcproject.MyActivity"
             android:label="@string/app_name" >
         </activity>
-
         <activity
-            android:name=".Topic"
-            android:label="MCProject">
+            android:name="com.iiitd.mcproject.Topic"
+            android:label="MCProject" >
         </activity>
 
         <activity
             android:name=".CategoryTopicActivity"
             android:label="MCProject">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.iiitd.mcproject.MasterActivity" />
         </activity>
 
 
         <activity
             android:name=".Search"
-            android:parentActivityName=".MasterActivity" >
+            android:parentActivityName=".MasterActivity"
             android:label="MCProject">
         </activity>
-
         <activity
-            android:name=".MasterActivity"
+            android:name="com.iiitd.mcproject.MasterActivity"
             android:label="@string/title_activity_master" >
         </activity>
-
         <activity
-            android:name=".Chat.ui.activities.NewDialogActivity"
+            android:name="com.iiitd.mcproject.Chat.ui.activities.NewDialogActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
-
         <activity
-            android:name=".Chat.ui.activities.SplashActivity"
+            android:name="com.iiitd.mcproject.Chat.ui.activities.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
-
         <activity
-            android:name=".Chat.ui.activities.ChatActivity"
+            android:name="com.iiitd.mcproject.Chat.ui.activities.ChatActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
-            android:name=".loginActivity"
-            android:label="@string/title_activity_login" >
+            android:name=".loginActivityTest"
+            android:label="@string/app_label" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SignInActivity"
+            android:label="Sign In" >
+        </activity>
+
+        <activity
+            android:name=".SignUpActivity"
+            android:label="Sign Up" >
+        </activity>
+
+        <!--<activity-->
+            <!--android:name=".loginActivity"-->
+            <!--android:label="@string/title_activity_login" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
 
         <activity
             android:name="com.facebook.LoginActivity"
@@ -68,16 +87,36 @@
         </activity>
 
         <!-- this is the searchable activity; it performs searches -->
-        <activity android:name=".SearchableActivity" >
+        <activity android:name="com.iiitd.mcproject.SearchableActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
+        <activity
+            android:name="com.iiitd.mcproject.ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:parentActivityName="com.iiitd.mcproject.MasterActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.iiitd.mcproject.MasterActivity" />
+        </activity>
+        <activity
+            android:name="com.iiitd.mcproject.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.iiitd.mcproject.MasterActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.iiitd.mcproject.MasterActivity" />
+        </activity>
     </application>
 
 </manifest>

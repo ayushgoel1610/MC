@@ -40,7 +40,6 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
 {
     private String userLogin;
     private String userEmail;
-    private String userFullName;
     private String userPassword;
     private String usertokenQB;
 
@@ -77,13 +76,12 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
         this.context = cnt;
     }
 
-    public quickbloxLogin (String a, String b, String c, String d, String e, Context cnt)
+    public quickbloxLogin (String a, String b, String c, String d, Context cnt)
     {
         this.userLogin = a;
         this.userPassword = b;
         this.userEmail = c;
-        this.userFullName = d;
-        this.usertokenQB = e;
+        this.usertokenQB = d;
         this.context = cnt;
     }
 
@@ -120,7 +118,7 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
             userObj.put("login",userLogin);
             userObj.put("password",userPassword);
             userObj.put("email",userEmail);
-            userObj.put("full_name",userFullName);
+            userObj.put("full_name",userLogin);
 
             loginObj.put("user", userObj);
 
@@ -185,7 +183,7 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
             }
             else
                 Log.d("QB ID:","not found");
-            RailsServerSignUp r1 = new RailsServerSignUp(userLogin,userEmail,userFullName,userPassword,usertokenQB,USER_QB_ID,context);
+            RailsServerSignUp r1 = new RailsServerSignUp(userLogin,userEmail,userPassword,usertokenQB,USER_QB_ID,context);
             r1.execute();
         }
         else
@@ -210,81 +208,4 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
             ex.printStackTrace();
         }
     }
-
-    /*
-    public void userChat_auth(){
-    SharedPreferences sp = context.getSharedPreferences(Common.PREF, context.MODE_PRIVATE);
-    this.USER_LOGIN = sp.getString("userLogin","null");
-    this.USER_PASSWORD = sp.getString("userPassword","null");
-    if(USER_PASSWORD.equals("null") || USER_LOGIN.equals("null"))
-        Log.d("debug","user login and password are null");
-    else
-        Log.d("debug","userLogon:"+USER_LOGIN+" userPass:"+USER_PASSWORD);
-    QBSettings.getInstance().fastConfigInit(APP_ID, AUTH_KEY, AUTH_SECRET);
-    if (!QBChatService.isInitialized()) {
-        QBChatService.init(context);
-    }
-    chatService = QBChatService.getInstance();
-
-
-    // create QB user
-    //
-    final QBUser user = new QBUser();
-    user.setLogin(USER_LOGIN);
-    user.setPassword(USER_PASSWORD);
-    QBAuth.createSession(user, new QBEntityCallbackImpl<QBSession>() {
-        @Override
-        public void onSuccess(QBSession session, Bundle args) {
-
-            // save current user
-            //
-            user.setId(session.getUserId());
-            //((ApplicationSingleton)getApplication()).setCurrentUser(user);
-            Log.d("debug","on success");
-
-            // login to Chat
-            //
-            loginToChat(user);
-        }
-
-        @Override
-        public void onError(List<String> errors) {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-            dialog.setMessage("create session errors: " + errors).create().show();
-        }
-    });
-
-}
-
-    private void loginToChat(final QBUser user){
-
-        chatService.login(user, new QBEntityCallbackImpl() {
-            @Override
-            public void onSuccess() {
-                Log.v("Logged in","Logged in");
-                // Start sending presences
-                //
-                try {
-                    chatService.startAutoSendPresence(AUTO_PRESENCE_INTERVAL_IN_SECONDS);
-                } catch (SmackException.NotLoggedInException e) {
-                    e.printStackTrace();
-                }
-
-                // go to Dialogs screen
-                //
-                Intent intent = new Intent(context, MasterActivity.class);
-                context.startActivity(intent);
-
-                // context.finish();
-            }
-
-            @Override
-            public void onError(List errors) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                dialog.setMessage("chat login errors: " + errors).create().show();
-            }
-        });
-    }
-    */
-
 }
