@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,7 +67,9 @@ public class Topic extends Activity{
     ProgressBar bar ;
     TextView summary;
     EditText search_text;
-    CheckBox check;
+
+    Switch check;
+
     SeekBar seek;
 
     String tag = new String("Topic");
@@ -93,7 +96,7 @@ public class Topic extends Activity{
         Log.d("Int value", pref.getString("userRailsID", "null"));
         user_id = Integer.parseInt(pref.getString("userRailsID", "null"));
 
-        setContentView(R.layout.topic);
+        setContentView(R.layout.topic_test);
         context=this;
 
         bar = (ProgressBar)findViewById(R.id.topic_search_progressBar);
@@ -102,7 +105,8 @@ public class Topic extends Activity{
         summary.setVisibility(View.INVISIBLE);
         image = (ImageView)findViewById(R.id.topic_image);
         image.setVisibility(View.INVISIBLE);
-        check = (CheckBox) findViewById(R.id.chkIos);
+//        check = (CheckBox) findViewById(R.id.chkIos);
+        check = (Switch) findViewById(R.id.chklos);
         chat = (Button) findViewById(R.id.topic_chat);
         topic=getIntent().getStringExtra("topic");
         seek = (SeekBar) findViewById(R.id.topic_seekBar);
@@ -164,8 +168,10 @@ public class Topic extends Activity{
         intent.putExtra("threshold" , seek.getProgress());
         int loc ;
         if(check.isChecked()){
+            Log.d("debug", "location on");
             loc=1;
         }else{
+            Log.d("debug", "location off");
             loc=0;
         }
         intent.putExtra("locflag" , loc);
@@ -372,7 +378,7 @@ public class Topic extends Activity{
         }
         StatusLine sl=httpResponse.getStatusLine();
 
-        Log.v("Topic", Integer.toString(sl.getStatusCode()));
+//        Log.v("Topic", Integer.toString(sl.getStatusCode()));
 
         StringBuffer sb=new StringBuffer();
 
