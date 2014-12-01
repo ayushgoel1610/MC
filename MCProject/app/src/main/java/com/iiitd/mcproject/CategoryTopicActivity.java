@@ -128,7 +128,7 @@ public class CategoryTopicActivity extends Activity {
                 if (categoryTopics.getLastVisiblePosition() == categoryTopics.getAdapter().getCount() - 1
                         && categoryTopics.getChildAt(categoryTopics.getChildCount() - 1).getBottom() <= categoryTopics.getHeight()) {
                     //scroll end reached
-                    Toast.makeText(getApplicationContext(), "Reached end of list ", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Reached end of list ", Toast.LENGTH_SHORT).show();
                     //add more items to list
 //                    addToList();
                     Log.v(tag, "last size: " + lastSize);

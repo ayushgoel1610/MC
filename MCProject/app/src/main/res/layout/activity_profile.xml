@@ -39,7 +39,7 @@
         android:layout_centerVertical="true"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="#00ffffff"
+        android:background="@android:color/transparent"
         android:layout_below="@+id/profile_email_textView"
 
         >

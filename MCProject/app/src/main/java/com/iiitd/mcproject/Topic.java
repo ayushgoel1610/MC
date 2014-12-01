@@ -369,7 +369,6 @@ public class Topic extends Activity{
         }.execute(null , null , null);
     }
 
-
     private void getRep()  {
         InputStream inputStream = null;
         DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -428,5 +427,11 @@ public class Topic extends Activity{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        getReputation();
+        super.onResume();
     }
 }
