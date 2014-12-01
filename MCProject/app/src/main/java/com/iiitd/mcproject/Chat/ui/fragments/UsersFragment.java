@@ -113,7 +113,11 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         threshold = getActivity().getIntent().getIntExtra("threshold" , -1);
        Request();
 
-        //QuickBlocksChat();
+
+
+       Request();
+
+
 
         retry.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -33,7 +33,4 @@ dependencies {
 
     compile 'commons-codec:commons-codec:1.9';
 
-    compile project(':facebook')
-
-    compile group: 'org.achartengine', name: 'achartengine', version: '1.2.0'
 }

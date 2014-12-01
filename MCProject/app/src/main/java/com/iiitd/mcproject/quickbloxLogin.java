@@ -63,7 +63,7 @@ public class quickbloxLogin extends AsyncTask<Void, Void, String>
 
     private StringBuilder sb = new StringBuilder();
 
-    private String urlQB = "http://api.quickblox.com/users.json";
+    private final String urlQB = "http://api.quickblox.com/users.json";
 
     private JSONObject loginObj = new JSONObject();
     private JSONObject userObj = new JSONObject();
