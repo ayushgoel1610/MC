@@ -223,7 +223,7 @@ public class ChatActivity extends Activity {
         if(mode == Mode.PRIVATE) {
             //showMessage(chatMessage);
         }
-        //EndChat();
+        EndChat();
 
     }
 

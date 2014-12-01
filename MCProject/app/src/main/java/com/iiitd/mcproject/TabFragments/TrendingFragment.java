@@ -165,7 +165,7 @@ public class TrendingFragment extends Fragment {
                 if (trendingTopics.getLastVisiblePosition() == trendingTopics.getAdapter().getCount() - 1
                         && trendingTopics.getChildAt(trendingTopics.getChildCount() - 1).getBottom() <= trendingTopics.getHeight()) {
                     //scroll end reached
-                    Toast.makeText(getActivity(), "Reached end of list ", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Reached end of list ", Toast.LENGTH_SHORT).show();
                     //add more items to list
 //                    addToList();
                     Log.v(tag,"last size: "+lastSize);
