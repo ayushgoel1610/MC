@@ -238,6 +238,7 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
     }
 
     private void loginToChat(final QBUser user){
+        Log.d("user",user.toString());
 
         chatService.login(user, new QBEntityCallbackImpl() {
             @Override

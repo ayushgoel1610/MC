@@ -35,18 +35,25 @@
 
 
             <EditText
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/suggestTopic"
-                android:layout_below="@+id/suggestText"/>
-            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Submit"
-                android:id="@+id/submitSuggestion"
+                android:id="@+id/suggestTopic"
                 android:layout_below="@+id/suggestText"
-                android:layout_toRightOf="@+id/suggestTopic"
-                android:layout_toEndOf="@+id/suggestTopic" />
+                android:hint="Topic"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/suggestCategory"
+                android:layout_below="@+id/suggestTopic"
+                android:hint="Category"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/submitSuggestion"
+                android:layout_below="@+id/suggestCategory"
+                 />
 
         </RelativeLayout>
 
@@ -57,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="Sign Out"
-        android:id="@+id/button"
+        android:id="@+id/signout"
         android:layout_alignParentBottom="true"/>
 
 
