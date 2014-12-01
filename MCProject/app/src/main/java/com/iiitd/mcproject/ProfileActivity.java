@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.iiitd.mcproject.FetchProfile;
+
 
 public class ProfileActivity extends Activity {
 
@@ -18,6 +20,8 @@ public class ProfileActivity extends Activity {
         SharedPreferences sp = this.getSharedPreferences(Common.PREF, Context.MODE_PRIVATE);
         String railsid=sp.getString("userRailsID","null");
         Log.d("ID",railsid);
+        FetchProfile fetchProfile=new FetchProfile(railsid,ProfileActivity.this);
+        fetchProfile.execute();
 
     }
 

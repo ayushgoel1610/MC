@@ -1,5 +1,8 @@
-package com.iiitd.mcproject.TabFragments;
+package com.iiitd.mcproject;
 
+/**
+ * Created by udayantandon on 01/12/14.
+ */
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -23,12 +26,12 @@ import java.io.UnsupportedEncodingException;
  * Created by udayantandon on 01/12/14.
  */
 public class FetchProfile extends AsyncTask<Void, Void, String> {
-    int id;
+    String id;
     private ProgressDialog pDialog;
     private final String UrlRails = "https://tranquil-stream-2635.herokuapp.com/profile";
     private Context context;
     private StringBuilder sb=new StringBuilder();
-    public FetchProfile(int id,Context cnt){
+    public FetchProfile(String id,Context cnt){
         this.id=id;
         context=cnt;
     }
@@ -53,7 +56,8 @@ public class FetchProfile extends AsyncTask<Void, Void, String> {
 
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("id",id);
+                int sendid=Integer.parseInt(id);
+                jsonObject.put("id",sendid);
 
             }catch (JSONException e){
                 e.printStackTrace();
