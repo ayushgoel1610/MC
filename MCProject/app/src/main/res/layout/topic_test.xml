@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:textSize="28sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-condensed"
+        android:id="@+id/topicHeader"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_weight="0.07" />
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:id="@+id/topic_image"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_weight="0.36"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/topic_search_text"
+
+        android:textSize="16sp"
+        android:textColor="@color/sidey_colour_text"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textStyle="bold|italic"
+
+        android:layout_alignLeft="@+id/topic_image"
+        android:layout_alignStart="@+id/topic_image"
+        android:layout_alignRight="@+id/topic_image"
+        android:layout_alignEnd="@+id/topic_image"
+        android:layout_alignParentStart="true"
+
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.13" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/topic_search_progressBar"
+        android:indeterminate="false"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Reputation Threshold (Optional)"
+        android:id="@+id/textView"
+        android:layout_gravity="left"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <SeekBar
+            android:layout_width="254dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/topic_seekBar"
+            android:layout_gravity="left|center_horizontal"
+            android:layout_marginLeft="35dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="no"
+            android:id="@+id/textView5"
+            android:layout_gravity="left"
+            android:layout_marginLeft="15dp" />
+
+        </LinearLayout>
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:id="@+id/chklos"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.07"
+        android:layout_marginTop="5dp" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Chat"
+        android:id="@+id/topic_chat"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_weight="0.04"
+        android:layout_marginTop="5dp" />
+
+</LinearLayout>

@@ -96,7 +96,7 @@ public class Topic extends Activity{
         Log.d("Int value", pref.getString("userRailsID", "null"));
         user_id = Integer.parseInt(pref.getString("userRailsID", "null"));
 
-        setContentView(R.layout.topic);
+        setContentView(R.layout.topic_test);
         context=this;
 
         bar = (ProgressBar)findViewById(R.id.topic_search_progressBar);
