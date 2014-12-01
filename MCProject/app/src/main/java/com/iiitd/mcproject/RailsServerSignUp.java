@@ -1,5 +1,6 @@
 package com.iiitd.mcproject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -159,7 +160,6 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
         else
             Log.d("system response","is null");
         userChat_auth();
-
     }
 
     private void getRailsToken(String str1)
@@ -227,6 +227,7 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
                 // login to Chat
                 //
                 loginToChat(user);
+                Log.d("debug" , "after loginToChat");
             }
 
             @Override
@@ -235,16 +236,16 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
                 dialog.setMessage("create session errors: " + errors).create().show();
             }
         });
-
     }
 
     private void loginToChat(final QBUser user){
 
+        Log.d("debug","entered LoginToChat");
         chatService.login(user, new QBEntityCallbackImpl() {
             @Override
             public void onSuccess() {
-                Log.v("Logged in","Logged in");
-                // Start sending presences
+                Log.d("Logged in","Logged in");
+                // Start sending presences`
                 //
                 try {
                     chatService.startAutoSendPresence(AUTO_PRESENCE_INTERVAL_IN_SECONDS);
@@ -256,18 +257,19 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
                 //
                 Intent intent = new Intent(context, MasterActivity.class);
                 context.startActivity(intent);
-
-                // context.finish();
+                Log.d("debug" , "started new activity");
+//                ((Activity)context).finish();
+                Log.d("debug" , "finished old activity");
             }
 
             @Override
             public void onError(List errors) {
+                Log.d("debug" , "errors");
+                Log.d("debug" , user.toString());
                 AlertDialog.Builder dialog = new AlertDialog.Builder(context);
                 dialog.setMessage("chat login errors: " + errors).create().show();
             }
         });
+        Log.d("debug","exited LoginToChat");
     }
-
-
-
 }

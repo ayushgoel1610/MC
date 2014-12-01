@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.api.client.http.GenericUrl;
@@ -67,17 +69,19 @@ public class TrendingFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+
+    private int count = 0;
     private long offset=0;
     private int lastSize=10;
+    private int footer_flag = 0;
 
     ListView trendingTopics;
-
-
     private ArrayList<TopicObject> topicObjectList=new ArrayList<TopicObject>();
 
 
     String tag = new String("getTopicTask");
 
+    ProgressBar progress;
     TopicList adapter;
 
     View inflateView;
@@ -126,6 +130,14 @@ public class TrendingFragment extends Fragment {
         adapter = new TopicList(getActivity(), topicObjectList);
         trendingTopics=(ListView)inflateView.findViewById(R.id.trending_list);
         trendingTopics.setAdapter(adapter);
+
+        if(footer_flag==0) {
+            View footerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.drawer_list_footer_item, null, false);
+            trendingTopics.addFooterView(footerView);
+            footer_flag=1;
+        }
+
+        //YoYo.with(Techniques.SlideInUp).duration(700).playOn(trendingTopics);
         trendingTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -137,6 +149,8 @@ public class TrendingFragment extends Fragment {
                 i.putExtra("id", clickedTopic.getId());
                 i.putExtra("category", clickedTopic.getCategory());
                 i.putExtra("image",clickedTopic.getImage());
+                Log.v(tag,"Image path: "+clickedTopic.getImage());
+                //YoYo.with(Techniques.FadeOut).duration(700).playOn(trendingTopics);
                 startActivity(i);
             }
         });
@@ -167,6 +181,8 @@ public class TrendingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         inflateView= inflater.inflate(R.layout.fragment_trending, container, false);
+        progress = (ProgressBar) inflateView.findViewById(R.id.trending_fragment_progressBar);
+        progress.setVisibility(View.VISIBLE);
         if(lastSize==10)
             getList();
         return inflateView;
@@ -236,7 +252,6 @@ public class TrendingFragment extends Fragment {
 
     private void getList(){
         TopicTask();
-        //initList();
     }
 
     private void getListImage(){
@@ -264,6 +279,11 @@ public class TrendingFragment extends Fragment {
         new AsyncTask<Void, String, String>(){
 
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
             protected String doInBackground(Void... param) {
                 String result=getTopics(offset);
                 return result;
@@ -272,8 +292,9 @@ public class TrendingFragment extends Fragment {
             @Override
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
+                progress.setVisibility(View.INVISIBLE);
                 if(msg.contains("retrieved")) {
-                    if(lastSize==10)
+                    if(lastSize==10 || count==0)
                         offset += 10;
                     if(offset==10)
                         initList();
@@ -284,6 +305,7 @@ public class TrendingFragment extends Fragment {
                         catch (NullPointerException e){
                             e.printStackTrace();
                         }
+                    count++;
                     getListImage();
                 }
                 //Populate list
@@ -365,7 +387,7 @@ public class TrendingFragment extends Fragment {
                 topicObject.putId(JSONTopic.getInt("id"));
                 topicObject.putCategory(JSONTopic.getString("category"));
                 topicObject.putName(JSONTopic.getString("name"));
-                topicObject.putImage("");
+                topicObject.putImage("/placeholder/url");
                 topicObjectList.add(topicObject);
 
             } catch (JSONException e) {

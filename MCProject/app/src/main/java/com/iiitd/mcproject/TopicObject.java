@@ -10,7 +10,9 @@ public class TopicObject {
     private String topicCategory;
 
     public TopicObject(){
-
+        this.topicName="";
+        this.topicImage="";
+        this.topicCategory="";
     }
 
     public int getId(){

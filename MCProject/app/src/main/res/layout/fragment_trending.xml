@@ -7,7 +7,15 @@
     <ListView
         android:id="@+id/trending_list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:divider="#89032c"
+        android:dividerHeight="1dp">
     </ListView>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/trending_fragment_progressBar"
+        android:layout_gravity="center" />
 
 </FrameLayout>

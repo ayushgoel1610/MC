@@ -2,6 +2,7 @@ package com.iiitd.mcproject.TabFragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,8 +13,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
+import com.iiitd.mcproject.CategoryTopicActivity;
 import com.iiitd.mcproject.Common;
 import com.iiitd.mcproject.R;
 
@@ -52,6 +54,8 @@ public class CategoryFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    ProgressBar progress;
 
     ListView categoryListView;
     private ArrayList<String> categoryList=new ArrayList<String>();
@@ -100,14 +104,16 @@ public class CategoryFragment extends Fragment {
         adapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, android.R.id.text1,categoryArray);
         categoryListView=(ListView)inflateView.findViewById(R.id.categoryListView);
         categoryListView.setAdapter(adapter);
+        //YoYo.with(Techniques.SlideInUp).duration(700).playOn(categoryListView);
         categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Toast.makeText(getActivity(), "You Clicked at " + categoryList.get(position), Toast.LENGTH_SHORT).show();
-                //Intent i = new Intent(getActivity() , Topic.class);
-
-                //startActivity(i);
+                //Toast.makeText(getActivity(), "You Clicked at " + categoryList.get(position), Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getActivity() , CategoryTopicActivity.class);
+                i.putExtra("category" , categoryList.get(position) );
+                startActivity(i);
+                //getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
     }
@@ -117,6 +123,8 @@ public class CategoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         inflateView= inflater.inflate(R.layout.fragment_category, container, false);
+        progress = (ProgressBar) inflateView.findViewById(R.id.category_fragment_progressBar);
+        progress.setVisibility(View.VISIBLE);
         getList();
         return inflateView;
     }
@@ -148,6 +156,11 @@ public class CategoryFragment extends Fragment {
         new AsyncTask<Void, String, String>(){
 
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
             protected String doInBackground(Void... param) {
                 String result=getTopics();
                 return result;
@@ -156,6 +169,7 @@ public class CategoryFragment extends Fragment {
             @Override
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
+                progress.setVisibility(View.INVISIBLE);
                 if(msg.contains("retrieved")) {
                     try {
                             initList();

@@ -58,6 +58,8 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
     int user_id;            //User quickblocks id , retrieved from SharedPref
     int pair_id;            //Other user quikcblocks id , getting from my Rails server.
     int chat;               //The chat_id at my rails server, use this to send the reputation
+    int loc_flag;           //The users location preference
+    int threshold;           //User reputation
 
 
     int pair_status_count = 0;
@@ -107,11 +109,15 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         retry.setVisibility(View.INVISIBLE);
         Log.d("UserFragment" , "The topic id is : " + Integer.toString(getActivity().getIntent().getIntExtra("id" , -1)));
         topic_id = getActivity().getIntent().getIntExtra("id" , -1);
+        loc_flag = getActivity().getIntent().getIntExtra("locflag" , -1);
+        threshold = getActivity().getIntent().getIntExtra("threshold" , -1);
+       Request();
+
 
 
        Request();
 
-        //QuickBlocksChat();
+
 
         retry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,6 +234,8 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         try {
             jsonObject.put("user_id" , user_id);
             jsonObject.put("topic_id" , topic_id);
+            jsonObject.put("locflag" , loc_flag);
+            jsonObject.put("threshold" , threshold);
         } catch (JSONException e) {
             e.printStackTrace();
         }

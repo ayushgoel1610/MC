@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -61,6 +62,7 @@ public class Search extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         progress = (ProgressBar) findViewById(R.id.search_progressBar);
+        progress.setVisibility(View.VISIBLE);
         query = getIntent().getStringExtra("topic");
         no_result = (TextView) findViewById(R.id.search_noresult_textView);
         no_result.setVisibility(View.INVISIBLE);
@@ -68,6 +70,19 @@ public class Search extends Activity{
         getActionBar().setTitle(query);
         initList();
         TopicTask();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result",1);
+                setResult(RESULT_OK,returnIntent);
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -96,6 +111,7 @@ public class Search extends Activity{
                 i.putExtra("topic", clickedTopic.getName());
                 i.putExtra("id", clickedTopic.getId());
                 i.putExtra("category", clickedTopic.getCategory());
+                i.putExtra("image",clickedTopic.getImage());
                 startActivity(i);
             }
         });
@@ -105,7 +121,6 @@ public class Search extends Activity{
         ConnectivityManager cmgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
         if(networkInfo!=null && networkInfo.isConnected()) {
-
             for (TopicObject topicObject : topicObjectList)  {
                 try {
                     KnowledgeGraphTask(topicObject);
@@ -116,7 +131,6 @@ public class Search extends Activity{
         }else{
             Toast.makeText(this , "No Internet Connection" , Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void TopicTask(){
@@ -216,7 +230,7 @@ public class Search extends Activity{
                 topicObject.putId(JSONTopic.getInt("id"));
                 topicObject.putCategory(JSONTopic.getString("category"));
                 topicObject.putName(JSONTopic.getString("name"));
-                topicObject.putImage("");
+                topicObject.putImage("/placeholder/url");
                 topicObjectList.add(topicObject);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -231,18 +245,14 @@ public class Search extends Activity{
             String tag = new String("KnowledgeGraphTask");
 
             @Override
-            protected void onPreExecute() {
-                progress.setVisibility(View.VISIBLE);
-                trendingTopics.setVisibility(View.INVISIBLE);
-                super.onPreExecute();
-            }
-
-            @Override
             protected String doInBackground(Void... param) {
                 Log.d(tag, "inside the KnowledgeGraphTask");
                 Log.d(tag , "The topic is : " + topicObject.getName());
                 String topic = topicObject.getName();
                 topic = topic.replace(" " , "_");
+
+                String category = topicObject.getCategory();
+                category=category.replace(" ","_");
 
                 String topic_id = getTopicId(topic);
                 Log.d(tag , "The topic id is : " + topic_id );
@@ -253,8 +263,11 @@ public class Search extends Activity{
                     return "ERROR";
                 }else{
 
-                    String image_id = "https://www.googleapis.com/freebase/v1/image" + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"+ "&key="+ Common.Freebase_api_key;
+                    String image_id = "https://www.googleapis.com/freebase/v1/image"
+                            + getTopicImageId(topic_id) + "?maxwidth=200&maxheight=200&mode=fillcropmid"
+                            + "&key="+ Common.Freebase_api_key;
                     if(image_id.equals("https://www.googleapis.com/freebase/v1/imagenull")){
+
                         return "ERROR";
                     }else if(topicObjectList.indexOf(topicObject)>=0){
                         //imageList.add(topicList.indexOf(topic),image_id);
@@ -378,10 +391,14 @@ public class Search extends Activity{
             @Override
             protected void onPostExecute(String msg) {
                 Log.i(tag, msg);
-                //Populate list
                 progress.setVisibility(View.INVISIBLE);
-                    trendingTopics.setVisibility(View.VISIBLE);
+                //Populate list
+                try {
                     adapter.notifyDataSetChanged();
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+                }
             }
         }.execute(null, null, null);
     }

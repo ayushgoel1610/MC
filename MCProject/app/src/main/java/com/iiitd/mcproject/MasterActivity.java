@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -77,7 +78,6 @@ public class MasterActivity extends Activity
 
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
     }
@@ -140,6 +140,12 @@ public class MasterActivity extends Activity
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             navigateToFragment(position);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("MasterActivity" , "Back Pressed");
+        moveTaskToBack(true);
     }
 
     private void navigateToFragment(int position) {

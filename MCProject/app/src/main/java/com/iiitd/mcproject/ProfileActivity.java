@@ -1,9 +1,14 @@
 package com.iiitd.mcproject;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.iiitd.mcproject.FetchProfile;
 
 
 public class ProfileActivity extends Activity {
@@ -12,6 +17,12 @@ public class ProfileActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        SharedPreferences sp = this.getSharedPreferences(Common.PREF, Context.MODE_PRIVATE);
+        String railsid=sp.getString("userRailsID","null");
+        Log.d("ID",railsid);
+        FetchProfile fetchProfile=new FetchProfile(railsid,ProfileActivity.this);
+        fetchProfile.execute();
+
     }
 
 
@@ -36,4 +47,5 @@ public class ProfileActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

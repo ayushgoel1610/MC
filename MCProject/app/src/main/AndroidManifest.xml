@@ -11,7 +11,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait">
         <activity
             android:name="com.iiitd.mcproject.MyActivity"
             android:label="@string/app_name" >
@@ -20,21 +21,25 @@
             android:name="com.iiitd.mcproject.Topic"
             android:label="MCProject" >
         </activity>
+
         <activity
-            android:name="com.iiitd.mcproject.Search"
-            android:parentActivityName="com.iiitd.mcproject.MasterActivity"
+            android:name=".CategoryTopicActivity"
             android:label="MCProject">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.iiitd.mcproject.MasterActivity" />
         </activity>
+
+
         <activity
-            android:name="com.iiitd.mcproject.Chat.ui.activities.TopicChat"
-            android:label="MCProject" >
+            android:name=".Search"
+            android:label="MCProject">
         </activity>
         <activity
             android:name="com.iiitd.mcproject.MasterActivity"
-            android:label="@string/title_activity_master" >
+            android:label="@string/title_activity_master"
+            android:alwaysRetainTaskState="true"
+            >
         </activity>
         <activity
             android:name="com.iiitd.mcproject.Chat.ui.activities.NewDialogActivity"
@@ -51,7 +56,9 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".loginActivityTest"
-            android:label="@string/app_label" >
+            android:label="@string/app_label"
+            android:noHistory="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
