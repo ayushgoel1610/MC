@@ -54,6 +54,7 @@ public class SettingsActivity extends Activity {
                 SharedPreferences.Editor editor = sp.edit();
                 editor.clear();
                 editor.commit();
+                MasterActivity.destroyMaster.finish();
                 startActivity(loginScreen);
                 SettingsActivity.this.finish();
             }

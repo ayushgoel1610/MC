@@ -3,6 +3,7 @@ package com.iiitd.mcproject;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -29,6 +30,7 @@ public class MasterActivity extends Activity
         RecentFragment.OnFragmentInteractionListener,
         TrendingFragment.OnFragmentInteractionListener{
 
+    public static Activity destroyMaster;
     private String[] mDrawerTitles;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -40,6 +42,8 @@ public class MasterActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master);
+
+        destroyMaster = this;
 
         mDrawerTitles = getResources().getStringArray(R.array.drawer_titles);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
