@@ -20,4 +20,8 @@
             android:endColor="#2d4984"
             android:angle="270"/>
 </shape>
+<<<<<<< HEAD
 <!-- From: file:/C:/Users/ayush/AndroidStudioProjects/MC/MCProject/facebook/res/drawable/com_facebook_picker_top_button.xml -->
+=======
+<!-- From: file:/C:/mc_project/MC/MCProject/facebook/res/drawable/com_facebook_picker_top_button.xml -->
+>>>>>>> 4fd067aa03fd3a847b04cb4acfc994144d5bfe4b

@@ -11,6 +11,9 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.google.api.client.json.Json;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -48,18 +51,32 @@ public class ProfileActivity extends Activity {
     JSONArray reputation;
     ArrayList<String> category = new ArrayList<String>();
     ArrayList<Double> category_reputation = new ArrayList<Double>();
+    TextView email;
+    TextView username;
+    TextView mvp;
+    String details = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        SharedPreferences sp = this.getSharedPreferences(Common.PREF, Context.MODE_PRIVATE);
+        String railsid=sp.getString("userRailsID","null");
+        Log.d("ID",railsid);
+
+        getActionBar().setTitle("Spalk");
+
         progress = (ProgressBar) findViewById(R.id.profile_progressBar);
         progress.setVisibility(View.VISIBLE);
         graph_layout = (LinearLayout) findViewById(R.id.profile_linearLayout);
 
-        SharedPreferences sp = this.getSharedPreferences(Common.PREF, Context.MODE_PRIVATE);
-        String railsid=sp.getString("userRailsID","null");
-        Log.d("ID",railsid);
+        username = (TextView) findViewById(R.id.profile_username_textView);
+        username.setText(sp.getString("userLogin" , null));
+        email = (TextView) findViewById(R.id.profile_email_textView);
+        email.setText(sp.getString("userEmail", null));
+
+        mvp = (TextView) findViewById(R.id.profile_details_textView);
+
         FetchProfile fetchProfile=new FetchProfile(railsid,ProfileActivity.this);
         fetchProfile.execute();
     }
@@ -72,11 +89,13 @@ public class ProfileActivity extends Activity {
         reputationRenderer = new DefaultRenderer();
         reputationRenderer.setShowLabels(true);
         reputationRenderer.setInScroll(true);
-        reputationRenderer.setStartAngle(90);
         reputationRenderer.setPanEnabled(false);// Disable User Interaction
         reputationRenderer.setScale((float) 1.4);
-        reputationRenderer.setLabelsTextSize(30);
+        reputationRenderer.setZoomEnabled(true);
+        reputationRenderer.setPanEnabled(false);
+        reputationRenderer.setLabelsTextSize(40);
         reputationRenderer.setLabelsColor(Color.BLACK);
+
 
         String cat[] = new String[category.size()];
         double rat[] = new double[category.size()];
@@ -119,14 +138,15 @@ public class ProfileActivity extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        try {
+            JSONObject mct = jsonObject.getJSONObject("mostchats");
+            details = details + "MCT : " + mct.getString("topic_name") + "   Chats : " +  mct.getInt("chats") + "\n";
+            JSONObject mrt = jsonObject.getJSONObject("mvptopic");
+            details = details + "MRT : " + mrt.getString("topic_name") +  "  Rep  : " + mrt.getInt("reputation")  + "\n";
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         Log.d("ProfileActivity" , Integer.toString(category.size()));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_profile, menu);
-        return true;
     }
 
     private class FetchProfile extends AsyncTask<Void, Void, Void> {
@@ -207,6 +227,7 @@ public class ProfileActivity extends Activity {
         protected void onPostExecute(Void aVoid) {
             progress.setVisibility(View.INVISIBLE);
             profile_chart();
+            mvp.setText(details);
             super.onPostExecute(aVoid);
         }
     }

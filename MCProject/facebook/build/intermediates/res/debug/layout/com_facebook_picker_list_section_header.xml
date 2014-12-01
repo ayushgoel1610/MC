@@ -32,4 +32,8 @@
     android:shadowDy="1"
     android:shadowRadius="1"
     android:shadowColor="#BFFFFFFF" />
+<<<<<<< HEAD
 <!-- From: file:/C:/Users/ayush/AndroidStudioProjects/MC/MCProject/facebook/res/layout/com_facebook_picker_list_section_header.xml -->
+=======
+<!-- From: file:/C:/mc_project/MC/MCProject/facebook/res/layout/com_facebook_picker_list_section_header.xml -->
+>>>>>>> 4fd067aa03fd3a847b04cb4acfc994144d5bfe4b

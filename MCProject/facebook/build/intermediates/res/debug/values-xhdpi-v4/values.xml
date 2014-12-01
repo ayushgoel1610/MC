@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< HEAD
     <!-- From: file:/C:/Users/ayush/AndroidStudioProjects/MC/MCProject/facebook/res/values-xhdpi/dimens.xml -->
+=======
+    <!-- From: file:/C:/mc_project/MC/MCProject/facebook/res/values-xhdpi/dimens.xml -->
+>>>>>>> 4fd067aa03fd3a847b04cb4acfc994144d5bfe4b
     <eat-comment/>
     <dimen name="com_facebook_picker_divider_width">2px</dimen>
 </resources>

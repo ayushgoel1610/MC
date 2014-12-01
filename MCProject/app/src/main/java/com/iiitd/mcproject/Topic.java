@@ -21,7 +21,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,9 +66,7 @@ public class Topic extends Activity{
     ProgressBar bar ;
     TextView summary;
     EditText search_text;
-
-    Switch check;
-
+    CheckBox check;
     SeekBar seek;
 
     String tag = new String("Topic");
@@ -83,6 +80,7 @@ public class Topic extends Activity{
     int topic_id;
     int reputation;
     int user_id;
+    TextView progress_view;
 
 
     Context context;
@@ -96,9 +94,7 @@ public class Topic extends Activity{
         Log.d("Int value", pref.getString("userRailsID", "null"));
         user_id = Integer.parseInt(pref.getString("userRailsID", "null"));
 
-        topic=getIntent().getStringExtra("topic");
-
-        setContentView(R.layout.topic_test);
+        setContentView(R.layout.topic);
         context=this;
 
         bar = (ProgressBar)findViewById(R.id.topic_search_progressBar);
@@ -107,41 +103,55 @@ public class Topic extends Activity{
         summary.setVisibility(View.INVISIBLE);
         image = (ImageView)findViewById(R.id.topic_image);
         image.setVisibility(View.INVISIBLE);
-
-        check = (Switch) findViewById(R.id.chklos);
-        check.setVisibility(View.INVISIBLE);
-
+        check = (CheckBox) findViewById(R.id.chkIos);
         chat = (Button) findViewById(R.id.topic_chat);
-        chat.setVisibility(View.INVISIBLE);
+        topic=getIntent().getStringExtra("topic");
         seek = (SeekBar) findViewById(R.id.topic_seekBar);
-        seek.setVisibility(View.INVISIBLE);
 
         topic_id = getIntent().getIntExtra("id", -1);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setTitle(topic);
+//        progress_view.setText("10");
+        seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                Log.v("Changed", progress + "");
+                progress_view  = (TextView) Topic.this.findViewById(R.id.progressView);
+                progress_view.setText(Integer.toString(progress));
+
+            }
+
+        });
 
         Log.d(tag , "Inside FreeBase Class");
-                ConnectivityManager cmgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
-                if(networkInfo!=null && networkInfo.isConnected()){
-                    bar.setVisibility(View.VISIBLE);
-                    summary.setVisibility(View.INVISIBLE);
-                    summary.setText("");
-                    image.setVisibility(View.INVISIBLE);
-                    image.setImageDrawable(null);
-                    Log.d(tag, "Connected to internet");
-                    TextView topicHeader=(TextView)findViewById(R.id.topicHeader);
-                    topicHeader.setText(topic);
-                    image_id = getIntent().getStringExtra("image");
-                    Log.v(tag,"Image path: "+image_id);
-                    setImage();
-                    new KnowledgeGraphTask().execute(topic);
-                    getReputation();
-                }else{
-                    Toast.makeText(getBaseContext(), "No internet connection", Toast.LENGTH_SHORT).show();
-                }
-            }
+        ConnectivityManager cmgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
+        if(networkInfo!=null && networkInfo.isConnected()){
+            bar.setVisibility(View.VISIBLE);
+            summary.setVisibility(View.INVISIBLE);
+            summary.setText("");
+            image.setVisibility(View.INVISIBLE);
+            image.setImageDrawable(null);
+            Log.d(tag, "Connected to internet");
+            TextView topicHeader=(TextView)findViewById(R.id.topicHeader);
+            topicHeader.setText(topic);
+            image_id = getIntent().getStringExtra("image");
+            Log.v(tag,"Image path: "+image_id);
+            setImage();
+            new KnowledgeGraphTask().execute(topic);
+            getReputation();
+        }else{
+            Toast.makeText(getBaseContext(), "No internet connection", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -173,10 +183,8 @@ public class Topic extends Activity{
         intent.putExtra("threshold" , seek.getProgress());
         int loc ;
         if(check.isChecked()){
-            Log.d("debug", "location on");
             loc=1;
         }else{
-            Log.d("debug", "location off");
             loc=0;
         }
         intent.putExtra("locflag" , loc);
@@ -184,12 +192,6 @@ public class Topic extends Activity{
     }
 
     private class KnowledgeGraphTask extends AsyncTask<String , Void , Void>{
-
-        @Override
-        protected void onPreExecute() {
-            bar.setVisibility(View.VISIBLE);
-            super.onPreExecute();
-        }
 
         @Override
         protected Void doInBackground(String... param) {
@@ -320,6 +322,7 @@ public class Topic extends Activity{
             super.onPostExecute(aVoid);
             bar.setVisibility(View.INVISIBLE);
             summary.setText(text);
+            //summary.setMovementMethod(new ScrollingMovementMethod());
             summary.setVisibility(View.VISIBLE);
         }
     }
@@ -341,15 +344,13 @@ public class Topic extends Activity{
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                bar.setVisibility(View.INVISIBLE);
                 seek.setMax(reputation);
-                seek.setVisibility(View.VISIBLE);
-                check.setVisibility(View.VISIBLE);
-                chat.setVisibility(View.VISIBLE);
+                bar.setVisibility(View.INVISIBLE);
                 super.onPostExecute(aVoid);
             }
         }.execute(null , null , null);
     }
+
 
     private void getRep()  {
         InputStream inputStream = null;
@@ -390,7 +391,7 @@ public class Topic extends Activity{
         }
         StatusLine sl=httpResponse.getStatusLine();
 
-//        Log.v("Topic", Integer.toString(sl.getStatusCode()));
+        Log.v("Topic", Integer.toString(sl.getStatusCode()));
 
         StringBuffer sb=new StringBuffer();
 

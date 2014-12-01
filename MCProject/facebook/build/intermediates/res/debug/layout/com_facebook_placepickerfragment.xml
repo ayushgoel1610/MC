@@ -45,4 +45,8 @@
                  android:visibility="invisible"
             />
 </RelativeLayout>
+<<<<<<< HEAD
 <!-- From: file:/C:/Users/ayush/AndroidStudioProjects/MC/MCProject/facebook/res/layout/com_facebook_placepickerfragment.xml -->
+=======
+<!-- From: file:/C:/mc_project/MC/MCProject/facebook/res/layout/com_facebook_placepickerfragment.xml -->
+>>>>>>> 4fd067aa03fd3a847b04cb4acfc994144d5bfe4b
