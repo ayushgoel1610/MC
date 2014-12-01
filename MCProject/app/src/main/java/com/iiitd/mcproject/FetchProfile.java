@@ -28,7 +28,7 @@ import java.io.UnsupportedEncodingException;
 public class FetchProfile extends AsyncTask<Void, Void, String> {
     String id;
     private ProgressDialog pDialog;
-    private final String UrlRails = "https://tranquil-stream-2635.herokuapp.com/profile";
+    private final String UrlRails = Common.SERVER_URL+"/profile";
     private Context context;
     private StringBuilder sb=new StringBuilder();
     public FetchProfile(String id,Context cnt){

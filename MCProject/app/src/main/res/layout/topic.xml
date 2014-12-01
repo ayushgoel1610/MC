@@ -83,7 +83,7 @@
     <SeekBar
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar"
+        android:id="@+id/topic_seekBar"
         android:layout_above="@+id/chkIos"/>
 
     <TextView
@@ -92,7 +92,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Set Reputation Threshhold(Optional)"
         android:id="@+id/textView"
-        android:layout_above="@+id/seekBar"
+        android:layout_above="@+id/topic_seekBar"
         android:layout_toStartOf="@+id/topic_search_progressBar"
         android:layout_alignRight="@+id/topic_search_progressBar"
         android:layout_alignEnd="@+id/topic_search_progressBar" />
