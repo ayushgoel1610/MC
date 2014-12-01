@@ -67,11 +67,6 @@
         android:fontFamily="sans-serif-condensed"
         android:textStyle="bold"/>
 
-    <SeekBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/seekBar"
-        android:layout_above="@+id/topic_chat" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -79,18 +74,24 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Set Reputation Threshhold(Optional)"
         android:id="@+id/textView"
-        android:layout_above="@+id/seekBar"
+        android:layout_above="@+id/topic_seekBar"
         android:layout_toStartOf="@+id/topic_search_progressBar"
         android:layout_alignRight="@+id/chklos"
         android:layout_alignEnd="@+id/chklos"
         android:layout_marginBottom="-50dp" />
+
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/topic_seekBar"
+        android:layout_above="@+id/chklos"/>
 
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Location"
         android:id="@+id/chklos"
-        android:layout_below="@+id/seekBar"
+        android:layout_below="@+id/topic_seekBar"
         android:layout_centerHorizontal="true" />
 
     <!--android:layout_above="@+id/topic_search_text"/>-->

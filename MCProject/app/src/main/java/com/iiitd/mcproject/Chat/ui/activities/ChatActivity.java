@@ -100,8 +100,9 @@ public class ChatActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        Log.d("ChatActivity" , "chat destroyed");
         sendExitMessage();
+        super.onDestroy();
     }
 
     @Override
@@ -167,7 +168,6 @@ public class ChatActivity extends Activity {
             public void onClick(DialogInterface arg0, int arg1) {
 
         sendExitMessage();
-        finish();
         return;
             }
         });

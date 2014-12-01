@@ -4,6 +4,7 @@ package com.iiitd.mcproject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,11 +35,19 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.iiitd.mcproject.Chat.ui.activities.NewDialogActivity;
 import com.squareup.picasso.Picasso;
 
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -50,13 +60,17 @@ public class Topic extends Activity{
     //TEST COMMIT
     //TEST COMMIT 2
 
+    private final String REPUTATION_TOPIC = "reputation";
+
     Button chat;
     ImageView image;
     ProgressBar bar ;
     TextView summary;
     EditText search_text;
-//    CheckBox check;
+
     Switch check;
+
+    SeekBar seek;
 
     String tag = new String("Topic");
 
@@ -66,14 +80,23 @@ public class Topic extends Activity{
     String description;
     String text;
     String topic;
+    int topic_id;
+    int reputation;
+    int user_id;
+
 
     Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.topic);
 
+
+        SharedPreferences pref = getSharedPreferences(Common.PREF, MODE_PRIVATE);
+        Log.d("Int value", pref.getString("userRailsID", "null"));
+        user_id = Integer.parseInt(pref.getString("userRailsID", "null"));
+
+        setContentView(R.layout.topic);
         context=this;
 
         bar = (ProgressBar)findViewById(R.id.topic_search_progressBar);
@@ -86,7 +109,9 @@ public class Topic extends Activity{
         check = (Switch) findViewById(R.id.chklos);
         chat = (Button) findViewById(R.id.topic_chat);
         topic=getIntent().getStringExtra("topic");
+        seek = (SeekBar) findViewById(R.id.topic_seekBar);
 
+        topic_id = getIntent().getIntExtra("id", -1);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setTitle(topic);
@@ -95,18 +120,19 @@ public class Topic extends Activity{
                 ConnectivityManager cmgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cmgr.getActiveNetworkInfo();
                 if(networkInfo!=null && networkInfo.isConnected()){
-                        bar.setVisibility(View.VISIBLE);
-                        summary.setVisibility(View.INVISIBLE);
-                        summary.setText("");
-                        image.setVisibility(View.INVISIBLE);
-                        image.setImageDrawable(null);
-                        Log.d(tag, "Connected to internet");
-                        TextView topicHeader=(TextView)findViewById(R.id.topicHeader);
-                        topicHeader.setText(topic);
-                        image_id = getIntent().getStringExtra("image");
+                    bar.setVisibility(View.VISIBLE);
+                    summary.setVisibility(View.INVISIBLE);
+                    summary.setText("");
+                    image.setVisibility(View.INVISIBLE);
+                    image.setImageDrawable(null);
+                    Log.d(tag, "Connected to internet");
+                    TextView topicHeader=(TextView)findViewById(R.id.topicHeader);
+                    topicHeader.setText(topic);
+                    image_id = getIntent().getStringExtra("image");
                     Log.v(tag,"Image path: "+image_id);
-                        setImage();
-                        new KnowledgeGraphTask().execute(topic);
+                    setImage();
+                    new KnowledgeGraphTask().execute(topic);
+                    getReputation();
                 }else{
                     Toast.makeText(getBaseContext(), "No internet connection", Toast.LENGTH_SHORT).show();
                 }
@@ -137,8 +163,9 @@ public class Topic extends Activity{
     public void runChatClient(View view){
         Log.v("Chat pressed", "Chat pressed");
         Intent intent = new Intent(this, NewDialogActivity.class);
-        intent.putExtra("id" , getIntent().getIntExtra("id" , -1));
+        intent.putExtra("id" , topic_id);
         intent.putExtra("topic" , topic);
+        intent.putExtra("threshold" , seek.getProgress());
         int loc ;
         if(check.isChecked()){
             Log.d("debug", "location on");
@@ -284,6 +311,91 @@ public class Topic extends Activity{
             summary.setText(text);
             //summary.setMovementMethod(new ScrollingMovementMethod());
             summary.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void getReputation(){
+        new AsyncTask<Void , Void, Void>(){
+
+            @Override
+            protected void onPreExecute() {
+                bar.setVisibility(View.VISIBLE);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                getRep();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                seek.setMax(reputation);
+                bar.setVisibility(View.INVISIBLE);
+                super.onPostExecute(aVoid);
+            }
+        }.execute(null , null , null);
+    }
+
+
+    private void getRep()  {
+        InputStream inputStream = null;
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(Common.SERVER_URL+REPUTATION_TOPIC);
+        JSONObject jsonObject = new JSONObject();
+
+        String json = new String();
+
+        try {
+            jsonObject.put("user_id" , user_id);
+            jsonObject.put("topic_id" ,topic_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        json=jsonObject.toString();
+
+        StringEntity se = null;
+        try {
+            se = new StringEntity(json);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE,"application/json"));
+
+        httpPost.setEntity(se);
+        org.apache.http.HttpResponse httpResponse = null;
+        try {
+            httpResponse = httpclient.execute(httpPost);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            inputStream = httpResponse.getEntity().getContent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        StatusLine sl=httpResponse.getStatusLine();
+
+//        Log.v("Topic", Integer.toString(sl.getStatusCode()));
+
+        StringBuffer sb=new StringBuffer();
+
+        int ch;
+        try {
+            while ((ch = inputStream.read()) != -1) {
+                sb.append((char) ch);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            JSONObject response=new JSONObject(sb.toString());
+            reputation = Integer.parseInt(response.get("reputation").toString());
+            Log.d("Topic" ,  "repuatation = " + reputation);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }
