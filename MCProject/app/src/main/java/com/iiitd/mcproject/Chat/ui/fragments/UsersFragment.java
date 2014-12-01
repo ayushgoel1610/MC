@@ -112,12 +112,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         loc_flag = getActivity().getIntent().getIntExtra("locflag" , -1);
         threshold = getActivity().getIntent().getIntExtra("threshold" , -1);
 
-
-
-
        Request();
-
-
 
         retry.setOnClickListener(new View.OnClickListener() {
             @Override
