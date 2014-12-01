@@ -67,7 +67,8 @@ public class MasterActivity extends Activity
                 R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
                 R.string.drawer_open,  /* "open drawer" description */
                 R.string.drawer_close  /* "close drawer" description */
-        ) {
+        )
+        {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
 //                getActionBar().setTitle(mTitle);
@@ -145,6 +146,13 @@ public class MasterActivity extends Activity
             navigateToFragment(position);
         }
     }
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        RailsServerSignUp r1 = new RailsServerSignUp(this);
+//        r1.user_logout();
+//    }
 
     @Override
     public void onBackPressed() {

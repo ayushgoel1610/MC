@@ -27,7 +27,8 @@
             android:padding="10dp"
             android:hint="Email"
             android:textColorHint="#cccccc"
-            android:imeOptions="actionNext"/>
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"/>
         <EditText
             android:id="@+id/Pass"
             android:layout_width="match_parent"
@@ -38,8 +39,17 @@
             android:background="@drawable/edittext_top_bg"
             android:textColorHint="#cccccc"
             android:password="true"
+            android:inputType="textPassword"
             android:imeOptions="actionDone"/>
         />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:layout_gravity="center_horizontal" />
+
         <Button
             android:id="@+id/btnSignIn"
             android:layout_width="match_parent"

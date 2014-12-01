@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,7 +67,7 @@ public class Topic extends Activity{
     ProgressBar bar ;
     TextView summary;
     EditText search_text;
-    CheckBox check;
+    Switch check;
     SeekBar seek;
 
     String tag = new String("Topic");
@@ -94,7 +95,7 @@ public class Topic extends Activity{
         Log.d("Int value", pref.getString("userRailsID", "null"));
         user_id = Integer.parseInt(pref.getString("userRailsID", "null"));
 
-        setContentView(R.layout.topic);
+        setContentView(R.layout.topic_test);
         context=this;
 
         bar = (ProgressBar)findViewById(R.id.topic_search_progressBar);
@@ -103,10 +104,13 @@ public class Topic extends Activity{
         summary.setVisibility(View.INVISIBLE);
         image = (ImageView)findViewById(R.id.topic_image);
         image.setVisibility(View.INVISIBLE);
-        check = (CheckBox) findViewById(R.id.chkIos);
+        check = (Switch) findViewById(R.id.chklos);
+        check.setVisibility(View.INVISIBLE);
         chat = (Button) findViewById(R.id.topic_chat);
+        chat.setVisibility(View.INVISIBLE);
         topic=getIntent().getStringExtra("topic");
         seek = (SeekBar) findViewById(R.id.topic_seekBar);
+        seek.setVisibility(View.INVISIBLE);
 
         topic_id = getIntent().getIntExtra("id", -1);
 
@@ -116,15 +120,17 @@ public class Topic extends Activity{
         seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 //                Log.v("Changed", progress + "");
-                progress_view  = (TextView) Topic.this.findViewById(R.id.progressView);
+                progress_view = (TextView) Topic.this.findViewById(R.id.progressView);
                 progress_view.setText(Integer.toString(progress));
 
             }
@@ -192,6 +198,12 @@ public class Topic extends Activity{
     }
 
     private class KnowledgeGraphTask extends AsyncTask<String , Void , Void>{
+
+        @Override
+        protected void onPreExecute() {
+            bar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
 
         @Override
         protected Void doInBackground(String... param) {
@@ -320,6 +332,9 @@ public class Topic extends Activity{
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            seek.setVisibility(View.VISIBLE);
+            chat.setVisibility(View.VISIBLE);
+            check.setVisibility(View.VISIBLE);
             bar.setVisibility(View.INVISIBLE);
             summary.setText(text);
             //summary.setMovementMethod(new ScrollingMovementMethod());
@@ -345,12 +360,14 @@ public class Topic extends Activity{
             @Override
             protected void onPostExecute(Void aVoid) {
                 seek.setMax(reputation);
+                seek.setVisibility(View.VISIBLE);
+                chat.setVisibility(View.VISIBLE);
+                check.setVisibility(View.VISIBLE);
                 bar.setVisibility(View.INVISIBLE);
                 super.onPostExecute(aVoid);
             }
         }.execute(null , null , null);
     }
-
 
     private void getRep()  {
         InputStream inputStream = null;
@@ -410,5 +427,11 @@ public class Topic extends Activity{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        getReputation();
+        super.onResume();
     }
 }

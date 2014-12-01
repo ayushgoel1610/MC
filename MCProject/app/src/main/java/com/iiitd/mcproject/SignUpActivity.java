@@ -1,12 +1,15 @@
 package com.iiitd.mcproject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 /**
@@ -19,6 +22,7 @@ public class SignUpActivity extends Activity
     String userPassword;
     String userLogin;
 
+    ProgressBar progressBar;
     EditText emailtext;
     EditText logintext;
     EditText passtext;
@@ -29,22 +33,31 @@ public class SignUpActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_screen);
+        progressBar = (ProgressBar) findViewById(R.id.spinner);
         emailtext = (EditText) findViewById(R.id.Email);
         logintext = (EditText) findViewById(R.id.UserName);
         passtext = (EditText) findViewById(R.id.Pass);
         passconfirmtext = (EditText) findViewById(R.id.PassConfirm);
         signUpButton = (Button) findViewById(R.id.btnSignUp);
+        progressBar.setVisibility(View.GONE);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 boolean passMatch = checkPasswords(passtext.getText().toString(),passconfirmtext.getText().toString());
                 boolean emptyPass = isPassEmpty(passtext.getText().toString());
                 boolean emptyEmail = isPassEmpty(emailtext.getText().toString());
                 boolean lengthCheck = checkPasswordLength(passtext.getText().toString());
                 if(passMatch && !emptyPass && lengthCheck && !emptyEmail)
                 {
-
+                    progressBar.setVisibility(View.VISIBLE);
+                    emailtext.setVisibility(View.GONE);
+                    logintext.setVisibility(View.GONE);
+                    passtext.setVisibility(View.GONE);
+                    passconfirmtext.setVisibility(View.GONE);
+                    signUpButton.setVisibility(View.GONE);
                     userEmail = emailtext.getText().toString();
                     userLogin = logintext.getText().toString();
                     userPassword = passtext.getText().toString();

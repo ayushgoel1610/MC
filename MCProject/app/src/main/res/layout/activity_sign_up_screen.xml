@@ -27,6 +27,7 @@
             android:padding="10dp"
             android:hint="Email"
             android:textColorHint="#bbbbbb"
+            android:inputType="textEmailAddress"
             android:imeOptions="actionNext"/>
         <EditText
             android:id="@+id/UserName"
@@ -48,7 +49,16 @@
             android:hint="Password"
             android:textColorHint="#bbbbbb"
             android:password="true"
+            android:inputType="textPassword"
             android:imeOptions="actionNext"/>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:layout_gravity="center_horizontal" />
+
         <EditText
             android:id="@+id/PassConfirm"
             android:layout_width="match_parent"
@@ -59,7 +69,8 @@
             android:hint="Confirm Password"
             android:textColorHint="#bbbbbb"
             android:password="true"
-            android:imeOptions="actionNext"/>
+            android:inputType="textPassword"
+            android:imeOptions="actionDone"/>
         <Button
             android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
@@ -68,8 +79,7 @@
             android:layout_margin="4dp"
             android:text="Sign Up"
             style="@style/DefaultButtonText"
-            android:background="@drawable/button_default_bg"
-            android:imeOptions="actionNext"/>
+            android:background="@drawable/button_default_bg"/>
     </LinearLayout>
 
 </RelativeLayout>

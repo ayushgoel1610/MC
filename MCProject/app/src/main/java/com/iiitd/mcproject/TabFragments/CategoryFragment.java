@@ -256,6 +256,13 @@ public class CategoryFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("category fragment","onResume");
+        getList();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;

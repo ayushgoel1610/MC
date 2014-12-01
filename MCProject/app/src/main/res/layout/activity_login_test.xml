@@ -25,7 +25,8 @@
         android:layout_centerInParent="true"
         android:background="@drawable/linearlayout_bg"
         android:padding="10dp"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout"
+        >
 
         <Button
             android:id="@+id/btnSignUp"
