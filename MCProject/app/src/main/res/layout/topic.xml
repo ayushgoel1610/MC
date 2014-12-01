@@ -16,28 +16,24 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text=""
-            android:gravity="center_horizontal"
-            android:id="@+id/topic_search_text"
-
-            android:textSize="16sp"
-            android:textColor="@color/sidey_colour_text"
-            android:fontFamily="sans-serif-condensed-light"
-            android:textStyle="bold|italic"
-
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_alignLeft="@+id/topic_image"
-            android:layout_alignStart="@+id/topic_image"
-            android:layout_alignRight="@+id/topic_image"
-            android:layout_alignEnd="@+id/topic_image"
-            android:layout_alignParentStart="true"
-            android:layout_above="@+id/textView"
-            android:layout_below="@+id/topic_image" />
-
+    <TextView
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=""
+        android:gravity="center_horizontal"
+        android:id="@+id/topic_search_text"
+        android:textSize="16sp"
+        android:textColor="@color/sidey_colour_text"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textStyle="bold|italic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/topic_image"
+        android:layout_alignStart="@+id/topic_image"
+        android:layout_alignRight="@+id/topic_image"
+        android:layout_alignEnd="@+id/topic_image"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/textView"
+        android:layout_below="@+id/topic_image" />
 
     <ImageView
         android:layout_width="300dp"
@@ -85,8 +81,9 @@
         android:id="@+id/textView"
         android:layout_above="@+id/seekBar"
         android:layout_toStartOf="@+id/topic_search_progressBar"
-        android:layout_alignRight="@+id/topic_search_progressBar"
-        android:layout_alignEnd="@+id/topic_search_progressBar" />
+        android:layout_alignRight="@+id/chklos"
+        android:layout_alignEnd="@+id/chklos"
+        android:layout_marginBottom="-50dp" />
 
     <Switch
         android:layout_width="wrap_content"
