@@ -25,14 +25,15 @@
         android:id="@+id/topic_image"
         android:layout_gravity="top|center_horizontal"
         android:layout_weight="0.36"
-        android:scaleType="fitCenter"
-        android:layout_above="@+id/topic_search_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp" />
+        android:scaleType="fitXY"
+        android:layout_below="@+id/topicHeader"
+        android:layout_alignRight="@+id/chklos"
+        android:layout_alignEnd="@+id/chklos"
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:layout_width="250dp"
-        android:layout_height="50dp"
+        android:layout_height="75dp"
         android:text=""
         android:id="@+id/topic_search_text"
 
@@ -43,9 +44,8 @@
 
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.13"
-        android:layout_alignBottom="@+id/topic_search_progressBar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp" />
+        android:layout_below="@+id/topic_image"
+        android:layout_centerHorizontal="true" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleSmall"
@@ -65,16 +65,17 @@
         android:id="@+id/textView"
         android:layout_gravity="left"
         android:layout_below="@+id/topic_search_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp" />
+        android:layout_alignLeft="@+id/topic_image"
+        android:layout_alignStart="@+id/topic_image"
+        android:layout_marginTop="10dp" />
 
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/linearLayout2"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout2"
         android:layout_marginTop="10dp">
 
         <SeekBar
@@ -82,7 +83,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/topic_seekBar"
             android:layout_gravity="left|center_horizontal"
-            android:layout_marginLeft="35dp"
+            android:layout_marginLeft="15dp"
             android:longClickable="false" />
 
         <TextView
@@ -104,7 +105,7 @@
         android:layout_weight="0.07"
         android:layout_below="@+id/linearLayout2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="10dp" />
 
     <Button
         android:layout_width="100dp"
@@ -115,6 +116,6 @@
         android:layout_weight="0.04"
         android:layout_below="@+id/chklos"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="20dp" />
 
 </RelativeLayout>
