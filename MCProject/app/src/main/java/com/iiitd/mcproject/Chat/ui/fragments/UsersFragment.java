@@ -56,7 +56,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
 
     int topic_id;           //Topic ID
     int user_id;            //User quickblocks id , retrieved from SharedPref
-    int pair_id = 	2032914;            //Other user quikcblocks id , getting from my Rails server.
+    int pair_id;            //Other user quikcblocks id , getting from my Rails server.
     int chat;               //The chat_id at my rails server, use this to send the reputation
 
 
@@ -109,9 +109,9 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         topic_id = getActivity().getIntent().getIntExtra("id" , -1);
 
 
-       // Request();
+       Request();
 
-        QuickBlocksChat();
+        //QuickBlocksChat();
 
         retry.setOnClickListener(new View.OnClickListener() {
             @Override
