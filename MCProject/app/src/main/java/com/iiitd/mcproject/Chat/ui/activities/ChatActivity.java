@@ -520,7 +520,7 @@ public class ChatActivity extends Activity {
         }
         StatusLine sl=httpResponse.getStatusLine();
 
-        Log.v("TopicChat", Integer.toString(sl.getStatusCode()) + " " + sl.getReasonPhrase());
+//        Log.v("TopicChat", Integer.toString(sl.getStatusCode()) + " " + sl.getReasonPhrase());
 
         StringBuffer sb=new StringBuffer();
 

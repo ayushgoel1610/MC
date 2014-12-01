@@ -127,7 +127,7 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
             inputStream = httpResponse.getEntity().getContent();
             StatusLine sl = httpResponse.getStatusLine();
 
-            Log.v("debug", Integer.toString(sl.getStatusCode()) + " " + sl.getReasonPhrase());
+//            Log.v("debug", Integer.toString(sl.getStatusCode()) + " " + sl.getReasonPhrase());
 
             try {
                 int ch;

@@ -32,10 +32,12 @@
         android:layout_marginTop="10dp" />
 
     <TextView
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=""
+        android:gravity="center_horizontal"
+        android:id="@+id/topic_search_text"
         android:layout_width="250dp"
         android:layout_height="75dp"
-        android:text=""
-        android:id="@+id/topic_search_text"
 
         android:textSize="16sp"
         android:textColor="@color/sidey_colour_text"
