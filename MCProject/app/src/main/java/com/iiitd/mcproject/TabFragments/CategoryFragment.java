@@ -255,12 +255,13 @@ public class CategoryFragment extends Fragment {
         categoryList.toArray(categoryArray);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("category fragment","onResume");
-        getList();
-    }
+//    @Override
+//    public void onRestart() {
+//        super.onRestart();
+//        Log.d("category fragment","onResume");
+//        getList();
+//    }
+
 
     @Override
     public void onDetach() {
