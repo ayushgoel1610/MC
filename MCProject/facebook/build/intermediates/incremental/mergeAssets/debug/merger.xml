@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <merger version="3"><dataSet config="main"><source path="C:\Users\ayush\AndroidStudioProjects\MC\MCProject\facebook\src\main\assets"/></dataSet><dataSet config="debug"><source path="C:\Users\ayush\AndroidStudioProjects\MC\MCProject\facebook\src\debug\assets"/></dataSet></merger>
+=======
+<merger version="3"><dataSet config="main"><source path="C:\mc_project\MC\MCProject\facebook\src\main\assets"/></dataSet><dataSet config="debug"><source path="C:\mc_project\MC\MCProject\facebook\src\debug\assets"/></dataSet></merger>
+>>>>>>> 4fd067aa03fd3a847b04cb4acfc994144d5bfe4b

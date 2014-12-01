@@ -15,8 +15,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -50,9 +50,9 @@ import org.jivesoftware.smack.XMPPException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,10 +72,10 @@ public class ChatActivity extends Activity {
 
     private EditText messageEditText;
     private ListView messagesContainer;
-    private Button sendButton;
-    private Button photoButton;
-    private Button addB;
-    private Button subB;
+    private ImageButton sendButton;
+    private ImageButton photoButton;
+    private ImageButton addB;
+    private ImageButton subB;
     private TextView countB;
     private int reputation;
     private ProgressBar progressBar;
@@ -249,11 +249,11 @@ public class ChatActivity extends Activity {
     private void initViews() {
         messagesContainer = (ListView) findViewById(R.id.messagesContainer);
         messageEditText = (EditText) findViewById(R.id.messageEdit);
-        addB = (Button) findViewById(R.id.addB);
-        subB = (Button) findViewById(R.id.subB);
+        addB = (ImageButton) findViewById(R.id.addB);
+        subB = (ImageButton) findViewById(R.id.subB);
         countB = (TextView) findViewById(R.id.np);
-        sendButton = (Button) findViewById(R.id.chatSendButton);
-        photoButton = (Button) findViewById(R.id.photoSendButton);
+        sendButton = (ImageButton) findViewById(R.id.chatSendButton);
+        photoButton = (ImageButton) findViewById(R.id.photoSendButton);
         TextView meLabel = (TextView) findViewById(R.id.meLabel);
         meLabel.setText("You");
         TextView companionLabel = (TextView) findViewById(R.id.companionLabel);

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< HEAD
     <!-- From: file:/C:/Users/ayush/AndroidStudioProjects/MC/MCProject/facebook/res/values-he/strings.xml -->
+=======
+    <!-- From: file:/C:/mc_project/MC/MCProject/facebook/res/values-he/strings.xml -->
+>>>>>>> 4fd067aa03fd3a847b04cb4acfc994144d5bfe4b
     <eat-comment/>
     <string name="com_facebook_choose_friends">בחר חברים</string>
     <string name="com_facebook_dialogloginactivity_ok_button">אישור</string>

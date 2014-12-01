@@ -88,4 +88,8 @@
             android:background="@drawable/com_facebook_picker_default_separator_color"
             />
 </RelativeLayout>
+<<<<<<< HEAD
 <!-- From: file:/C:/Users/ayush/AndroidStudioProjects/MC/MCProject/facebook/res/layout/com_facebook_placepickerfragment_list_row.xml -->
+=======
+<!-- From: file:/C:/mc_project/MC/MCProject/facebook/res/layout/com_facebook_placepickerfragment_list_row.xml -->
+>>>>>>> 4fd067aa03fd3a847b04cb4acfc994144d5bfe4b
