@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MCProject</string>
-    <string name="app_label">MCProject</string>
+    <string name="app_name">Spalk</string>
+    <string name="app_label">Spalk</string>
     <string name="action_search">Search</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

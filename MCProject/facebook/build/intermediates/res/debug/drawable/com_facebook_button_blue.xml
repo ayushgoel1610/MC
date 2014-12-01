@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item
+      android:drawable="@drawable/com_facebook_button_blue_pressed"
+      android:state_focused="true"
+      android:state_pressed="true"
+      />
+  <item
+      android:drawable="@drawable/com_facebook_button_blue_pressed"
+      android:state_focused="false"
+      android:state_pressed="true"
+      />
+  <item
+      android:drawable="@drawable/com_facebook_button_blue_focused"
+      android:state_focused="true"
+      />
+  <item
+      android:drawable="@drawable/com_facebook_button_blue_normal"
+      android:state_focused="false"
+      android:state_pressed="false"
+      />
+
+</selector>
+<<<<<<< HEAD
+<!-- From: file:/C:/Users/ayush/AndroidStudioProjects/MC/MCProject/facebook/res/drawable/com_facebook_button_blue.xml -->
+=======
+<!-- From: file:/C:/mc_project/MC/MCProject/facebook/res/drawable/com_facebook_button_blue.xml -->
+>>>>>>> 4fd067aa03fd3a847b04cb4acfc994144d5bfe4b

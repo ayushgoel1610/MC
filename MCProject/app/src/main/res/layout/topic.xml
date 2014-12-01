@@ -71,11 +71,23 @@
         android:fontFamily="sans-serif-condensed"
         android:textStyle="bold"/>
 
+    <CheckBox
+        android:id="@+id/chkIos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:layout_above="@+id/topic_chat"
+        android:layout_alignRight="@+id/topic_search_progressBar"
+        android:layout_alignEnd="@+id/topic_search_progressBar" />
+
     <SeekBar
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/topic_seekBar"
-        android:layout_above="@+id/topic_chat" />
+        android:layout_above="@+id/chkIos"
+        android:layout_toStartOf="@+id/progressView"
+        android:layout_alignRight="@+id/progressView"
+        android:layout_alignEnd="@+id/progressView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -88,13 +100,18 @@
         android:layout_alignRight="@+id/topic_search_progressBar"
         android:layout_alignEnd="@+id/topic_search_progressBar" />
 
-    <Switch
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Switch"
-        android:id="@+id/switch1"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/topic_chat" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/progressView"
+        android:layout_toEndOf="@+id/topic_chat"
+        android:layout_alignRight="@+id/topic_search_text"
+        android:layout_alignEnd="@+id/topic_search_text"
+        android:layout_above="@+id/topic_seekBar"
+        android:layout_alignParentStart="false"
+        android:gravity="right"
+        android:text="0"/>
 
     <!--android:layout_above="@+id/topic_search_text"/>-->
 

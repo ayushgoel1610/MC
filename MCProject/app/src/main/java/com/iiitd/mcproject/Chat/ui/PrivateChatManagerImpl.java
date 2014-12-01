@@ -26,6 +26,8 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class PrivateChatManagerImpl extends QBMessageListenerImpl<QBPrivateChat> implements ChatManager, QBPrivateChatManagerListener {
@@ -36,6 +38,9 @@ public class PrivateChatManagerImpl extends QBMessageListenerImpl<QBPrivateChat>
     private String photo_uri;
     private QBPrivateChatManager privateChatManager;
     private QBPrivateChat privateChat;
+
+    public static File OurDir=new File("/sdcard/"+"Spalk Images");
+
 
     public PrivateChatManagerImpl(ChatActivity chatActivity, Integer opponentID) {
         this.chatActivity = chatActivity;
@@ -95,8 +100,23 @@ public class PrivateChatManagerImpl extends QBMessageListenerImpl<QBPrivateChat>
                                            QBContent.downloadFileTask(fileId, new QBEntityCallbackImpl<InputStream>() {
                                                @Override
                                                public void onSuccess(InputStream inputStream, Bundle params) {
+                                                   if(!OurDir.exists()){
+                                                       try{
+                                                           OurDir.mkdir();
+                                                           Log.v("LOG WRITER","directory made at: "+OurDir.getPath());
+                                                       }
+                                                       catch(Exception e){
+                                                           Log.v("LOG WRITER",e.toString());
+                                                       }
+                                                   }
+
+                                                   Date curDate = new Date();
+                                                   SimpleDateFormat format = new SimpleDateFormat("dd_MM_yy_hh_mm_ss");
+                                                   String DateToStr = format.format(curDate);
+
                                                    // process file
-                                                   File destinationFile = new File("/sdcard/" + "image.png");
+                                                   File destinationFile = new File(OurDir +File.separator+DateToStr+"_"+"image.png");
+                                                   Log.v("LOG","Image received: "+destinationFile.getAbsolutePath());
                                                    BufferedOutputStream buffer;
                                                    try {
                                                        buffer = new BufferedOutputStream(new FileOutputStream(destinationFile));
