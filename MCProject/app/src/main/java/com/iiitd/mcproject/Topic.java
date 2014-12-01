@@ -93,6 +93,8 @@ public class Topic extends Activity{
         Log.d("Int value", pref.getString("userRailsID", "null"));
         user_id = Integer.parseInt(pref.getString("userRailsID", "null"));
 
+        topic=getIntent().getStringExtra("topic");
+
         setContentView(R.layout.topic);
         context=this;
 
@@ -103,9 +105,11 @@ public class Topic extends Activity{
         image = (ImageView)findViewById(R.id.topic_image);
         image.setVisibility(View.INVISIBLE);
         check = (CheckBox) findViewById(R.id.chkIos);
+        check.setVisibility(View.INVISIBLE);
         chat = (Button) findViewById(R.id.topic_chat);
-        topic=getIntent().getStringExtra("topic");
+        chat.setVisibility(View.INVISIBLE);
         seek = (SeekBar) findViewById(R.id.topic_seekBar);
+        seek.setVisibility(View.INVISIBLE);
 
         topic_id = getIntent().getIntExtra("id", -1);
 
@@ -173,6 +177,12 @@ public class Topic extends Activity{
     }
 
     private class KnowledgeGraphTask extends AsyncTask<String , Void , Void>{
+
+        @Override
+        protected void onPreExecute() {
+            bar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
 
         @Override
         protected Void doInBackground(String... param) {
@@ -303,7 +313,6 @@ public class Topic extends Activity{
             super.onPostExecute(aVoid);
             bar.setVisibility(View.INVISIBLE);
             summary.setText(text);
-            //summary.setMovementMethod(new ScrollingMovementMethod());
             summary.setVisibility(View.VISIBLE);
         }
     }
@@ -325,13 +334,15 @@ public class Topic extends Activity{
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                seek.setMax(reputation);
                 bar.setVisibility(View.INVISIBLE);
+                seek.setMax(reputation);
+                seek.setVisibility(View.VISIBLE);
+                check.setVisibility(View.VISIBLE);
+                chat.setVisibility(View.VISIBLE);
                 super.onPostExecute(aVoid);
             }
         }.execute(null , null , null);
     }
-
 
     private void getRep()  {
         InputStream inputStream = null;
