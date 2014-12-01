@@ -194,6 +194,33 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
 
     }
 
+    public void user_logout()
+    {
+        final QBChatService chatServiceLogout;
+        chatServiceLogout = QBChatService.getInstance();
+        boolean isLoggedIn = chatServiceLogout.isLoggedIn();
+        Log.d("logged in status",isLoggedIn+"");
+        if(!isLoggedIn){
+            return;
+        }
+
+        Log.d("chatService",chatServiceLogout.toString());
+
+        chatServiceLogout.logout(new QBEntityCallbackImpl() {
+
+            @Override
+            public void onSuccess() {
+
+                chatServiceLogout.destroy();
+            }
+
+            @Override
+            public void onError(final List list) {
+                Log.d("logout","error");
+            }
+        });
+        }
+
     public void userChat_auth(){
         SharedPreferences sp = context.getSharedPreferences(Common.PREF, context.MODE_PRIVATE);
         this.USER_LOGIN = sp.getString("userLogin","null");
@@ -250,6 +277,7 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
                 //
                 try {
                     chatService.startAutoSendPresence(AUTO_PRESENCE_INTERVAL_IN_SECONDS);
+                    Log.d("chatService on login", chatService.toString());
                 } catch (SmackException.NotLoggedInException e) {
                     e.printStackTrace();
                 }

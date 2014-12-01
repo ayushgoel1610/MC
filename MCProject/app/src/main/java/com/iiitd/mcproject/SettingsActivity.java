@@ -49,6 +49,8 @@ public class SettingsActivity extends Activity {
         signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                RailsServerSignUp r1 = new RailsServerSignUp(SettingsActivity.this);
+                r1.user_logout();
                 SharedPreferences.Editor editor = sp.edit();
                 editor.clear();
                 editor.commit();
