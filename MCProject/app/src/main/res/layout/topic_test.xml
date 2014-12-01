@@ -50,7 +50,6 @@
         android:layout_centerHorizontal="true" />
 
     <ProgressBar
-        style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/topic_search_progressBar"
@@ -58,7 +57,9 @@
         android:layout_gravity="center_horizontal"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/topic_image"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,7 +70,10 @@
         android:layout_below="@+id/topic_search_text"
         android:layout_alignLeft="@+id/topic_image"
         android:layout_alignStart="@+id/topic_image"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:textColor="@color/sidey_colour_text"
+        android:textStyle="bold"
+        />
 
 
     <LinearLayout
@@ -91,7 +95,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/textView5"
+            android:id="@+id/progressView"
             android:layout_gravity="left"
             android:layout_marginLeft="15dp" />
 
