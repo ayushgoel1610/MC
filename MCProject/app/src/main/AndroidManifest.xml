@@ -38,6 +38,7 @@
         <activity
             android:name="com.iiitd.mcproject.MasterActivity"
             android:label="@string/title_activity_master"
+            android:alwaysRetainTaskState="true"
             >
         </activity>
         <activity
@@ -56,6 +57,7 @@
         <activity
             android:name=".loginActivityTest"
             android:label="@string/app_label"
+            android:noHistory="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

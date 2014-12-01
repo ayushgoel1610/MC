@@ -227,6 +227,7 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
                 // login to Chat
                 //
                 loginToChat(user);
+                Log.d("debug" , "after loginToChat");
             }
 
             @Override
@@ -239,11 +240,12 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
 
     private void loginToChat(final QBUser user){
 
+        Log.d("debug","entered LoginToChat");
         chatService.login(user, new QBEntityCallbackImpl() {
             @Override
             public void onSuccess() {
-                Log.v("Logged in","Logged in");
-                // Start sending presences
+                Log.d("Logged in","Logged in");
+                // Start sending presences`
                 //
                 try {
                     chatService.startAutoSendPresence(AUTO_PRESENCE_INTERVAL_IN_SECONDS);
@@ -255,13 +257,19 @@ public class RailsServerSignUp extends AsyncTask <Void, Void, String>
                 //
                 Intent intent = new Intent(context, MasterActivity.class);
                 context.startActivity(intent);
+                Log.d("debug" , "started new activity");
+//                ((Activity)context).finish();
+                Log.d("debug" , "finished old activity");
             }
 
             @Override
             public void onError(List errors) {
+                Log.d("debug" , "errors");
+                Log.d("debug" , user.toString());
                 AlertDialog.Builder dialog = new AlertDialog.Builder(context);
                 dialog.setMessage("chat login errors: " + errors).create().show();
             }
         });
+        Log.d("debug","exited LoginToChat");
     }
 }
