@@ -4,14 +4,25 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class SettingsActivity extends Activity {
-
+    View submitSuggestion;
+    View suggestTopic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        submitSuggestion=findViewById(R.id.submitSuggestion);
+        suggestTopic=findViewById(R.id.suggestTopic);
+        submitSuggestion.setVisibility(View.GONE);
+        suggestTopic.setVisibility(View.GONE);
+    }
+
+    public void toggle_contents(View v){
+        submitSuggestion.setVisibility(submitSuggestion.isShown()?View.GONE:View.VISIBLE);
+        suggestTopic.setVisibility(suggestTopic.isShown()?View.GONE:View.VISIBLE);
     }
 
 

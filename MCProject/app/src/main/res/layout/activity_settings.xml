@@ -1,12 +1,64 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.iiitd.mcproject.SettingsActivity">
+    android:layout_height="match_parent" android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    tools:context="com.iiitd.mcproject.SettingsActivity"
+    android:padding="0dp">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp" >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/drop_down_arrow"
+                android:id="@+id/suggestArrow"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Suggest a topic"
+            android:clickable="true"
+            android:onClick="toggle_contents"
+            android:textSize="30dp"
+            android:id="@+id/suggestText"
+            android:layout_toRightOf="@+id/suggestArrow"/>
+
+
+            <EditText
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/suggestTopic"
+                android:layout_below="@+id/suggestText"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:id="@+id/submitSuggestion"
+                android:layout_below="@+id/suggestText"
+                android:layout_toRightOf="@+id/suggestTopic"
+                android:layout_toEndOf="@+id/suggestTopic" />
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Sign Out"
+        android:id="@+id/button"
+        android:layout_alignParentBottom="true"/>
+
 
 </RelativeLayout>

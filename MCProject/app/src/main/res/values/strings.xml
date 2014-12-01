@@ -37,7 +37,7 @@
     <string-array name="drawer_titles">
         <item>Home</item>
         <item>Profile</item>
-        <item>Settings</item>
+        <item>Options</item>
     </string-array>
 
     <string name="title_activity_master">Master</string>
