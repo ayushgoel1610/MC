@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:padding="5dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -15,18 +16,22 @@
         android:fontFamily="sans-serif-condensed"
         android:id="@+id/topicHeader"
         android:layout_gravity="top|center_horizontal"
-        android:layout_weight="0.07" />
+        android:layout_weight="0.07"
+        android:layout_marginTop="5dp" />
 
     <ImageView
-        android:layout_width="230dp"
-        android:layout_height="230dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:id="@+id/topic_image"
         android:layout_gravity="top|center_horizontal"
         android:layout_weight="0.36"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        android:layout_above="@+id/topic_search_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp" />
 
     <TextView
-        android:layout_width="230dp"
+        android:layout_width="250dp"
         android:layout_height="50dp"
         android:text=""
         android:id="@+id/topic_search_text"
@@ -36,14 +41,11 @@
         android:fontFamily="sans-serif-condensed-light"
         android:textStyle="bold|italic"
 
-        android:layout_alignLeft="@+id/topic_image"
-        android:layout_alignStart="@+id/topic_image"
-        android:layout_alignRight="@+id/topic_image"
-        android:layout_alignEnd="@+id/topic_image"
-        android:layout_alignParentStart="true"
-
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.13" />
+        android:layout_weight="0.13"
+        android:layout_alignBottom="@+id/topic_search_progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleSmall"
@@ -53,7 +55,8 @@
         android:indeterminate="false"
         android:layout_gravity="center_horizontal"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -61,19 +64,26 @@
         android:text="Set Reputation Threshold (Optional)"
         android:id="@+id/textView"
         android:layout_gravity="left"
-        android:layout_marginLeft="5dp" />
+        android:layout_below="@+id/topic_search_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp" />
 
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout2"
+        android:layout_marginTop="10dp">
 
         <SeekBar
             android:layout_width="254dp"
             android:layout_height="wrap_content"
             android:id="@+id/topic_seekBar"
             android:layout_gravity="left|center_horizontal"
-            android:layout_marginLeft="35dp" />
+            android:layout_marginLeft="35dp"
+            android:longClickable="false" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -91,7 +101,10 @@
         android:text="Location"
         android:id="@+id/chklos"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.07" />
+        android:layout_weight="0.07"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp" />
 
     <Button
         android:layout_width="100dp"
@@ -100,6 +113,8 @@
         android:id="@+id/topic_chat"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_weight="0.04"
-        android:layout_marginTop="5dp" />
+        android:layout_below="@+id/chklos"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
 
-</LinearLayout>
+</RelativeLayout>
