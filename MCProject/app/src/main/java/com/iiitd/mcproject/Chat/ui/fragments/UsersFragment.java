@@ -111,7 +111,7 @@ public class UsersFragment extends Fragment implements QBEntityCallback<ArrayLis
         topic_id = getActivity().getIntent().getIntExtra("id" , -1);
         loc_flag = getActivity().getIntent().getIntExtra("locflag" , -1);
         threshold = getActivity().getIntent().getIntExtra("threshold" , -1);
-       Request();
+
 
 
 

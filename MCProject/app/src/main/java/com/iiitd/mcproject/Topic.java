@@ -80,6 +80,7 @@ public class Topic extends Activity{
     int topic_id;
     int reputation;
     int user_id;
+    TextView progress_view;
 
 
     Context context;
@@ -111,6 +112,24 @@ public class Topic extends Activity{
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setTitle(topic);
+//        progress_view.setText("10");
+        seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                Log.v("Changed", progress + "");
+                progress_view  = (TextView) Topic.this.findViewById(R.id.progressView);
+                progress_view.setText(Integer.toString(progress));
+
+            }
+
+        });
 
         Log.d(tag , "Inside FreeBase Class");
                 ConnectivityManager cmgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -84,7 +84,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/topic_seekBar"
-        android:layout_above="@+id/chkIos"/>
+        android:layout_above="@+id/chkIos"
+        android:layout_toStartOf="@+id/progressView"
+        android:layout_alignRight="@+id/progressView"
+        android:layout_alignEnd="@+id/progressView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -96,6 +99,19 @@
         android:layout_toStartOf="@+id/topic_search_progressBar"
         android:layout_alignRight="@+id/topic_search_progressBar"
         android:layout_alignEnd="@+id/topic_search_progressBar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/progressView"
+        android:layout_toEndOf="@+id/topic_chat"
+        android:layout_alignRight="@+id/topic_search_text"
+        android:layout_alignEnd="@+id/topic_search_text"
+        android:layout_above="@+id/topic_seekBar"
+        android:layout_alignParentStart="false"
+        android:gravity="right"
+        android:text="0"/>
 
     <!--android:layout_above="@+id/topic_search_text"/>-->
 

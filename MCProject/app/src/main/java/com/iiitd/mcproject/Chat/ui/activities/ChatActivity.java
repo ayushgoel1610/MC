@@ -80,7 +80,7 @@ public class ChatActivity extends Activity {
     private int reputation;
     private ProgressBar progressBar;
     private static ProgressBar pb;
-
+    int exit_with_message = 0;
     private Mode mode = Mode.PRIVATE;
     private ChatManager chat;
     public ChatAdapter adapter;
@@ -98,12 +98,32 @@ public class ChatActivity extends Activity {
         context.startActivity(intent);
     }
 
-    @Override
-    protected void onDestroy() {
-        Log.d("ChatActivity" , "chat destroyed");
-        sendExitMessage();
-        super.onDestroy();
-    }
+//    @Override
+//    protected void onDestroy() {
+//        Log.d("ChatActivity" , "chat destroyed");
+//        if (exit_with_message == 0) {
+//            sendExitMessage();
+//
+//        }
+//        super.onDestroy();
+//        Log.d("exit message value",exit_with_message + "");
+//    }
+
+//    @Override
+//    protected void onPause() {
+//        Log.d("ChatActivity" , "chat paused");
+//
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        Log.d("ChatActivity" , "chat stopped");
+//
+//    }
+
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,12 +166,9 @@ public class ChatActivity extends Activity {
             super.onBackPressed();
             return;
         }
-
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Press again to exit chat", Toast.LENGTH_SHORT).show();
-
         new Handler().postDelayed(new Runnable() {
-
             @Override
             public void run() {
                 doubleBackToExitPressedOnce=false;
@@ -167,8 +184,9 @@ public class ChatActivity extends Activity {
 
             public void onClick(DialogInterface arg0, int arg1) {
 
-        sendExitMessage();
-        return;
+                sendExitMessage();
+                finish();
+                return;
             }
         });
 
@@ -205,12 +223,13 @@ public class ChatActivity extends Activity {
         if(mode == Mode.PRIVATE) {
             //showMessage(chatMessage);
         }
-        EndChat();
+        //EndChat();
 
     }
 
     public void receivedExitMessage(){
         Log.v("Entered", "entered received");
+        exit_with_message = 1;
         //Toast.makeText(getApplicationContext(), "The user exited the chat", Toast.LENGTH_LONG).show();
         AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
         alertbox.setTitle("Chat Over");
@@ -387,16 +406,13 @@ public class ChatActivity extends Activity {
                 QBContent.uploadFileTask(file, fileIsPublic, null, new QBEntityCallbackImpl<QBFile>() {
                     @Override
                     public void onSuccess(QBFile file, Bundle params) {
-
                         // create a message
                         QBChatMessage chatMessage = new QBChatMessage();
                         chatMessage.setProperty("save_to_history", "1"); // Save a message to history
-
                         // attach a photo
                         QBAttachment attachment = new QBAttachment("photo");
                         attachment.setId(file.getId().toString());
                         chatMessage.addAttachment(attachment);
-
                         // send a message
                         try {
                             chat.sendMessage(chatMessage);
@@ -406,7 +422,6 @@ public class ChatActivity extends Activity {
                             Log.e(TAG, "failed to send a message", sme);
                         }
                     }
-
                     @Override
                     public void onError(List<String> errors) {
                         // error
@@ -416,7 +431,6 @@ public class ChatActivity extends Activity {
             }
         });
                 Log.v("File uploaded","ok");
-
 */
 
 
