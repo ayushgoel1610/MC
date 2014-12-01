@@ -41,7 +41,7 @@
 
     <ImageView
         android:layout_width="300dp"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:id="@+id/topic_image"
         android:layout_below="@+id/topicHeader"
         android:layout_marginTop="10dp"
@@ -71,20 +71,11 @@
         android:fontFamily="sans-serif-condensed"
         android:textStyle="bold"/>
 
-    <CheckBox
-        android:id="@+id/chkIos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Location"
-        android:layout_above="@+id/topic_chat"
-        android:layout_alignRight="@+id/topic_search_progressBar"
-        android:layout_alignEnd="@+id/topic_search_progressBar" />
-
     <SeekBar
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/seekBar"
-        android:layout_above="@+id/chkIos"/>
+        android:layout_above="@+id/topic_chat" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -96,6 +87,14 @@
         android:layout_toStartOf="@+id/topic_search_progressBar"
         android:layout_alignRight="@+id/topic_search_progressBar"
         android:layout_alignEnd="@+id/topic_search_progressBar" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:id="@+id/chklos"
+        android:layout_below="@+id/seekBar"
+        android:layout_centerHorizontal="true" />
 
     <!--android:layout_above="@+id/topic_search_text"/>-->
 
