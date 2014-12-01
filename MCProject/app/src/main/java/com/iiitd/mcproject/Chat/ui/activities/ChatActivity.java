@@ -167,8 +167,8 @@ public class ChatActivity extends Activity {
 
             public void onClick(DialogInterface arg0, int arg1) {
 
-        sendExitMessage();
-        return;
+                sendExitMessage();
+                return;
             }
         });
 

@@ -4,16 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MCProject.iml" filepath="$PROJECT_DIR$/MCProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-=======
->>>>>>> be0d9142ef8d44a36c5e8adb47fe0d68d3b33299
-      <module fileurl="file://$PROJECT_DIR$/facebook/facebook.iml" filepath="$PROJECT_DIR$/facebook/facebook.iml" />
-=======
->>>>>>> 5a011f907895c2bf71952fa02076eb15579fe2c3
     </modules>
   </component>
 </project>

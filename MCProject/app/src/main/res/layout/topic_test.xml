@@ -100,6 +100,8 @@
         android:id="@+id/topic_chat"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_weight="0.04"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp"
+        android:onClick="runChatClient"
+        />
 
 </LinearLayout>

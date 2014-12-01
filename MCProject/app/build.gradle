@@ -33,4 +33,5 @@ dependencies {
 
     compile 'commons-codec:commons-codec:1.9';
 
+    compile group: 'org.achartengine', name: 'achartengine', version: '1.2.0'
 }
