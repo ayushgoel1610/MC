@@ -3,6 +3,7 @@ package com.iiitd.mcproject.Chat.ui.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -94,16 +95,23 @@ public class ChatAdapter extends BaseAdapter {
 
                 Log.v("URI", chatMessage.getProperty("uri"));
                 //ImageView photo = new ImageView(context);
-                imageView.setLayoutParams(new LinearLayout.LayoutParams(120, 120));
+                //imageView.setLayoutParams(new LinearLayout.LayoutParams(120, 120));
                 //holder.content.addView(photo);
                 imageView.setVisibility(View.VISIBLE);
                 imageView.setImageBitmap(BitmapFactory.decodeFile(chatMessage.getProperty("uri")));
                 ProgressBar pb = (ProgressBar) holder.content.findViewById(R.id.progressBar);
                 pb.setVisibility(View.GONE);
+//                imageView.setOnClickListener(new View.OnClickListener(){
+//
+//                    @Override
+//                    public void onClick(View v){
+//                        Log.v("image","image clicked");
+//                    }
+//                });
             }
         if (chatMessage.getBody() != null) {
             if (chatMessage.getBody().contains("/sdcard/")) {
-                imageView.setLayoutParams(new LinearLayout.LayoutParams(120, 120));
+                //imageView.setLayoutParams(new LinearLayout.LayoutParams(120, 120));
                 //holder.content.addView(photo);
                 imageView.setVisibility(View.VISIBLE);
                 Log.v("Image path", chatMessage.getBody());
@@ -127,12 +135,14 @@ public class ChatAdapter extends BaseAdapter {
 
     private void setAlignment(ViewHolder holder, boolean isIncoming) {
         if (isIncoming) {
-            Log.v("Incoming", "Incoming message");
-            holder.contentWithBG.setBackgroundResource(R.drawable.incoming_message_bg);
+            Log.v("Incoming", "Outgoing message");
+            holder.contentWithBG.setBackgroundResource(R.drawable.out_message_bubble);
 
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.contentWithBG.getLayoutParams();
             layoutParams.gravity = Gravity.RIGHT;
             holder.contentWithBG.setLayoutParams(layoutParams);
+
+            holder.txtMessage.setTextColor(Color.WHITE);
 
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.content.getLayoutParams();
             lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
@@ -146,12 +156,14 @@ public class ChatAdapter extends BaseAdapter {
             layoutParams.gravity = Gravity.RIGHT;
             holder.txtInfo.setLayoutParams(layoutParams);
         } else {
-            Log.v("Outgoing", "Outgoing message");
-            holder.contentWithBG.setBackgroundResource(R.drawable.outgoing_message_bg);
+            Log.v("Outgoing", "Incoming message");
+            holder.contentWithBG.setBackgroundResource(R.drawable.in_message_bubble);
 
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.contentWithBG.getLayoutParams();
             layoutParams.gravity = Gravity.LEFT;
             holder.contentWithBG.setLayoutParams(layoutParams);
+
+            holder.txtMessage.setTextColor(Color.BLACK);
 
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.content.getLayoutParams();
             lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);

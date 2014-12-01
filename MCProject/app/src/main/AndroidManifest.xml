@@ -51,7 +51,8 @@
             android:name="com.iiitd.mcproject.Chat.ui.activities.ChatActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            />
         <activity
             android:name=".loginActivityTest"
             android:label="@string/app_label" >
