@@ -2,6 +2,7 @@ package com.iiitd.mcproject.Chat.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
@@ -101,13 +102,16 @@ public class ChatAdapter extends BaseAdapter {
                 imageView.setImageBitmap(BitmapFactory.decodeFile(chatMessage.getProperty("uri")));
                 ProgressBar pb = (ProgressBar) holder.content.findViewById(R.id.progressBar);
                 pb.setVisibility(View.GONE);
-//                imageView.setOnClickListener(new View.OnClickListener(){
-//
-//                    @Override
-//                    public void onClick(View v){
-//                        Log.v("image","image clicked");
-//                    }
-//                });
+                final String imageUri=chatMessage.getProperty("uri");
+                imageView.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse("file://" + imageUri), "image/*");
+                        context.startActivity(intent);
+                    }
+                });
             }
         if (chatMessage.getBody() != null) {
             if (chatMessage.getBody().contains("/sdcard/")) {
@@ -116,7 +120,16 @@ public class ChatAdapter extends BaseAdapter {
                 imageView.setVisibility(View.VISIBLE);
                 Log.v("Image path", chatMessage.getBody());
                 imageView.setImageURI(Uri.fromFile(new File(chatMessage.getBody())));
-
+                final String imageUri=chatMessage.getBody();
+                imageView.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse("file://" + imageUri), "image/*");
+                        context.startActivity(intent);
+                    }
+                });
             }
 
         }
